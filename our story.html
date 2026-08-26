@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Our Story - Ocho Ventures</title>
+
+<!-- IMPORT GOOGLE FONTS: Space Mono & Poppins -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+}
+
+/* Styled Gold Scrollbar */
+::-webkit-scrollbar {
+	width: 8px;
+}
+::-webkit-scrollbar-track {
+	background: #000000;
+}
+::-webkit-scrollbar-thumb {
+	background: #c8a338;
+	border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+	background: #f1c40f;
+}
+
+body{
+	font-family:'Poppins', sans-serif;
+
+	background:
+	linear-gradient(
+		135deg,
+		#000000,
+		#0a0a0a,
+		#121212
+	);
+
+	background-attachment:fixed;
+	color:#f8fafc;
+}
+
+/* UPDATED MAIN CONTAINER (1 BIG BOX) TO JET BLACK / ONYX */
+#our-story{
+	max-width:1200px;
+	margin:50px auto;
+	padding:70px 30px;
+
+	background:
+	linear-gradient(
+		145deg,
+		#0a0a0a,
+		#030303
+	);
+
+	backdrop-filter:blur(20px);
+	border-radius:30px;
+	border: 1px solid rgba(200, 163, 56, 0.4);
+	box-shadow: 0 40px 80px rgba(0,0,0,0.95), inset 0 0 20px rgba(212, 175, 55, 0.05);
+}
+
+/* MATCHED FONT FOR TITLE */
+#our-story h2{
+	text-align:center;
+	color:#ffffff; 
+	font-family: 'Space Mono', monospace;
+	font-size:3.2rem;
+	font-weight:700;
+	letter-spacing:4px;
+	text-transform:uppercase;
+	margin-bottom:25px;
+}
+
+/* MATCHED FONT FOR QUOTE & AUTHOR */
+.description{
+	max-width:900px;
+	margin:0 auto 40px;
+	text-align:center;
+	line-height:1.8;
+	color:#e2e8f0;
+	font-family: 'Space Mono', monospace;
+	font-size:1.05rem;
+	letter-spacing: 0.5px;
+}
+
+.story-gallery{
+	display:flex;
+	justify-content:center;
+	gap:30px;
+	flex-wrap:wrap;
+}
+
+/* MAIN CARD CONTAINER ADJUSTED WIDTH & BG */
+.story-image{
+	width:360px;
+	background: #0d0d0d;
+	border: 1px solid #c8a338;
+	border-radius:20px;	
+	box-shadow:0 25px 50px rgba(0,0,0,0.9);
+	transition:
+		transform .4s ease,
+		box-shadow .4s ease,
+		border-color .4s ease;
+}
+
+.story-image::before{
+	content:"";
+	display:block;
+	height:3px;
+	background:linear-gradient(90deg, transparent, #d4af37, transparent);
+	border-radius: 20px 20px 0 0;
+}
+
+.story-image:hover{
+	transform:translateY(-12px);
+	border-color:#f1c40f;
+	box-shadow: 0 20px 40px rgba(212, 175, 55, 0.25);
+}
+
+.main-image{
+	width:100%;
+	height:260px;
+	object-fit:cover;
+	display:block;
+}
+
+.thumbnails{
+	display:flex;
+	justify-content:center;
+	gap:8px;
+	padding:10px;
+	flex-wrap:wrap;
+}
+
+.thumbnails img{
+	width:75px;
+	height:55px;
+	object-fit:cover;
+	border-radius:8px;
+	border:2px solid transparent;
+	transition:.3s;
+}
+
+.thumbnails img:hover{
+	border-color:#d4af37;
+	transform:scale(1.08);
+}
+
+.caption{
+	padding:20px;
+}
+
+.caption h3{
+	margin-bottom:10px;
+	color:#ffffff;
+	letter-spacing:1px;
+}
+
+.caption p{
+	text-align:justify;
+	line-height:1.8;
+	color:#a3a3a3;
+}
+
+/* =========================================================
+   3D FLIP CARD STYLES FOR ALL BOXES
+========================================================= */
+
+.flip-card {
+	perspective: 1000px;
+	cursor: pointer;
+	position: relative;
+	min-height: 560px;
+}
+
+.flip-card-inner {
+	position: relative;
+	width: 100%;
+	height: 100%;
+	transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+	transform-style: preserve-3d;
+}
+
+/* Flips on hover OR when manually flipped via JS click */
+.flip-card:hover .flip-card-inner,
+.flip-card.is-flipped .flip-card-inner {
+	transform: rotateY(180deg);
+}
+
+/* Force un-flip if clicked back during active hover */
+.flip-card.force-unflip .flip-card-inner {
+	transform: rotateY(0deg) !important;
+}
+
+.flip-card-front, .flip-card-back {
+	width: 100%;
+	height: 100%;
+	backface-visibility: hidden;
+	-webkit-backface-visibility: hidden;
+	border-radius: 20px;
+	overflow: hidden;
+}
+
+.flip-card-front {
+	background: #0d0d0d;
+}
+
+.flip-card-back {
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: rotateY(180deg);
+	background: #121212;
+	border: 1px solid #c8a338;
+	padding: 30px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	text-align: center;
+	box-shadow: inset 0 0 20px rgba(212, 175, 55, 0.15);
+}
+
+.flip-card-back h3 {
+	color: #d4af37;
+	font-family: 'Space Mono', monospace;
+	font-size: 1.5rem;
+	font-weight: 700;
+	letter-spacing: 1.5px;
+	margin-bottom: 15px;
+	text-transform: uppercase;
+}
+
+.flip-card-back p {
+	color: #cbd5e1;
+	line-height: 1.8;
+	font-size: 1rem;
+}
+
+/* Popup */
+.image-modal{
+	display:none;
+	position:fixed;
+	left:0;
+	top:0;
+	width:100%;
+	height:100%;
+	background:rgba(0,0,0,.95);
+	justify-content:center;
+	align-items:center;
+	z-index:9999;
+}
+
+.image-modal img{
+	width:auto;
+	height:auto;
+	max-width:95%;
+	max-height:95%;
+	object-fit:contain;
+	border-radius:15px;
+	box-shadow: 0 0 40px rgba(255,255,255,.15);
+}
+
+.close{
+	position:absolute;
+	top:20px;
+	right:35px;
+	color:#fff;
+	font-size:45px;
+}
+
+@media(max-width:768px){
+	.story-image{
+		width:100%;
+	}
+}
+
+.video-thumb {
+	position: relative;
+}
+
+.video-thumb span {
+	position:absolute;
+	top:50%;
+	left:50%;
+	transform:translate(-50%, -50%);	
+	font-size:20px;
+	color:white;
+	background:rgba(0,0,0,0.6);
+	border-radius:40%;
+	width:30px;
+	height:35px;
+	display:flex;
+	align-items:center;
+	justify-content:center;
+}
+
+/* INNER TEXT BOX MATTING MATCHED TO BLACK THEME */
+.silver-box{
+	margin:15px;
+	padding:15px;
+	background: #050505;
+	border:1px solid rgba(212, 175, 55, 0.3);
+	border-radius:15px;
+	box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.9);
+	position:relative;
+	overflow:hidden;
+}
+
+.silver-box::before{
+	content:"";
+	position:absolute;
+	top:0;
+	left:-50%;
+	width:200%;
+	height:40%;
+	background:linear-gradient(120deg, transparent, rgba(212, 175, 55, 0.15), transparent);
+	transform:rotate(-10deg);
+}
+
+.silver-box h3{
+	color:#d4af37;
+	font-family: 'Space Mono', monospace;
+	font-size:1.2rem;
+	font-weight:700;
+	letter-spacing:1px;
+	text-transform:uppercase;
+	position:relative;
+	z-index:1;
+}
+
+.silver-box p{
+	color:#cccccc;
+	position:relative;
+	z-index:1;
+	font-size: 0.92rem;
+}
+
+/* =========================================================
+   OCHO - CINEMATIC CURSOR MATCHED TO BLACK BACKGROUND
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+
+	html, body, a, button,
+	.main-image, .thumbnails img, .video-thumb, .close, .story-image {
+		cursor: none !important;
+	}
+
+	.ocho-cursor-dot {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 8px;
+		height: 8px;
+		background: #d4af37;
+		border-radius: 50%;
+		pointer-events: none;
+		z-index: 1000001;
+		transform: translate(-50%, -50%);
+		box-shadow: 0 0 12px rgba(212, 175, 55, 0.9);
+		transition: transform 0.15s ease-out, background 0.3s ease, opacity 0.3s ease;
+	}
+
+	.ocho-cursor-ring {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 38px;
+		height: 38px;
+		border: 1.5px solid rgba(212, 175, 55, 0.6);
+		border-radius: 50%;
+		pointer-events: none;
+		z-index: 1000000;
+		transform: translate(-50%, -50%);
+		backdrop-filter: blur(2px);
+		box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
+		transition: width 0.3s cubic-bezier(.16,1,.3,1), height 0.3s cubic-bezier(.16,1,.3,1), border-color 0.3s ease, background 0.3s ease, opacity 0.3s ease;
+	}
+
+	.ocho-cursor-ring.hover-active {
+		width: 68px;
+		height: 68px;
+		background: rgba(212, 175, 55, 0.18);
+		border-color: #d4af37;
+		box-shadow: 0 0 25px rgba(212, 175, 55, 0.5);
+	}
+
+	.ocho-cursor-label {
+		position: fixed;
+		top: 0;
+		left: 0;
+		pointer-events: none;
+		z-index: 1000002;
+		transform: translate(-50%, -50%) scale(0.8);
+		color: #000000;
+		font-family: 'Space Mono', monospace;
+		font-size: 10px;
+		font-weight: 700;
+		letter-spacing: 1.5px;
+		opacity: 0;
+		white-space: nowrap;
+		text-transform: uppercase;
+		transition: opacity 0.25s ease, transform 0.25s cubic-bezier(.16,1,.3,1);
+	}
+
+	.ocho-cursor-label.show {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+}
+
+@media (max-width: 900px) {
+	.ocho-cursor-dot,
+	.ocho-cursor-ring,
+	.ocho-cursor-label {
+		display: none !important;
+	}
+}
+
+</style>
+</head>
+<body>
+
+	<div class="ocho-cursor-dot"></div>
+	<div class="ocho-cursor-ring"></div>
+	<div class="ocho-cursor-label"></div>
+
+	<div id="imageModal" class="image-modal">
+		<span class="close" onclick="closeImage()">&times;</span>
+		<img id="popupImage">
+	</div>
+
+	<section id="our-story">
+
+		<h2>Our Story</h2>
+
+		<p class="description">
+			"In the end, a vision without the ability to execute it is probably a hallucination.
+			What matters is that you believe in your product, but also that you're relentless
+			in learning, improving, and solving real problems for real people."
+			<br><br>
+			— Elon Musk
+		</p>
+
+		<div class="story-gallery">
+
+			<!-- STORY 1 (FLIP CARD) -->
+			<div class="story-image flip-card" onclick="toggleFlip(this)" onmouseleave="resetFlip(this)">	
+				<div class="flip-card-inner">
+					
+					<!-- FRONT SIDE -->
+					<div class="flip-card-front">
+						<video 
+							id="mainVideo1"
+							class="main-image"
+							controls
+							muted
+							poster="01.jpg"
+							onclick="event.stopPropagation();">
+							<source src="17.mp4" type="video/mp4">
+						</video>
+
+						<div class="thumbnails">
+							<img src="01.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="02.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="14.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="15.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="16.jpg" onclick="event.stopPropagation(); changeImage(this)">
+
+							<div class="video-thumb" onclick="event.stopPropagation(); showVideo1()">
+								<img src="01.jpg">
+								<span>▶</span>
+							</div>
+						</div>
+
+						<div class="silver-box">
+							<h3>Our Beginning</h3>
+							<p>
+								Our journey has been one of perseverance through countless
+								challenges over the years.
+							</p>
+						</div>			
+					</div>
+
+					<!-- BACK SIDE -->
+					<div class="flip-card-back">
+						<h3>Behind The Vision</h3>
+						<p>
+							We never stopped believing in our vision. Every obstacle became an 
+							opportunity to learn, improve, and build stronger systems. 
+							Driven by relentless dedication and continuous engineering.
+						</p>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- STORY 2 (FLIP CARD) -->
+			<div class="story-image flip-card" onclick="toggleFlip(this)" onmouseleave="resetFlip(this)">
+				<div class="flip-card-inner">
+					
+					<!-- FRONT SIDE -->
+					<div class="flip-card-front">
+						<video
+							id="mainVideo2"
+							class="main-image"
+							controls
+							muted
+							poster="5.jpg"
+							onclick="event.stopPropagation();">
+							<source src="8.mp4" type="video/mp4">
+						</video>
+
+						<div class="thumbnails">
+							<img src="19.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="18.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="21.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="24.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							<img src="25.jpg" onclick="event.stopPropagation(); changeImage(this)">
+							
+							<div class="video-thumb" onclick="event.stopPropagation(); showVideo2()">
+								<img src="5.jpg">	
+								<span>▶</span>
+							</div>
+						</div>
+
+						<div class="silver-box">
+							<h3>Building the Future</h3>
+							<p>
+								In 2025, we embraced the Kaizen mindset of continuous
+								improvement. Every achievement started with a single step.
+								We continue moving forward with passion, innovation,
+								and commitment to creating lasting value.
+							</p>
+						</div>
+					</div>
+
+					<!-- BACK SIDE -->
+					<div class="flip-card-back">
+						<h3>Continuous Growth</h3>
+						<p>
+							Innovation requires persistent effort and adaptability. 
+							By breaking down complex problems and refining our process daily, 
+							we establish standards that set us apart.
+						</p>
+					</div>
+
+				</div>
+			</div>
+
+			<!-- STORY 3 (FLIP CARD) -->
+			<div class="story-image flip-card" onclick="toggleFlip(this)" onmouseleave="resetFlip(this)">
+				<div class="flip-card-inner">
+
+					<!-- FRONT SIDE -->
+					<div class="flip-card-front">
+						<img id="mainImg2"
+							 class="main-image"
+							 src="5.jpg"
+							 onclick="event.stopPropagation(); openImage(this.src)"
+							 alt="Main Image">
+
+						<video id="mainVideo3"
+							   class="main-image"
+							   controls
+							   poster="5.jpg"
+							   style="display:none;"
+							   onclick="event.stopPropagation();">
+							<source src="8.mp4" type="video/mp4">
+						</video>
+
+						<div class="thumbnails">
+							<img src="19.jpg" onclick="event.stopPropagation(); stopStory3(); changeImage(this)">
+							<img src="18.jpg" onclick="event.stopPropagation(); stopStory3(); changeImage(this)">
+							<img src="21.jpg" onclick="event.stopPropagation(); stopStory3(); changeImage(this)">
+							<img src="24.jpg" onclick="event.stopPropagation(); stopStory3(); changeImage(this)">
+							<img src="25.jpg" onclick="event.stopPropagation(); stopStory3(); changeImage(this)">
+							
+							<div class="video-thumb" onclick="event.stopPropagation(); showVideo3()">
+								<img src="5.jpg">	
+								<span>▶</span>
+							</div>
+						</div>
+
+						<div class="silver-box">
+							<h3>Our Achievement</h3>
+							<p>
+								After years of dedication and continuous improvement,
+								we transformed our vision into reality. This milestone
+								represents our commitment to quality, innovation,
+								and building a stronger future.
+							</p>
+						</div>
+					</div>
+
+					<!-- BACK SIDE -->
+					<div class="flip-card-back">
+						<h3>Excellence Delivered</h3>
+						<p>
+							Reaching milestones is only the beginning. We maintain a relentless 
+							focus on execution, ensuring every result reflects precision, reliability, 
+							and sustainable excellence.
+						</p>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+	</section>
+
+<script>
+
+/* =========================================================
+   CONTROLLED FRAME-RATE INDEPENDENT CINEMATIC SCROLL
+========================================================= */
+(function setupControlledCinematicScroll() {
+	let targetY = window.scrollY;
+	let currentY = window.scrollY;
+	let isScrolling = false;
+	let lastTime = null;
+
+	const baseEase = 0.05;         
+	const scrollMultiplier = 0.4;  
+	const maxVelocity = 18;        
+
+	window.addEventListener("wheel", (e) => {
+		e.preventDefault();
+
+		const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+		targetY += e.deltaY * scrollMultiplier;
+		targetY = Math.max(0, Math.min(targetY, maxScroll));
+
+		if (!isScrolling) {
+			isScrolling = true;
+			lastTime = performance.now();
+			requestAnimationFrame(updateScroll);
+		}
+	}, { passive: false });
+
+	function updateScroll(currentTime) {
+		if (!lastTime) lastTime = currentTime;
+
+		const deltaTime = (currentTime - lastTime) / 16.67;
+		lastTime = currentTime;
+
+		let diff = targetY - currentY;
+
+		let effectiveEase = 1 - Math.pow(1 - baseEase, deltaTime || 1);
+		let velocity = diff * effectiveEase;
+
+		let adjustedMaxVelocity = maxVelocity * (deltaTime || 1);
+
+		if (Math.abs(velocity) > adjustedMaxVelocity) {
+			velocity = Math.sign(velocity) * adjustedMaxVelocity;
+		}
+
+		currentY += velocity;
+		window.scrollTo(0, currentY);
+
+		if (Math.abs(targetY - currentY) > 0.3) {
+			requestAnimationFrame(updateScroll);
+		} else {
+			currentY = targetY;
+			isScrolling = false;
+			lastTime = null;
+		}
+	}
+})();
+
+function toggleFlip(card) {
+	if (card.classList.contains("force-unflip")) {
+		card.classList.remove("force-unflip");
+		card.classList.add("is-flipped");
+	} else if (card.classList.contains("is-flipped")) {
+		card.classList.remove("is-flipped");
+		card.classList.add("force-unflip");
+	} else {
+		card.classList.add("force-unflip");
+	}
+}
+
+function resetFlip(card) {
+	card.classList.remove("is-flipped");
+	card.classList.remove("force-unflip");
+}
+
+const cursorDot = document.querySelector(".ocho-cursor-dot");
+const cursorRing = document.querySelector(".ocho-cursor-ring");
+const cursorLabel = document.querySelector(".ocho-cursor-label");
+
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
+
+let ringX = mouseX;
+let ringY = mouseY;
+
+document.addEventListener("mousemove", (e) => {
+	mouseX = e.clientX;
+	mouseY = e.clientY;
+
+	cursorDot.style.left = `${mouseX}px`;
+	cursorDot.style.top = `${mouseY}px`;
+
+	cursorLabel.style.left = `${mouseX}px`;
+	cursorLabel.style.top = `${mouseY}px`;
+});
+
+function renderCursor() {
+	ringX += (mouseX - ringX) * 0.15;
+	ringY += (mouseY - ringY) * 0.15;
+
+	cursorRing.style.left = `${ringX}px`;
+	cursorRing.style.top = `${ringY}px`;
+
+	requestAnimationFrame(renderCursor);
+}
+renderCursor();
+
+function addHoverEvents(selector, labelText = "") {
+	const targets = document.querySelectorAll(selector);
+	targets.forEach((el) => {
+		el.addEventListener("mouseenter", () => {
+			cursorRing.classList.add("hover-active");
+			if (labelText) {
+				cursorLabel.textContent = labelText;
+				cursorLabel.classList.add("show");
+			}
+		});
+		el.addEventListener("mouseleave", () => {
+			cursorRing.classList.remove("hover-active");
+			cursorLabel.classList.remove("show");
+		});
+	});
+}
+
+addHoverEvents("a, .close, .thumbnails img");
+addHoverEvents(".main-image", "VIEW");
+addHoverEvents(".video-thumb", "PLAY");
+addHoverEvents(".flip-card", "FLIP");
+
+document.addEventListener("mouseleave", () => {
+	cursorDot.style.opacity = "0";
+	cursorRing.style.opacity = "0";
+});
+
+document.addEventListener("mouseenter", () => {
+	cursorDot.style.opacity = "1";
+	cursorRing.style.opacity = "1";
+});
+
+function showVideo1(){
+	const story = document.querySelectorAll(".story-image")[0];
+	const image = story.querySelector("img.main-image");
+	const video = story.querySelector("video.main-image");
+
+	if(image){
+		image.style.display = "none";
+	}
+	video.style.display = "block";
+	video.play();
+}
+
+function showVideo2(){
+	document.getElementById("mainVideo1").pause();
+	const video = document.getElementById("mainVideo2");
+	const story = video.closest(".story-image");
+	let image = story.querySelector("img.main-image");
+
+	if(image){
+		image.style.display = "none";
+	}
+	video.style.display = "block";
+	video.play();
+}
+
+function showVideo3(){
+	document.getElementById("mainVideo2").pause();
+	document.getElementById("mainImg2").style.display = "none";
+
+	const video = document.getElementById("mainVideo3");
+	video.style.display = "block";
+	video.play();
+}
+
+function stopStory3() {
+	const video = document.getElementById("mainVideo3");
+	video.pause();
+	video.currentTime = 0;
+	video.style.display = "none";
+
+	document.getElementById("mainImg2").style.display = "block";
+}
+
+function changeImage(thumbnail){
+	const story = thumbnail.closest(".story-image");
+	const video = story.querySelector("video.main-image");
+
+	if(video){
+		video.pause();
+		video.currentTime = 0;
+		video.style.display = "none";
+	}
+
+	let image = story.querySelector("img.main-image");
+
+	if(!image){
+		image = document.createElement("img");
+		image.className = "main-image";
+		image.onclick = function(e){
+			e.stopPropagation();
+			openImage(this.src);
+		};
+		const frontSide = story.querySelector('.flip-card-front') || story;
+		frontSide.insertBefore(image, video);
+	}
+
+	image.src = thumbnail.src;
+	image.style.display = "block";
+	
+	addHoverEvents(".main-image", "VIEW");
+}
+
+function openImage(src){
+	document.getElementById("popupImage").src = src;
+	document.getElementById("imageModal").style.display = "flex";
+}
+
+function closeImage(){
+	document.getElementById("imageModal").style.display = "none";
+}
+
+document.getElementById("imageModal").addEventListener("click", function(e){
+	if(e.target === this){
+		closeImage();
+	}
+});
+
+</script>
+</body>
+</html>

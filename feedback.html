@@ -1,0 +1,91 @@
+<?php
+// File to store posts
+$data_file = 'posts.json';
+
+// Load existing posts
+if(file_exists($data_file)){
+    $posts = json_decode(file_get_contents($data_file), true);
+} else {
+    $posts = [];
+}
+
+// Handle form submission
+$msg = '';
+if(isset($_POST['submit'])){
+    $name = htmlspecialchars($_POST['name']);
+    $message = htmlspecialchars($_POST['message']);
+
+    // Handle image upload
+    if(isset($_FILES['image']) && $_FILES['image']['error'] == 0){
+        $target_dir = "uploads/";
+        if(!is_dir($target_dir)) mkdir($target_dir, 0777, true);
+
+        $filename = time() . "_" . basename($_FILES["image"]["name"]);
+        $target_file = $target_dir . $filename;
+        move_uploaded_file($_FILES["image"]["tmp_name"], $target_file);
+
+        // Save new post
+        $posts[] = [
+            'name' => $name,
+            'message' => $message,
+            'image' => $target_file
+        ];
+
+        // Save to JSON file
+        file_put_contents($data_file, json_encode($posts, JSON_PRETTY_PRINT));
+
+        $msg = "Your post has been uploaded!";
+    } else {
+        $msg = "Please select an image.";
+    }
+}
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Gallery - Ocho Ventures</title>
+<style>
+body { font-family: Arial; background: #f8f9fa; margin: 0; }
+header { background: #2c3e50; color: white; text-align: center; padding: 15px; }
+form { max-width: 400px; margin: 20px auto; background: #fff; padding: 20px; border-radius: 8px; }
+input, textarea { width: 100%; padding: 10px; margin-bottom: 10px; border-radius: 5px; border: 1px solid #ccc; }
+button { padding: 10px 15px; border: none; background: #4CAF50; color: white; border-radius: 5px; cursor: pointer; }
+button:hover { background: #45a049; }
+.msg { text-align: center; color: green; margin-top: 10px; }
+.gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr)); gap: 10px; max-width: 900px; margin: auto; padding: 20px; }
+.post { background: white; border-radius: 8px; padding: 10px; text-align: center; box-shadow: 0 0 5px rgba(0,0,0,0.1); }
+.post img { width: 100%; height: 150px; object-fit: cover; border-radius: 5px; margin-bottom: 5px; }
+.post h4 { margin: 5px 0; font-size: 1rem; }
+.post p { font-size: 0.9rem; color: #555; }
+</style>
+</head>
+<body>
+
+<header>
+<h1>Customer Gallery</h1>
+<p>Share your experience with our grille</p>
+</header>
+
+<form action="" method="post" enctype="multipart/form-data">
+<input type="text" name="name" placeholder="Your Name" required>
+<textarea name="message" rows="3" placeholder="Your Feedback" required></textarea>
+<input type="file" name="image" accept="image/*" required>
+<button type="submit" name="submit">Post</button>
+<?php if($msg) echo "<p class='msg'>$msg</p>"; ?>
+</form>
+
+<div class="gallery">
+<?php foreach(array_reverse($posts) as $post): ?>
+    <div class="post">
+        <img src="<?php echo $post['image']; ?>" alt="Customer Image">
+        <h4><?php echo $post['name']; ?></h4>
+        <p><?php echo $post['message']; ?></p>
+    </div>
+<?php endforeach; ?>
+</div>
+
+</body>
+</html>

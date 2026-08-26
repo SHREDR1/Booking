@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | OCHO Ventures</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Segoe UI',sans-serif;
+    background:linear-gradient(
+        180deg,
+        #06090f 0%,
+        #0b1220 30%,
+        #111827 60%,
+        #0a1018 100%
+    );
+    color:white;
+    line-height:1.8;
+}
+
+header{
+    background:#111827;
+    padding:25px 40px;
+    border-bottom:3px solid #D4AF37;
+}
+
+.logo{
+    font-size:34px;
+    font-weight:bold;
+    letter-spacing:5px;
+    color:#D4AF37;
+}
+
+.container{
+    max-width:1000px;
+    margin:50px auto;
+    padding:40px;
+    background:rgba(255,255,255,.05);
+    border-radius:12px;
+}
+
+h1{
+    color:#D4AF37;
+    margin-bottom:15px;
+    text-align:center;
+}
+
+h2{
+    color:#D4AF37;
+    margin-top:35px;
+    margin-bottom:10px;
+}
+
+p{
+    color:#dddddd;
+    margin-bottom:15px;
+}
+
+ul{
+    margin-left:25px;
+    margin-bottom:20px;
+}
+
+li{
+    margin-bottom:8px;
+}
+
+.back-btn{
+    display:inline-block;
+    margin-top:35px;
+    padding:12px 28px;
+    background:#D4AF37;
+    color:#111;
+    text-decoration:none;
+    border-radius:30px;
+    font-weight:bold;
+}
+
+.back-btn:hover{
+    background:white;
+}
+
+footer{
+    text-align:center;
+    padding:25px;
+    color:#aaa;
+    border-top:1px solid rgba(255,255,255,.1);
+    margin-top:50px;
+}
+
+/* =========================================
+   CINEMATIC CURSOR
+========================================= */
+
+@media (pointer: fine) {
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        cursor: none;
+    }
+
+    /* Small center dot */
+    .cursor-dot {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 7px;
+        height: 7px;
+        background: #D4AF37;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 99999;
+        transform: translate(-50%, -50%);
+        box-shadow:
+            0 0 8px rgba(212,175,55,.8),
+            0 0 20px rgba(212,175,55,.35);
+    }
+
+    /* Large cinematic ring */
+    .cursor-ring {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 42px;
+        height: 42px;
+        border: 1px solid rgba(212,175,55,.7);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 99998;
+
+        transform:
+            translate(-50%, -50%)
+            scale(1);
+
+        transition:
+            width .35s cubic-bezier(.22,1,.36,1),
+            height .35s cubic-bezier(.22,1,.36,1),
+            border-color .35s ease,
+            background .35s ease,
+            box-shadow .35s ease;
+    }
+
+    /* Hover effect */
+    .cursor-ring.hover {
+        width: 70px;
+        height: 70px;
+        border-color: rgba(212,175,55,.95);
+        background: rgba(212,175,55,.08);
+
+        box-shadow:
+            0 0 20px rgba(212,175,55,.18),
+            inset 0 0 20px rgba(212,175,55,.05);
+    }
+
+    .cursor-dot.hover {
+        transform: translate(-50%, -50%) scale(.65);
+    }
+
+    /* Click animation */
+    .cursor-ring.click {
+        width: 55px;
+        height: 55px;
+        background: rgba(212,175,55,.15);
+    }
+
+    /* Don't show cursor over browser-like text selection */
+    ::selection {
+        background: rgba(212,175,55,.3);
+        color: white;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 768px), (pointer: coarse) {
+
+    body {
+        cursor: auto;
+    }
+
+    .cursor-dot,
+    .cursor-ring {
+        display: none;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+/* =========================================
+   STAGGERED ONE-BY-ONE REVEAL ANIMATION
+========================================= */
+
+.reveal-item {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease, transform 0.8s cubic-bezier(.22,1,.36,1);
+}
+
+.reveal-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+</style>
+
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<header class="reveal-item">
+    <div class="logo">OCHO</div>
+</header>
+
+<div class="container">
+
+<h1 class="reveal-item">Privacy Policy</h1>
+
+<p class="reveal-item"><strong>Effective Date:</strong> August 7, 2026</p>
+
+<p class="reveal-item">
+OCHO Ventures respects your privacy. This Privacy Policy explains how we collect,
+use, protect, and store your personal information whenever you use our website
+or create an account.
+</p>
+
+<h2 class="reveal-item">1. Information We Collect</h2>
+
+<ul class="reveal-item">
+<li>Full Name</li>
+<li>Email Address</li>
+<li>Mobile Number</li>
+<li>Password (encrypted)</li>
+<li>Booking Information</li>
+<li>Messages and Inquiries</li>
+</ul>
+
+<h2 class="reveal-item">2. How We Use Your Information</h2>
+
+<ul class="reveal-item">
+<li>Create your account</li>
+<li>Process bookings</li>
+<li>Respond to inquiries</li>
+<li>Improve our services</li>
+<li>Send important notifications</li>
+<li>Maintain website security</li>
+</ul>
+
+<h2 class="reveal-item">3. Data Security</h2>
+
+<p class="reveal-item">
+We use reasonable security measures to protect your personal information from
+unauthorized access, alteration, or disclosure.
+</p>
+
+<h2 class="reveal-item">4. Cookies</h2>
+
+<p class="reveal-item">
+Our website may use cookies to improve your browsing experience and remember
+your preferences.
+</p>
+
+<h2 class="reveal-item">5. Third-Party Login</h2>
+
+<p class="reveal-item">
+If you choose to continue with Google, Facebook, or Apple, some information may
+be shared according to their respective privacy policies.
+</p>
+
+<h2 class="reveal-item">6. Sharing Information</h2>
+
+<p class="reveal-item">
+OCHO Ventures does not sell your personal information. Information is only
+shared when required by law or when necessary to provide our services.
+</p>
+
+<h2 class="reveal-item">7. Your Rights</h2>
+
+<ul class="reveal-item">
+<li>Access your personal data</li>
+<li>Update incorrect information</li>
+<li>Delete your account</li>
+<li>Request a copy of your information</li>
+</ul>
+
+<h2 class="reveal-item">8. Changes to this Policy</h2>
+
+<p class="reveal-item">
+We may update this Privacy Policy at any time. Changes will be posted on this page.
+</p>
+
+<h2 class="reveal-item">9. Contact Us</h2>
+
+<p class="reveal-item">
+If you have questions regarding this Privacy Policy, please contact OCHO Ventures
+through our Contact page.
+</p>
+
+<a href="welcome.html" class="back-btn reveal-item">← Back to Home</a>
+
+</div>
+
+<footer class="reveal-item">
+© 2026 OCHO Ventures. All Rights Reserved.
+</footer>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+
+    /* =========================================
+       STAGGERED ONE-BY-ONE REVEAL LOGIC
+    ========================================= */
+    const items = document.querySelectorAll(".reveal-item");
+    const STAGGER_DELAY = 120; // Time gap between each item in milliseconds (0.12s)
+
+    items.forEach((item, index) => {
+        setTimeout(() => {
+            item.classList.add("visible");
+        }, index * STAGGER_DELAY);
+    });
+
+    /* =========================================
+       CINEMATIC CURSOR LOGIC (UNCHANGED)
+    ========================================= */
+    const dot = document.querySelector(".cursor-dot");
+    const ring = document.querySelector(".cursor-ring");
+
+    let mouseX = window.innerWidth / 2;
+    let mouseY = window.innerHeight / 2;
+
+    let ringX = mouseX;
+    let ringY = mouseY;
+
+    /* Mouse position */
+    document.addEventListener("mousemove", (e) => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+
+        /* Small dot follows immediately */
+        dot.style.left = mouseX + "px";
+        dot.style.top = mouseY + "px";
+    });
+
+    /* Smooth delayed ring */
+    function animateCursor() {
+        ringX += (mouseX - ringX) * 0.12;
+        ringY += (mouseY - ringY) * 0.12;
+
+        ring.style.left = ringX + "px";
+        ring.style.top = ringY + "px";
+
+        requestAnimationFrame(animateCursor);
+    }
+
+    animateCursor();
+
+    /* Elements that activate cinematic hover */
+    const hoverElements = document.querySelectorAll(
+        "a, button, .logo, input, textarea, select"
+    );
+
+    hoverElements.forEach(element => {
+        element.addEventListener("mouseenter", () => {
+            dot.classList.add("hover");
+            ring.classList.add("hover");
+        });
+
+        element.addEventListener("mouseleave", () => {
+            dot.classList.remove("hover");
+            ring.classList.remove("hover");
+        });
+    });
+
+    /* Click effect */
+    document.addEventListener("mousedown", () => {
+        ring.classList.add("click");
+    });
+
+    document.addEventListener("mouseup", () => {
+        ring.classList.remove("click");
+    });
+
+    /* =========================================
+       WHEEL INERTIA SCROLL (SMOOTH DELAY)
+    ========================================= */
+    const INERTIA_FRICTION = 0.965;
+    const INERTIA_WHEEL_GAIN = 0.25;
+    const INERTIA_MIN_VELOCITY = 0.005;
+    const MAX_VELOCITY = 15;
+
+    let currentVelocity = 0;
+    let targetVelocity = 0;
+    let inertiaRunning = false;
+    let lastFrameTime = performance.now();
+
+    function inertiaTick(now) {
+        const deltaTime = (now - lastFrameTime) / 1000;
+        lastFrameTime = now;
+
+        currentVelocity += (targetVelocity - currentVelocity) * 0.12;
+
+        const adjustedFriction = Math.pow(INERTIA_FRICTION, deltaTime * 60);
+        targetVelocity *= adjustedFriction;
+
+        if (Math.abs(currentVelocity) < INERTIA_MIN_VELOCITY) {
+            currentVelocity = 0;
+            targetVelocity = 0;
+            inertiaRunning = false;
+            return;
+        }
+
+        window.scrollBy({ top: currentVelocity, left: 0, behavior: "auto" });
+
+        requestAnimationFrame(inertiaTick);
+    }
+
+    function handleWheelInertia(e) {
+        e.preventDefault();
+
+        let addedForce = e.deltaY * INERTIA_WHEEL_GAIN;
+
+        if (Math.abs(addedForce) > 5) {
+            addedForce = Math.sign(addedForce) * (5 + Math.log1p(Math.abs(addedForce) - 5));
+        }
+
+        targetVelocity += addedForce;
+        targetVelocity = Math.sign(targetVelocity) * Math.min(Math.abs(targetVelocity), MAX_VELOCITY);
+
+        if (!inertiaRunning) {
+            inertiaRunning = true;
+            lastFrameTime = performance.now();
+            requestAnimationFrame(inertiaTick);
+        }
+    }
+
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+        window.addEventListener("wheel", handleWheelInertia, { passive: false });
+    }
+
+});
+</script>
+
+</body>
+</html>

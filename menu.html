@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ocho Grille Food Menu - 3D Flip Card Vision</title>
+  <style>
+    html, body {
+      overflow-x: hidden;
+      height: 100%;
+      background-color: #06090f;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: radial-gradient(
+          circle at center,
+          #111827 0%,
+          #0b1220 40%,
+          #040609 100%
+      );
+      color: white;
+      margin: 0;
+      padding: 0;
+      perspective: 1600px;
+      overflow-y: hidden;
+    }
+
+    #scroll-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+
+    .menu-section {
+      max-width: 1100px;
+      margin: auto;
+      padding: 80px 20px;
+      text-align: center;
+      transform-style: preserve-3d;
+    }
+
+    .menu-title {
+      font-size: 2.8rem;
+      color: #D4AF37;
+      margin-bottom: 50px;
+      border-bottom: 3px solid #D4AF37;
+      display: inline-block;
+      padding-bottom: 10px;
+      letter-spacing: 2px;
+      transform: translateZ(50px);
+      text-shadow: 0 15px 30px rgba(0,0,0,0.8);
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 40px;
+      text-align: left;
+      transform-style: preserve-3d;
+    }
+
+    /* 3D Card Perspective Parent Wrapper */
+    .menu-card-wrapper {
+      width: 100%;
+      height: 440px;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+
+    /* The Flippable 3D Card Element */
+    .menu-item {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      will-change: transform;
+    }
+
+    /* Flipped state activated via JavaScript */
+    .menu-item.flipped {
+      transform: rotateY(180deg);
+    }
+
+    /* Common Card Face Styling */
+    .card-face {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border-radius: 20px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid rgba(212,175,55,0.3);
+      background: linear-gradient(135deg, #162235 0%, #0d1420 100%);
+    }
+
+    /* Back Side Specific Rules (Mirrored in 3D Space) */
+    .card-back {
+      transform: rotateY(180deg);
+      background: linear-gradient(135deg, #1e1b12 0%, #0f0d09 100%);
+      border-color: rgba(212,175,55,0.6);
+      padding: 30px;
+      box-sizing: border-box;
+    }
+
+    /* Front Side Content Elements */
+    .menu-img-wrapper {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 190px;
+      transform-style: preserve-3d;
+    }
+
+    .menu-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform-style: preserve-3d;
+      will-change: transform;
+      transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .menu-details {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      transform: translateZ(30px);
+    }
+
+    .menu-name {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: white;
+    }
+
+    .menu-price {
+      color: #D4AF37;
+      font-weight: bold;
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+    }
+
+    .menu-desc {
+      font-size: 0.95rem;
+      color: #bfbfbf;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+
+    /* Action Buttons */
+    .action-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 30px;
+      background-color: #D4AF37;
+      color: #111;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    }
+
+    .action-btn:hover {
+      background-color: white;
+      transform: scale(1.02);
+      box-shadow: 0 8px 25px rgba(255,255,255,0.3);
+    }
+
+    .flip-btn {
+      background-color: transparent;
+      border: 2px solid #D4AF37;
+      color: #D4AF37;
+      margin-top: 10px;
+    }
+
+    .flip-btn:hover {
+      background-color: #D4AF37;
+      color: #111;
+    }
+
+    /* Back Side Content Styles */
+    .back-title {
+      font-size: 1.5rem;
+      color: #D4AF37;
+      margin-bottom: 15px;
+      font-weight: bold;
+    }
+
+    .back-info {
+      font-size: 0.95rem;
+      color: #dfdfdf;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Cinematic Scroll Container -->
+  <div id="scroll-container">
+    <section class="menu-section" id="menu">
+      <h2 class="menu-title">Our Food Selections</h2>
+      <div class="menu-grid">
+
+        <!-- Card 1 -->
+        <div class="menu-card-wrapper">
+          <div class="menu-item" data-card>
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+              <div class="menu-img-wrapper">
+                <img src="1.jpg" alt="Chicken skin" class="menu-img" data-3d-img>
+              </div>
+              <div class="menu-details">
+                <div class="menu-name">Chicken Skin</div>
+                <div class="menu-price">₱150</div>
+                <div class="menu-desc">Juicy chicken breast grilled to perfection with signature spices.</div>
+                <button class="action-btn flip-btn" onclick="toggleCard(this)">View Back Side</button>
+              </div>
+            </div>
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+              <div class="back-title">Nutrition & Ingredients</div>
+              <div class="back-info">
+                <strong>Origin:</strong> Fresh local farm poultry.<br>
+                <strong>Calories:</strong> 320 kcal<br>
+                <strong>Allergens:</strong> Soy, Garlic, Spices.<br>
+                Prepared fresh upon order with secret house batter.
+              </div>
+              <button class="action-btn" onclick="orderItem('Chicken Skin', '₱150')">Order Now</button>
+              <button class="action-btn flip-btn" onclick="toggleCard(this)">Back to Front</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 2 -->
+        <div class="menu-card-wrapper">
+          <div class="menu-item" data-card>
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+              <div class="menu-img-wrapper">
+                <img src="isaw.jpg" alt="Isaw" class="menu-img" data-3d-img>
+              </div>
+              <div class="menu-details">
+                <div class="menu-name">Isaw</div>
+                <div class="menu-price">₱120</div>
+                <div class="menu-desc">Crispy pork bits mixed with onions and chili, served sizzling hot.</div>
+                <button class="action-btn flip-btn" onclick="toggleCard(this)">View Back Side</button>
+              </div>
+            </div>
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+              <div class="back-title">Nutrition & Ingredients</div>
+              <div class="back-info">
+                <strong>Origin:</strong> Premium local cuts.<br>
+                <strong>Calories:</strong> 280 kcal<br>
+                <strong>Allergens:</strong> Vinegar, Soy sauce, Chili.<br>
+                Grilled over organic charcoal embers.
+              </div>
+              <button class="action-btn" onclick="orderItem('Isaw', '₱120')">Order Now</button>
+              <button class="action-btn flip-btn" onclick="toggleCard(this)">Back to Front</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 3 -->
+        <div class="menu-card-wrapper">
+          <div class="menu-item" data-card>
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+              <div class="menu-img-wrapper">
+                <img src="KWEK.jpg" alt="Quill Egg" class="menu-img" data-3d-img>
+              </div>
+              <div class="menu-details">
+                <div class="menu-name">Quill Egg</div>
+                <div class="menu-price">₱130</div>
+                <div class="menu-desc">Whole tilapia seasoned and deep fried for that golden crunch.</div>
+                <button class="action-btn flip-btn" onclick="toggleCard(this)">View Back Side</button>
+              </div>
+            </div>
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+              <div class="back-title">Nutrition & Ingredients</div>
+              <div class="back-info">
+                <strong>Origin:</strong> Fresh organic farm eggs.<br>
+                <strong>Calories:</strong> 210 kcal<br>
+                <strong>Allergens:</strong> Egg, Wheat flour.<br>
+                Coated in crispy golden orange batter.
+              </div>
+              <button class="action-btn" onclick="orderItem('Quill Egg', '₱130')">Order Now</button>
+              <button class="action-btn flip-btn" onclick="toggleCard(this)">Back to Front</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 4 -->
+        <div class="menu-card-wrapper">
+          <div class="menu-item" data-card>
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+              <div class="menu-img-wrapper">
+                <img src="SQUID.jpg" alt="Squid Ball" class="menu-img" data-3d-img>
+              </div>
+              <div class="menu-details">
+                <div class="menu-name">Squid Ball</div>
+                <div class="menu-price">₱180</div>
+                <div class="menu-desc">Classic Filipino stew made with tender beef and rich tomato sauce.</div>
+                <button class="action-btn flip-btn" onclick="toggleCard(this)">View Back Side</button>
+              </div>
+            </div>
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+              <div class="back-title">Nutrition & Ingredients</div>
+              <div class="back-info">
+                <strong>Origin:</strong> Deep sea catch.<br>
+                <strong>Calories:</strong> 310 kcal<br>
+                <strong>Allergens:</strong> Seafood, Wheat.<br>
+                Served with sweet and spicy vinegar dip.
+              </div>
+              <button class="action-btn" onclick="orderItem('Squid Ball', '₱180')">Order Now</button>
+              <button class="action-btn flip-btn" onclick="toggleCard(this)">Back to Front</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card 5 -->
+        <div class="menu-card-wrapper">
+          <div class="menu-item" data-card>
+            <!-- FRONT SIDE -->
+            <div class="card-face card-front">
+              <div class="menu-img-wrapper">
+                <img src="STREET.jpg" alt="Food Street" class="menu-img" data-3d-img>
+              </div>
+              <div class="menu-details">
+                <div class="menu-name">Food Street</div>
+                <div class="menu-price">₱180</div>
+                <div class="menu-desc">Classic Filipino stew made with tender beef and rich tomato sauce.</div>
+                <button class="action-btn flip-btn" onclick="toggleCard(this)">View Back Side</button>
+              </div>
+            </div>
+            <!-- BACK SIDE -->
+            <div class="card-face card-back">
+              <div class="back-title">Nutrition & Ingredients</div>
+              <div class="back-info">
+                <strong>Origin:</strong> Street food heritage recipe.<br>
+                <strong>Calories:</strong> 350 kcal<br>
+                <strong>Allergens:</strong> Soy, Gluten.<br>
+                A vibrant mix of traditional street favorites.
+              </div>
+              <button class="action-btn" onclick="orderItem('Food Street', '₱180')">Order Now</button>
+              <button class="action-btn flip-btn" onclick="toggleCard(this)">Back to Front</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let targetScrollY = 0;
+    let currentScrollY = 0;
+    let maxScroll = 0;
+    const scrollContainer = document.getElementById('scroll-container');
+
+    function updatePageHeight() {
+      maxScroll = scrollContainer.getBoundingClientRect().height - window.innerHeight;
+      document.body.style.height = (scrollContainer.getBoundingClientRect().height + window.innerHeight) + 'px';
+    }
+
+    window.addEventListener('resize', updatePageHeight);
+    window.addEventListener('load', updatePageHeight);
+
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      targetScrollY += e.deltaY;
+      targetScrollY = Math.max(0, Math.min(targetScrollY, maxScroll));
+    }, { passive: false });
+
+    // Mouse Tracking for 3D Perspective Depth
+    let mouseX = 0;
+    let mouseY = 0;
+    let currentMouseX = 0;
+    let currentMouseY = 0;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+      mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+    });
+
+    const cards = document.querySelectorAll('[data-card]');
+    const images3D = document.querySelectorAll('[data-3d-img]');
+
+    function renderLoop() {
+      currentScrollY += (targetScrollY - currentScrollY) * 0.08;
+      currentMouseX += (mouseX - currentMouseX) * 0.1;
+      currentMouseY += (mouseY - currentMouseY) * 0.1;
+
+      scrollContainer.style.transform = `translate3d(0, -${currentScrollY}px, 0)`;
+
+      const scrollVelocity = targetScrollY - currentScrollY;
+
+      cards.forEach((card, index) => {
+        const img = images3D[index];
+        const isFlipped = card.classList.contains('flipped');
+
+        // Human vision tilt calculation
+        const tiltX = currentMouseY * -12;
+        const tiltY = currentMouseX * 12;
+
+        // Maintain the flip transformation state while layering mouse tilt rotation
+        if (isFlipped) {
+          card.style.transform = `rotateY(180deg) rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        } else {
+          card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+        }
+
+        // Image movement depth mapping
+        if (img) {
+          const imgRotateX = currentMouseY * -20 + (scrollVelocity * 0.04);
+          const imgRotateY = currentMouseX * 20;
+          const imgScale = 1.1 + Math.abs(scrollVelocity * 0.0004);
+
+          img.style.transform = `
+            scale(${imgScale})
+            translateZ(30px)
+            rotateX(${imgRotateX}deg)
+            rotateY(${imgRotateY}deg)
+          `;
+        }
+      });
+
+      requestAnimationFrame(renderLoop);
+    }
+
+    renderLoop();
+
+    // Flip Card Handler Function
+    function toggleCard(btn) {
+      const card = btn.closest('[data-card]');
+      card.classList.toggle('flipped');
+    }
+
+    function orderItem(itemName, itemPrice) {
+      alert("You ordered: " + itemName + " (" + itemPrice + "). Proceeding to checkout!");
+    }
+  </script>
+
+</body>
+</html>

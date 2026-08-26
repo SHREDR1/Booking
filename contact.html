@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        /* CSS starts here */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start; /* Align to the top */
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 900px; /* Adjust as needed */
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-family: 'Times New Roman', serif; /* To match the elegant font */
+            font-style: italic;
+        }
+
+        h2 {
+            color: #555;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+
+        .form-sections {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            flex-wrap: wrap; /* Allow wrapping on smaller screens */
+        }
+
+        .general-inquiries,
+        .existing-guests {
+            flex: 1; /* Allow sections to grow and shrink */
+            min-width: 380px; /* Minimum width before wrapping */
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            color: #666;
+            font-weight: bold;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="email"],
+        .form-group textarea {
+            width: calc(100% - 10px); /* Adjust for padding */
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* Include padding and border in the element's total width and height */
+        }
+
+        .form-group.full-width {
+            width: 100%;
+        }
+
+        .radio-group {
+            margin-bottom: 15px;
+        }
+
+        .radio-group input[type="radio"] {
+            margin-right: 5px;
+        }
+
+        .radio-options label {
+            font-weight: normal; /* Override bold for general labels */
+        }
+
+        .name-fields {
+            display: flex;
+            gap: 10px;
+        }
+
+        .name-fields input {
+            flex: 1;
+        }
+
+        .submit-button {
+            background-color: #4CAF50; /* Green */
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+
+        .contact-numbers {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .contact-numbers h2 {
+            text-align: center;
+            border-bottom: none;
+            margin-bottom: 20px;
+        }
+
+        .location-contacts {
+            margin-bottom: 15px;
+        }
+
+        .location-contacts p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .all-locations {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-weight: bold;
+            color: #555;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .form-sections {
+                flex-direction: column;
+            }
+            .general-inquiries,
+            .existing-guests {
+                min-width: unset; /* Remove min-width on smaller screens */
+                width: 100%;
+            }
+        }
+        /* CSS ends here */
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contact Us</h1>
+        <div class="form-sections">
+            <div class="general-inquiries">
+                <h2>General Inquiries</h2>
+                <p>* indicates required field</p>
+                <form>
+                    <div class="form-group">
+                        <label for="firstName">First Name *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="email">Email *</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="yourMessage">Your Message *</label>
+                        <textarea id="yourMessage" name="yourMessage" rows="6" required></textarea>
+                    </div>
+                    <div class="form-group full-width">
+                        <label for="phoneNumber">Phone Number</label>
+                        <input type="text" id="phoneNumber" name="phoneNumber">
+                    </div>
+                    <button type="submit" class="submit-button">Send Inquiry</button>
+                </form>
+            </div>
+
+            <div class="existing-guests">
+                <h2>Existing Guests / Boarders</h2>
+                <p>Please verify you're a guest *</p>
+                <div class="radio-group">
+                    <input type="radio" id="yesImGuest" name="isGuest" value="yes" required>
+                    <label for="yesImGuest">Yes, I'm a guest</label>
+                    <input type="radio" id="noImNotGuest" name="isGuest" value="no">
+                    <label for="noImNotGuest">No, I'm not a guest</label>
+                </div>
+
+                <div class="form-group">
+                    <label for="unitRoom">Unit / Room # *</label>
+                    <input type="text" id="unitRoom" name="unitRoom" required>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Location / Branch *</label>
+                    <div class="radio-options">
+                        <input type="radio" id="medhouseRamos" name="location" value="MedHouse Ramos, Cebu" required>
+                        <label for="medhouseRamos">MedHouse Ramos, Cebu</label><br>
+                        <input type="radio" id="laEsperanza" name="location" value="La Esperanza, Labangon Cebu">
+                        <label for="laEsperanza">La Esperanza, Labangon Cebu</label><br>
+                        <input type="radio" id="tisa" name="location" value="Tisa, Labangon Cebu">
+                        <label for="tisa">Tisa, Labangon Cebu</label><br>
+                        <input type="radio" id="happyValley" name="location" value="Happy Valley, Banawa Cebu">
+                        <label for="happyValley">Happy Valley, Banawa Cebu</label><br>
+                        <input type="radio" id="gunOb" name="location" value="Gun-Ob, Lapu-Lapu Mactan">
+                        <label for="gunOb">Gun-Ob, Lapu-Lapu Mactan</label><br>
+                        <input type="radio" id="basak" name="location" value="Basak, Lapu-Lapu Mactan">
+                        <label for="basak">Basak, Lapu-Lapu Mactan</label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="guestName">Guest Name *</label>
+                    <div class="name-fields">
+                        <input type="text" id="guestNameFirst" name="guestNameFirst" placeholder="First" required>
+                        <input type="text" id="guestNameLast" name="guestNameLast" placeholder="Last" required>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label>Subject Type *</label>
+                    <div class="radio-options">
+                        <input type="radio" id="generalQuestions" name="subjectType" value="General Questions" required>
+                        <label for="generalQuestions">General Questions</label><br>
+                        <input type="radio" id="letterToManagement" name="subjectType" value="Letter to Management">
+                        <label for="letterToManagement">Letter to Management</label><br>
+                        <input type="radio" id="reportProblem" name="subjectType" value="Report a Problem / Issue">
+                        <label for="reportProblem">Report a Problem / Issue</label><br>
+                        <input type="radio" id="feedbackSuggestions" name="subjectType" value="Feedback / Suggestions">
+                        <label for="feedbackSuggestions">Feedback / Suggestions</label><br>
+                        <input type="radio" id="accountsPaymentInfo" name="subjectType" value="Accounts/Payment Info">
+                        <label for="accountsPaymentInfo">Accounts/Payment Info</label><br>
+                        <input type="radio" id="otherSubject" name="subjectType" value="Other">
+                        <label for="otherSubject">Other</label>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="messageGuest">Message *</label>
+                    <textarea id="messageGuest" name="messageGuest" rows="6" required></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="guestEmail">Your Email *</label>
+                    <input type="email" id="guestEmail" name="guestEmail" required>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-numbers">
+            <h2>Contact Numbers</h2>
+            <div class="location-contacts">
+                <p><strong>Ramos:</strong></p>
+                <p>(032) 402 0874 - Landline</p>
+                <p>+63 995 294 2237 - Murphy</p>
+                <p>+63 932 143 4651 - Murphy</p>
+                <p>+63 923 180 2549 - Murphy</p>
+                <p>+63 923 902 5977 - Cromwell</p>
+                <p>+63 919 001 7116 - Cromwell</p>
+                <p>+63 922 400 3329 - Cromwell</p>
+            </div>
+            <div class="location-contacts">
+                <p><strong>Labangon, Banawa, Cebu:</strong></p>
+                <p>+63 945 257 2796 - Jimbo</p>
+            </div>
+            <div class="location-contacts">
+                <p><strong>Basak & Gun-Ob Lapu-Lapu:</strong></p>
+                <p>+63 906 875 8041 - Dario</p>
+                <p>+63 995 725 7747 - Dario</p>
+            </div>
+        </div>
+        <div class="all-locations">
+            <p>All Locations</p>
+        </div>
+    </div>
+</body>
+</html>

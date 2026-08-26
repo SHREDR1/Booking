@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ocho Boarding House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg-alt: #14110d;
+    --panel-bg: #15120e;
+    --ink: #f2ede2;
+    --muted: #8c8477;
+    --brass: #b98a4e;
+    --brass-dim: #7d6440;
+    --forest: #2f3b2e;
+    --border: rgba(242, 237, 226, 0.09);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  @media (hover: hover) and (pointer: fine) {
+    body { cursor: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ============ SITE-WIDE SMOOTH SCROLL ============ */
+  #smoothWrapper { width: 100%; }
+
+  body.smooth-active #smoothWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    will-change: transform;
+  }
+
+  /* ============ GRAIN OVERLAY ============ */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ============ CUSTOM CURSOR ============ */
+  .ocho-cursor {
+    position: fixed; top: 0; left: 0;
+    width: 6px; height: 6px;
+    background-color: var(--brass);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate3d(0,0,0) translate(-50%,-50%);
+  }
+
+  .ocho-cursor-ring {
+    position: fixed; top: 0; left: 0;
+    width: 44px; height: 44px;
+    border: 1px solid rgba(185, 138, 78, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate3d(0,0,0) translate(-50%,-50%);
+    transition: width 0.3s cubic-bezier(0.16,1,0.3,1), height 0.3s cubic-bezier(0.16,1,0.3,1), background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  #tubesCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ============ NAV ============ */
+  .lusion-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 50px;
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 1000;
+    mix-blend-mode: difference;
+  }
+
+  .nav-left, .nav-right { display: flex; gap: 14px; align-items: center; }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid rgba(242,237,226,0.25);
+    color: var(--ink);
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+  }
+
+  .nav-btn:hover, .nav-btn:focus-visible {
+    border-color: var(--ink);
+    background: rgba(242,237,226,0.08);
+  }
+
+  .brand-logo {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 1.05rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('22.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.42) saturate(0.9);
+    transform: scale(1.06);
+  }
+
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12,10,8,0.55) 0%, rgba(12,10,8,0.35) 40%, var(--bg) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 50px 90px 50px;
+    max-width: 1100px;
+  }
+
+  .eyebrow {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--brass);
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    margin-bottom: 22px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .hero-content h1 em {
+    font-style: italic;
+    color: var(--brass);
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 460px;
+    margin-top: 26px;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    left: 50px;
+    bottom: 34px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+  }
+
+  .scroll-cue .line {
+    width: 1px;
+    height: 46px;
+    background: rgba(242,237,226,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-cue .line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0; right: 0;
+    height: 100%;
+    background: var(--brass);
+    animation: cueDrop 2.2s ease-in-out infinite;
+  }
+
+  @keyframes cueDrop {
+    0% { top: -100%; }
+    60% { top: 100%; }
+    100% { top: 100%; }
+  }
+
+  /* ============ INTRO STRIP ============ */
+  .intro {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 120px 50px 60px 50px;
+    text-align: center;
+  }
+
+  .intro p {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .intro p span { color: var(--muted); }
+
+  /* ============ CAROUSEL SECTION LABEL ============ */
+  .section-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 40px 60px 0 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .section-label .tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--brass);
+  }
+
+  .section-label .count {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* Mobile-only Carousel Controls */
+  .mobile-carousel-controls {
+    display: none; /* Hidden by default on desktop */
+  }
+
+  /* ============ CAROUSEL ============ */
+  .cinematic-carousel {
+    display: flex;
+    gap: 30px;
+    padding: 30px 60px 100px 60px;
+    overflow-x: hidden;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .cinematic-carousel:active { cursor: grabbing; }
+
+  .room-panel {
+    flex: 0 0 75vw;
+    max-width: 950px;
+    height: 550px;
+    background-color: var(--panel-bg);
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    position: relative;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.55);
+    transition: border-color 0.4s ease, transform 0.7s cubic-bezier(0.16,1,0.3,1), opacity 0.7s ease;
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+
+  .room-panel.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+  .room-panel:hover { border-color: rgba(185, 138, 78, 0.45); }
+
+  .plaque {
+    position: absolute;
+    top: 26px;
+    left: 26px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 16px;
+    background: rgba(12,10,8,0.55);
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(185,138,78,0.5);
+    border-radius: 2px;
+  }
+
+  .plaque .no {
+    font-family: 'Fraunces', serif;
+    font-size: 0.95rem;
+    color: var(--brass);
+    letter-spacing: 0.04em;
+  }
+
+  .panel-image-container {
+    position: relative;
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: #000;
+    pointer-events: none;
+  }
+
+  .panel-image-container img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 1s cubic-bezier(0.16,1,0.3,1);
+  }
+
+  .room-panel:hover .panel-image-container img { transform: scale(1.06); }
+
+  .panel-content-layer {
+    padding: 50px 42px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: var(--panel-bg);
+  }
+
+  .panel-content-layer h3 {
+    font-size: clamp(1.6rem, 2.4vw, 2.1rem);
+    font-weight: 400;
+    letter-spacing: 0.01em;
+    color: var(--ink);
+    margin-bottom: 12px;
+  }
+
+  .price {
+    color: var(--brass);
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    margin-bottom: 22px;
+  }
+
+  .panel-content-layer p {
+    font-size: 0.94rem;
+    color: var(--muted);
+    line-height: 1.75;
+    margin-bottom: 32px;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 13px 30px;
+    background-color: transparent;
+    color: var(--ink);
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border: 1px solid rgba(242,237,226,0.22);
+    align-self: flex-start;
+    transition: all 0.35s ease;
+  }
+
+  .btn:hover, .btn:focus-visible {
+    background-color: var(--brass);
+    border-color: var(--brass);
+    color: #0c0a08;
+  }
+
+  /* ============ CTA ============ */
+  .cta {
+    text-align: center;
+    padding: 140px 40px 150px 40px;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+  }
+
+  .cta .eyebrow { justify-content: center; display: flex; }
+
+  .cta h2 {
+    font-size: clamp(2.1rem, 5.5vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    max-width: 780px;
+    margin: 22px auto 40px auto;
+  }
+
+  .cta h2 em { font-style: italic; color: var(--brass); }
+
+  /* ============ FOOTER ============ */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 60px 50px 40px 50px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 40px;
+    color: var(--muted);
+    font-size: 0.85rem;
+  }
+
+  footer .col h4 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    font-size: 0.68rem;
+    color: var(--brass);
+    margin-bottom: 14px;
+  }
+
+  footer .col a, footer .col p {
+    display: block;
+    color: var(--muted);
+    text-decoration: none;
+    line-height: 1.9;
+    margin: 0;
+  }
+
+  footer .col a:hover { color: var(--ink); }
+
+  footer .bottom-row {
+    width: 100%;
+    border-top: 1px solid var(--border);
+    margin-top: 30px;
+    padding-top: 24px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  /* ============ RESPONSIVE (MOBILE VIEW ONLY) ============ */
+  @media (max-width: 992px) {
+    .lusion-nav { padding: 20px 24px; }
+    .hero-content { padding: 0 24px 70px 24px; }
+    .scroll-cue { left: 24px; }
+    .intro { padding: 90px 24px 40px 24px; }
+    .section-label { padding: 30px 24px 0 24px; flex-direction: column; gap: 15px; align-items: flex-start; }
+    
+    /* Enable and style the arrow buttons for mobile view */
+    .mobile-carousel-controls {
+      display: flex;
+      gap: 10px;
+      width: 100%;
+    }
+    .carousel-arrow {
+      flex: 1;
+      background: transparent;
+      border: 1px solid rgba(185, 138, 78, 0.4);
+      color: var(--ink);
+      height: 44px;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .carousel-arrow:active {
+      background: var(--brass);
+      border-color: var(--brass);
+      color: #0c0a08;
+    }
+
+    /* Enable snap scrolling on mobile so arrows snap nicely to each room */
+    .cinematic-carousel {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scrollbar-width: none;
+    }
+    .cinematic-carousel::-webkit-scrollbar {
+      display: none;
+    }
+    .room-panel {
+      scroll-snap-align: center;
+      grid-template-columns: 1fr;
+      grid-template-rows: 260px 1fr;
+      height: auto;
+      flex: 0 0 90vw;
+    }
+    .panel-content-layer { padding: 32px; }
+    .cinematic-carousel { padding-left: 24px; padding-right: 24px; }
+    .cta { padding: 90px 24px 100px 24px; }
+    footer { padding: 50px 24px 30px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<canvas id="tubesCanvas"></canvas>
+<div class="ocho-cursor"></div>
+<div class="ocho-cursor-ring"></div>
+
+<nav class="lusion-nav">
+  <div class="nav-left">
+    <a href="#" class="nav-btn">&larr; Back</a>
+  </div>
+  <div class="brand-logo">Ocho House</div>
+  <div class="nav-right">
+    <a href="#contact" class="nav-btn">Let's Talk &rarr;</a>
+  </div>
+</nav>
+
+<div id="smoothWrapper">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <span class="eyebrow">A Room For Every Stay</span>
+    <h1>Ocho <em>Boarding</em><br>House</h1>
+    <p class="hero-sub">Six room types, one address. Wired for work, priced for real life, and built around the small comforts that make a rented room feel like yours.</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <p>From a single bedspace to a private mezzanine loft — <span>every room at Ocho House is walked through below, in order, exactly as you'd find them down the hall.</span></p>
+</section>
+
+<div class="section-label">
+  <div>
+    <span class="tag">The Rooms</span>
+    <span class="count" style="display:block; margin-top:4px;">06 Types Available</span>
+  </div>
+  <!-- Mobile-only Arrow Controls -->
+  <div class="mobile-carousel-controls">
+    <button class="carousel-arrow" id="prevBtn">&larr; Prev Room</button>
+    <button class="carousel-arrow" id="nextBtn">Next Room &rarr;</button>
+  </div>
+</div>
+
+<!-- CAROUSEL -->
+<div class="cinematic-carousel" id="carousel">
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 01</span></div>
+      <img src="20.jpg" alt="Single Suite" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <h3>Single Suite</h3>
+      <div class="price">₱1,500 / month</div>
+      <p>Perfect for solo stay. Includes an electric fan, shared clean CR, and high-speed Wi-Fi tailored for productivity.</p>
+      <a href="book%20now.html?room=Single%20Suite&price=%E2%82%B11,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 02</span></div>
+      <img src="21.jpg" alt="Double Room" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <h3>Double Room</h3>
+      <div class="price">₱2,500 / month</div>
+      <p>Ideal for two people. Includes dual bedding configurations, study desks, and full access to the common kitchen.</p>
+      <a href="book%20now.html?room=Double%20Room&price=%E2%82%B12,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 03</span></div>
+      <img src="22.jpg" alt="Executive Aircon" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <h3>Executive Aircon</h3>
+      <div class="price">₱3,500 / month</div>
+      <p>Air-conditioned room with a private comfort room and enhanced privacy, built for working professionals.</p>
+      <a href="book%20now.html?room=Executive%20Aircon&price=%E2%82%B13,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 04</span></div>
+      <img src="20.jpg" alt="Shared Bedspace" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <h3>Shared Bedspace</h3>
+      <div class="price">₱800 / month</div>
+      <p>Budget-friendly option in secure quarters, with separate designated wings for male and female occupants.</p>
+      <a href="book%20now.html?room=Shared%20Bedspace&price=%E2%82%B1800%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 05</span></div>
+      <img src="21.jpg" alt="Deluxe Studio" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <h3>Deluxe Studio</h3>
+      <div class="price">₱4,500 / month</div>
+      <p>Spacious standalone studio unit featuring its own mini-kitchenette, air conditioning, and premium lighting.</p>
+      <a href="book%20now.html?room=Deluxe%20Studio&price=%E2%82%B14,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 06</span></div>
+      <img src="22.jpg" alt="Mezzanine Loft" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <h3>Mezzanine Loft</h3>
+      <div class="price">₱5,200 / month</div>
+      <p>A multi-level layout with a dedicated upper sleeping berth and a lower study/lounge area.</p>
+      <a href="book%20now.html?room=Mezzanine%20Loft&price=%E2%82%B15,200%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <span class="eyebrow">Ready When You Are</span>
+  <h2>Come see the room <em>before</em><br>someone else does.</h2>
+  <a href="mailto:hello@ochohouse.com" class="btn">Inquire Now</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="col">
+    <h4>Address</h4>
+    <p>Ocho Boarding House<br>Cebu City, Philippines</p>
+  </div>
+  <div class="col">
+    <h4>Contact</h4>
+    <a href="mailto:hello@ochohouse.com">hello@ochohouse.com</a>
+    <a href="tel:+639000000000">+63 900 000 0000</a>
+  </div>
+  <div class="col">
+    <h4>Follow</h4>
+    <a href="#">Facebook</a>
+    <a href="#">Instagram</a>
+  </div>
+  <div class="bottom-row">
+    <span>© 2026 Ocho Boarding House</span>
+    <span>All rooms subject to availability</span>
+  </div>
+</footer>
+
+</div><!-- /#smoothWrapper -->
+<div id="smoothSpacer"></div>
+
+<script>
+  /* ===== AUTH CHECK FOR INQUIRE SPACE BUTTONS ===== */
+  document.addEventListener('DOMContentLoaded', () => {
+    // Check if user is logged in. 
+    // Assumes your login logic sets localStorage.getItem('isLoggedIn') to 'true' (or handles an active user session/token).
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    const inquireButtons = document.querySelectorAll('.inquire-btn');
+    inquireButtons.forEach(btn => {
+      if (!isLoggedIn) {
+        // If not logged in, redirect them to login.html instead, optionally saving where they wanted to go
+        const originalHref = btn.getAttribute('href');
+        btn.setAttribute('href', `login.html?redirect=${encodeURIComponent(originalHref)}`);
+      }
+    });
+  });
+
+  /* ===== ROPE-STYLE CURSOR & PHYSICS SIMULATION ===== */
+  const cursorDot = document.querySelector('.ocho-cursor');
+  const cursorRing = document.querySelector('.ocho-cursor-ring');
+  const tubesCanvas = document.getElementById('tubesCanvas');
+
+  if (cursorDot && cursorRing && tubesCanvas && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY, ringInit = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      if (!ringInit) { ringX = mouseX; ringY = mouseY; ringInit = true; }
+      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+    });
+
+    function renderRing() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(renderRing);
+    }
+    renderRing();
+
+    document.querySelectorAll('a, button, .room-panel, .btn').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.style.width = '68px';
+        cursorRing.style.height = '68px';
+        cursorRing.style.backgroundColor = 'rgba(185,138,78,0.12)';
+        cursorRing.style.borderColor = '#b98a4e';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.style.width = '44px';
+        cursorRing.style.height = '44px';
+        cursorRing.style.backgroundColor = 'transparent';
+        cursorRing.style.borderColor = 'rgba(185,138,78,0.4)';
+      });
+    });
+
+    /* ===== ROPE PHYSICS ENGINE ===== */
+    const tctx = tubesCanvas.getContext('2d');
+    const TUBE_DPR = Math.min(window.devicePixelRatio || 1, 1.5); 
+    function resizeTubes() {
+      tubesCanvas.width = window.innerWidth * TUBE_DPR;
+      tubesCanvas.height = window.innerHeight * TUBE_DPR;
+      tctx.setTransform(TUBE_DPR, 0, 0, TUBE_DPR, 0, 0);
+    }
+    resizeTubes();
+    window.addEventListener('resize', resizeTubes);
+
+    const ROPE_SEGMENTS = 30;
+    const NUM_ROPES = 5;
+    
+    const ropes = Array.from({ length: NUM_ROPES }, (_, ropeIndex) => {
+      return Array.from({ length: ROPE_SEGMENTS }, () => ({
+        x: mouseX,
+        y: mouseY,
+        vx: 0,
+        vy: 0
+      }));
+    });
+
+    const ropePalettes = [
+      ['#b98a4e', '#d4af37', '#9c743f', '#7d6440', '#4a3b25'],
+      ['#e0c095', '#b98a4e', '#8c7048', '#5e4b2f', '#362b1b'],
+      ['#c89d5a', '#a67c37', '#d9c28a', '#66512c', '#382b17']
+    ];
+    let paletteIndex = 0;
+
+    window.addEventListener('click', () => {
+      paletteIndex = (paletteIndex + 1) % ropePalettes.length;
+    });
+
+    function drawRopes() {
+      tctx.clearRect(0, 0, tubesCanvas.width, tubesCanvas.height);
+      tctx.lineCap = 'round';
+      tctx.lineJoin = 'round';
+
+      const colors = ropePalettes[paletteIndex];
+
+      ropes.forEach((rope, rIndex) => {
+        const offsetX = (rIndex - Math.floor(NUM_ROPES / 2)) * 4;
+        const offsetY = (rIndex - Math.floor(NUM_ROPES / 2)) * 4;
+
+        rope[0].x += (mouseX + offsetX - rope[0].x) * 0.3;
+        rope[0].y += (mouseY + offsetY - rope[0].y) * 0.3;
+
+        for (let i = 1; i < rope.length; i++) {
+          const prev = rope[i - 1];
+          const curr = rope[i];
+          
+          const dx = prev.x - curr.x;
+          const dy = prev.y - curr.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const targetDist = 6;
+
+          if (dist > 1) {
+            const pull = (dist - targetDist) / dist * 0.5;
+            curr.x += dx * pull;
+            curr.y += dy * pull;
+          }
+        }
+
+        tctx.beginPath();
+        for (let i = 0; i < rope.length; i++) {
+          if (i === 0) tctx.moveTo(rope[i].x, rope[i].y);
+          else tctx.lineTo(rope[i].x, rope[i].y);
+        }
+
+        tctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        tctx.shadowBlur = 8;
+        tctx.globalAlpha = 0.35;
+        tctx.lineWidth = 8 - rIndex * 0.6;
+        tctx.strokeStyle = '#0c0a08';
+        tctx.stroke();
+
+        tctx.shadowBlur = 0;
+        tctx.globalAlpha = 0.9;
+        tctx.lineWidth = 3.5 - rIndex * 0.3;
+        tctx.strokeStyle = colors[rIndex % colors.length];
+        tctx.stroke();
+      });
+
+      tctx.globalAlpha = 1;
+      requestAnimationFrame(drawRopes);
+    }
+    drawRopes();
+  }
+
+  /* ===== CINEMATIC MOMENTUM SCROLL ===== */
+  const heroBg = document.getElementById('heroBg');
+  const hero = document.querySelector('.hero');
+  const smoothWrapper = document.getElementById('smoothWrapper');
+  const smoothSpacer = document.getElementById('smoothSpacer');
+
+  const wantsSmoothScroll =
+    window.matchMedia('(pointer: fine)').matches &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function applyParallax(scrollY) {
+    if (hero && heroBg && scrollY < hero.offsetHeight) {
+      heroBg.style.transform = `scale(1.06) translateY(${scrollY * 0.15}px)`;
+    }
+  }
+
+  if (wantsSmoothScroll) {
+    document.body.classList.add('smooth-active');
+
+    let currentY = window.scrollY;
+    let velocityY = 0;
+    let isVerticalTicking = false;
+
+    function setSpacerHeight() {
+      if (smoothWrapper && smoothSpacer) {
+        smoothSpacer.style.height = smoothWrapper.getBoundingClientRect().height + 'px';
+      }
+    }
+    setSpacerHeight();
+    window.addEventListener('resize', setSpacerHeight);
+    window.addEventListener('load', setSpacerHeight);
+    if (smoothWrapper) {
+      new ResizeObserver(setSpacerHeight).observe(smoothWrapper);
+    }
+
+    window.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      let delta = e.deltaY;
+      if (e.deltaMode === 1) delta *= 40;
+      else if (e.deltaMode === 2) delta *= 800;
+
+      velocityY += delta * 0.3; 
+
+      if (!isVerticalTicking) { 
+        requestAnimationFrame(updateVerticalScroll); 
+        isVerticalTicking = true; 
+      }
+    }, { passive: false });
+
+    function updateVerticalScroll() {
+      currentY += velocityY;
+      velocityY *= 0.965; 
+
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      
+      if (currentY < 0) {
+        currentY = 0;
+        velocityY = 0;
+      } else if (currentY > maxScroll) {
+        currentY = maxScroll;
+        velocityY = 0;
+      }
+
+      if (smoothWrapper) {
+        smoothWrapper.style.transform = `translate3d(0, ${-currentY}px, 0)`;
+      }
+      applyParallax(currentY);
+
+      if (Math.abs(velocityY) > 0.01) {
+        requestAnimationFrame(updateVerticalScroll);
+      } else {
+        isVerticalTicking = false;
+      }
+    }
+  } else {
+    window.addEventListener('scroll', () => applyParallax(window.scrollY), { passive: true });
+  }
+
+  /* ===== HORIZONTAL MOMENTUM CAROUSEL & MOBILE ARROW BUTTONS ===== */
+  const carousel = document.getElementById('carousel');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  
+  let currentScroll = carousel.scrollLeft;
+  let carouselVelocity = 0;
+  let isCarouselTicking = false;
+
+  // Mobile Button Click Logic to jump between rooms
+  if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      const cardWidth = carousel.querySelector('.room-panel').offsetWidth + 30;
+      carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const cardWidth = carousel.querySelector('.room-panel').offsetWidth + 30;
+      carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    });
+  }
+
+  carousel.addEventListener('wheel', (evt) => {
+    // Disable custom horizontal scroll wheel behavior on mobile devices (max-width: 992px)
+    if (window.innerWidth <= 992) {
+      return; 
+    }
+
+    evt.preventDefault();
+    let delta = evt.deltaY;
+    if (evt.deltaMode === 1) delta *= 40;
+    else if (evt.deltaMode === 2) delta *= 800;
+
+    carouselVelocity += delta * 0.3;
+
+    if (!isCarouselTicking) { 
+      requestAnimationFrame(updateCarousel); 
+      isCarouselTicking = true; 
+    }
+  }, { passive: false });
+
+  let isDown = false;
+  let startX;
+  let scrollStart;
+
+  carousel.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - carousel.offsetLeft;
+    scrollStart = currentScroll;
+    carouselVelocity = 0;
+  });
+
+  window.addEventListener('mouseup', () => { isDown = false; });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 2;
+    currentScroll = scrollStart - walk;
+    
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    currentScroll = Math.max(0, Math.min(currentScroll, maxScroll));
+    carousel.scrollLeft = currentScroll;
+  });
+
+  function updateCarousel() {
+    currentScroll += carouselVelocity;
+    carouselVelocity *= 0.965;
+
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    if (currentScroll < 0) {
+      currentScroll = 0;
+      carouselVelocity = 0;
+    } else if (currentScroll > maxScroll) {
+      currentScroll = maxScroll;
+      carouselVelocity = 0;
+    }
+
+    carousel.scrollLeft = currentScroll;
+    
+    if (Math.abs(carouselVelocity) > 0.01) {
+      requestAnimationFrame(updateCarousel);
+    } else {
+      isCarouselTicking = false;
+    }
+  }
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
+  }, { root: carousel, threshold: 0.1 });
+
+  carousel.querySelectorAll('.room-panel').forEach(panel => observer.observe(panel));
+</script>
+
+</body>
+</html>
