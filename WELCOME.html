@@ -359,6 +359,7 @@ header{
 	border-radius: 2px;
 	outline: none;
 	transition: border-color 0.3s;
+	cursor: text !important;
 }
 
 .login-input-group input:focus {
@@ -559,7 +560,7 @@ header{
 }
 
 
-/* HERO CONTENT */
+/* HERO CONTENT & HOVER EFFECT */
 
 .hero-content{
 
@@ -568,7 +569,38 @@ header{
 	z-index:2;
 
 	max-width:750px;
+	
+	/* Added smooth transition for the content block hover effect */
+	transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* --- NEW HERO TEXT HOVER ANIMATION ENHANCEMENTS --- */
+.hero-content:hover {
+	transform: translateY(-6px);
+}
+
+.hero-content:hover .hero-label {
+	letter-spacing: 9px;
+	color: #f1d45e;
+}
+
+.hero-content:hover h1 {
+	letter-spacing: -2px;
+	text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.hero-content:hover h2 {
+	letter-spacing: -2px;
+}
+
+.hero-content:hover h2 span {
+	text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+.hero-content:hover .hero-description {
+	color: #ffffff;
+}
+/* ------------------------------------------------ */
 
 .hero-label{
 
@@ -583,40 +615,44 @@ header{
 	margin-bottom:20px;
 
 	text-transform: uppercase;
+	transition: letter-spacing 0.5s ease, color 0.5s ease;
 }
 
 .hero h1{
 
-	font-size:clamp(60px,9vw,125px);
+	font-size: clamp(40px, 6vw, 85px);
 
-	line-height:.88;
+	line-height:.95;
 
 	font-weight:700;
 
-	letter-spacing:-4px;
+	letter-spacing:-2px;
 
 	margin-bottom:10px;
 
 	text-transform: uppercase;
+	transition: letter-spacing 0.5s ease, text-shadow 0.5s ease;
 }
 
 .hero h2{
-	font-size:clamp(60px,9vw,125px);
+	font-size: clamp(40px, 6vw, 85px);
 
-	line-height:.88;
+	line-height:.95;
 
 	font-weight:700;
 
-	letter-spacing:-4px;
+	letter-spacing:-2px;
 
 	margin-bottom:30px;
 
 	text-transform: uppercase;
+	transition: letter-spacing 0.5s ease;
 }
 
 .hero h2 span{
 
 	color:#D4AF37;
+	transition: text-shadow 0.5s ease;
 }
 
 .hero-description{
@@ -630,7 +666,7 @@ header{
 	line-height:1.8;
 
 	margin-bottom:35px;
-	min-height: 60px;
+	transition: color 0.5s ease;
 }
 
 .hero-button{
@@ -769,26 +805,6 @@ header{
 	font-size:16px;
 
 	max-width:550px;
-}
-
-
-/* =========================================================
-   TYPEWRITER EFFECT STYLES
-========================================================= */
-
-.typing-cursor {
-	display: inline-block;
-	width: 2px;
-	height: 1em;
-	background-color: #D4AF37;
-	margin-left: 2px;
-	vertical-align: middle;
-	animation: blinkCursor 0.7s infinite;
-}
-
-@keyframes blinkCursor {
-	0%, 100% { opacity: 1; }
-	50% { opacity: 0; }
 }
 
 
@@ -1019,18 +1035,18 @@ header{
 
 
 /* =========================================================
-   GALLERY
+   GALLERY (UNIFORM SIZING FIX)
 ========================================================= */
 
 .gallery{
 
 	display:grid;
 
-	grid-template-columns:2fr 1fr 1fr;
+	grid-template-columns:repeat(3, 1fr);
 
-	grid-template-rows:300px 300px;
+	grid-auto-rows:280px;
 
-	gap:12px;
+	gap:15px;
 
 	margin-top:50px;
 
@@ -1046,12 +1062,7 @@ header{
 	object-position:center;
 
 	background:#111;
-}
-
-.gallery img:first-child{
-
-	grid-row:span 2;
-
+	border-radius:4px;
 }
 
 
@@ -1169,47 +1180,6 @@ header{
 	margin:0 auto 35px;
 
 	line-height:1.8;
-}
-
-
-/* =========================================================
-   DATA RETRIEVAL CONTROL PANEL STYLES
-========================================================= */
-
-.data-retrieval-box {
-	margin-top: 35px;
-	padding: 25px;
-	background: #0b0e14;
-	border: 1px solid rgba(212, 175, 55, 0.4);
-	border-radius: 4px;
-	text-align: left;
-}
-
-.data-retrieval-box h3 {
-	color: #D4AF37;
-	font-size: 16px;
-	margin-bottom: 12px;
-	letter-spacing: 2px;
-	text-transform: uppercase;
-}
-
-.data-output {
-	font-family: monospace;
-	font-size: 13px;
-	color: #4CAF50;
-	background: #030507;
-	padding: 12px;
-	border-radius: 3px;
-	border: 1px solid #222;
-	margin-top: 10px;
-	word-break: break-all;
-	white-space: pre-wrap;
-}
-
-.data-btn-group {
-	display: flex;
-	gap: 10px;
-	margin-top: 15px;
 }
 
 
@@ -1474,7 +1444,7 @@ footer{
 
 	.hero h1, .hero h2{
 
-		font-size:clamp(55px,15vw,90px);
+		font-size:clamp(35px, 10vw, 55px);
 	}
 
 	.hero-description{
@@ -1526,16 +1496,9 @@ footer{
 
 	.gallery{
 
-		grid-template-columns:1fr 1fr;
+		grid-template-columns:repeat(2, 1fr);
 
-		grid-template-rows:250px 250px 250px;
-	}
-
-	.gallery img:first-child{
-
-		grid-column:span 2;
-
-		grid-row:span 1;
+		grid-auto-rows:240px;
 	}
 
 	.features{
@@ -1612,12 +1575,7 @@ footer{
 
 		grid-template-columns:1fr;
 
-		grid-template-rows:250px 250px 250px 250px;
-	}
-
-	.gallery img:first-child{
-
-		grid-column:auto;
+		grid-auto-rows:220px;
 	}
 
 	.contact h2{
@@ -1793,7 +1751,7 @@ html{
 		width: 100vw;
 		height: 100vh;
 		pointer-events: none;
-		z-index: 999999;
+		z-index: 10000000; /* FIXED: Elevated above modal layer (9999999) */
 	}
 }
 
@@ -1828,7 +1786,7 @@ html{
 
 	.hero h1, 
 	.hero h2 {
-		font-size: 36px !important;
+		font-size: 30px !important;
 		line-height: 1.05 !important;
 		letter-spacing: -1px !important;
 		margin-bottom: 10px !important;
@@ -1891,7 +1849,7 @@ html{
 
 	.gallery {
 		grid-template-columns: 1fr !important;
-		grid-template-rows: repeat(5, 180px) !important;
+		grid-auto-rows: 180px !important;
 	}
 }
 
@@ -2075,13 +2033,11 @@ html{
 						Our Story
 					</a>
 
-					<a href="mission.html">
-						Mission & Vision
+					<a href="VMGO.html">
+						VMGO & Testimonials
 					</a>
 
-					<a href="#">
-						Testimonials
-					</a>
+					
 
 					<a href="PRIVACY POLICY.html">
 						Privacy Policy
@@ -2161,7 +2117,7 @@ html{
 	<!-- =====================================================
 		 LOGIN MODAL POPUP
 	===================================================== -->
-	<div class="login-modal-overlay" id="loginModalOverlay">
+	<div class="login-modal-overlay" id="loginModalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
 		<div class="login-modal-box">
 			<h3>System Login</h3>
 			<div class="login-input-group">
@@ -2190,18 +2146,18 @@ html{
 		<div class="hero-content">
 
 			<div class="hero-label">
-				<span id="hero-label"></span>
+				Welcome
 			</div>
 
-			<h2 id="hero-h1"></h2>
+			<h1>Where Every Stay</h1>
 			
-			<h3 id="hero-h2"></h3>
+			<h2><span>Tells a Story.</span></h2>
 
 			<p class="hero-description">
-				<span id="hero-desc"></span>
+				Connecting people with quality spaces, great food, and better experiences.
 			</p>
 
-			<a href="#experience" class="hero-button" id="hero-btn" style="opacity: 0;">
+			<a href="#experience" class="hero-button" id="hero-btn">
 				Discover
 			</a>
 
@@ -2232,24 +2188,25 @@ html{
 				<div>
 
 					<div class="section-label">
-						<span id="typewriter-label"></span>
+						Our Story
 					</div>
 
 					<h2 class="section-title">
-						<span id="typewriter-title"></span>
+						More Than<br>
+						a Place to Stay.
 					</h2>
 
 					<p class="section-text">
-						<span id="typewriter-p1"></span>
+						OCHO Ventures was created to bring accommodation, food, comfort, and experience together in one destination.
 						<br><br>
-						<span id="typewriter-p2"></span>
+						From the moment you arrive, every detail is designed to make your stay comfortable and memorable.
 					</p>
 
 				</div>
 
 				<div class="story-image-container">
 					<img
-						src="25.jpg"
+						src=".jpg"
 						class="story-image"
 						alt="OCHO Ventures"
 					>
@@ -2281,7 +2238,7 @@ html{
 
 
 			<div class="rooms">
-
+		
 				<div class="room">
 					<img src="18.jpg" alt="OCHO Room">
 					<div class="room-overlay">
@@ -2408,10 +2365,7 @@ html{
 
 			<div class="gallery">
 				<img src="18.jpg" alt="OCHO Gallery">
-				<img src="18.jpg" alt="OCHO Gallery">
-				<img src="18.jpg" alt="OCHO Gallery">
-				<img src="18.jpg" alt="OCHO Gallery">
-				<img src="gallery5.jpg" alt="OCHO Gallery">
+				<img src="18.jpg" alt="OCHO Gallery">				
 			</div>
 
 		</div>
@@ -2442,17 +2396,6 @@ html{
 			<a href="contact.html" class="hero-button">
 				Let’s Connect
 			</a>
-
-			<div class="data-retrieval-box">
-				<h3>Stored Preferences Status</h3>
-				<p style="font-size: 13px; color: #aaa;">Retrieve and check your local browser settings below:</p>
-				<div class="data-output" id="retrievedDataOutput">Checking storage...</div>
-				
-				<div class="data-btn-group">
-					<button class="cookie-btn cookie-btn-accept" id="btnRetrieveData">Retrieve Data</button>
-					<button class="cookie-btn cookie-btn-decline" id="btnClearData">Clear Storage</button>
-				</div>
-			</div>
 
 		</div>
 
@@ -2541,6 +2484,40 @@ html{
 	<script>
 
 	/* =========================================================
+	   CENTRALIZED STORAGE HELPER UTILITY
+	========================================================= */
+	const OchoStorage = {
+		getLoggedIn() {
+			return sessionStorage.getItem('ocho_logged_in') === 'true' || localStorage.getItem('isLoggedIn') === 'true';
+		},
+		setLoggedIn(status) {
+			if (status) {
+				sessionStorage.setItem('ocho_logged_in', 'true');
+				localStorage.setItem('isLoggedIn', 'true');
+			} else {
+				sessionStorage.removeItem('ocho_logged_in');
+				localStorage.removeItem('isLoggedIn');
+			}
+		},
+		getUsers() {
+			return JSON.parse(localStorage.getItem('ocho_users') || '[]');
+		},
+		getCookieConsent() {
+			const rawData = localStorage.getItem('ocho_cookie_consent');
+			if (!rawData) return null;
+			try {
+				return JSON.parse(rawData);
+			} catch(e) {
+				return { essential: true, analytics: rawData === 'accepted', marketing: rawData === 'accepted', status: rawData };
+			}
+		},
+		setCookieConsent(consentData) {
+			localStorage.setItem('ocho_cookie_consent', JSON.stringify(consentData));
+		}
+	};
+
+
+	/* =========================================================
 	   CLICK COLOR CHANGE FEATURE FOR THE LOGO
 	========================================================= */
 	document.addEventListener('DOMContentLoaded', () => {
@@ -2558,7 +2535,7 @@ html{
 
 
 	/* =========================================================
-	   DYNAMIC LOGIN / LOG OUT STATE & MODAL LOGIC
+	   DYNAMIC LOGIN / LOG OUT STATE & MODAL LOGIC + FOCUS TRAP
 	========================================================= */
 	document.addEventListener('DOMContentLoaded', () => {
 		const loginTrigger = document.getElementById('loginActionTrigger');
@@ -2571,7 +2548,7 @@ html{
 		const modalPass = document.getElementById('modalPass');
 		const errorMsg = document.getElementById('loginErrorMsg');
 
-		let isLoggedIn = sessionStorage.getItem('ocho_logged_in') === 'true' || localStorage.getItem('isLoggedIn') === 'true';
+		let isLoggedIn = OchoStorage.getLoggedIn();
 
 		function updateLoginState() {
 			if (isLoggedIn) {
@@ -2586,8 +2563,7 @@ html{
 					logoutTrigger.style.display = 'inline-block';
 					logoutTrigger.onclick = (e) => {
 						e.preventDefault();
-						sessionStorage.removeItem('ocho_logged_in');
-						localStorage.removeItem('isLoggedIn');
+						OchoStorage.setLoggedIn(false);
 						isLoggedIn = false;
 						updateLoginState();
 						window.location.reload();
@@ -2601,6 +2577,7 @@ html{
 					loginTrigger.onclick = (e) => {
 						e.preventDefault();
 						modalOverlay.classList.add('active');
+						modalOverlay.setAttribute('aria-hidden', 'false');
 						if (modalUser) modalUser.focus();
 					};
 				}
@@ -2615,13 +2592,50 @@ html{
 
 		updateLoginState();
 
+		function closeModal() {
+			modalOverlay.classList.remove('active');
+			modalOverlay.setAttribute('aria-hidden', 'true');
+			errorMsg.style.display = 'none';
+			if (loginTrigger) loginTrigger.focus();
+		}
+
+		// Focus Trap Logic for Modal
+		if (modalOverlay) {
+			modalOverlay.addEventListener('keydown', (e) => {
+				if (!modalOverlay.classList.contains('active')) return;
+				
+				if (e.key === 'Escape') {
+					closeModal();
+					return;
+				}
+
+				if (e.key === 'Tab') {
+					const focusableElements = modalOverlay.querySelectorAll('input, button');
+					const firstElement = focusableElements[0];
+					const lastElement = focusableElements[focusableElements.length - 1];
+
+					if (e.shiftKey) { // Shift + Tab
+						if (document.activeElement === firstElement) {
+							lastElement.focus();
+							e.preventDefault();
+						}
+					} else { // Tab
+						if (document.activeElement === lastElement) {
+							firstElement.focus();
+							e.preventDefault();
+						}
+					}
+				}
+			});
+		}
+
 		if (modalSubmit) {
 			modalSubmit.addEventListener('click', () => {
 				const u = modalUser.value.trim();
 				const p = modalPass.value.trim();
 
 				let isValidUser = false;
-				const storedUsers = JSON.parse(localStorage.getItem('ocho_users') || '[]');
+				const storedUsers = OchoStorage.getUsers();
 				
 				if (storedUsers.length > 0) {
 					isValidUser = storedUsers.some(user => (user.username === u || user.email === u) && user.password === p);
@@ -2632,11 +2646,10 @@ html{
 				}
 
 				if (isValidUser) {
-					sessionStorage.setItem('ocho_logged_in', 'true');
-					localStorage.setItem('isLoggedIn', 'true');
+					OchoStorage.setLoggedIn(true);
 					isLoggedIn = true;
 					errorMsg.style.display = 'none';
-					modalOverlay.classList.remove('active');
+					closeModal();
 					
 					modalUser.value = '';
 					modalPass.value = '';
@@ -2649,17 +2662,13 @@ html{
 		}
 
 		if (modalCancel) {
-			modalCancel.addEventListener('click', () => {
-				modalOverlay.classList.remove('active');
-				errorMsg.style.display = 'none';
-			});
+			modalCancel.addEventListener('click', closeModal);
 		}
 
 		if (modalOverlay) {
 			modalOverlay.addEventListener('click', (e) => {
 				if (e.target === modalOverlay) {
-					modalOverlay.classList.remove('active');
-					errorMsg.style.display = 'none';
+					closeModal();
 				}
 			});
 		}
@@ -2667,50 +2676,25 @@ html{
 
 
 	/* =========================================================
-	   COOKIE CONSENT LOGIC & RETRIEVAL FUNCTIONS
+	   COOKIE CONSENT LOGIC (SHOW ONLY ONCE)
 	========================================================= */
-	function getStoredCookieConsent() {
-		const rawData = localStorage.getItem('ocho_cookie_consent');
-		if (!rawData) return null;
-		
-		try {
-			return JSON.parse(rawData);
-		} catch(e) {
-			return { essential: true, analytics: rawData === 'accepted', marketing: rawData === 'accepted', status: rawData };
-		}
-	}
-
-	function updateStorageUI() {
-		const outputDisplay = document.getElementById('retrievedDataOutput');
-		const savedConsent = getStoredCookieConsent();
-
-		if (outputDisplay) {
-			if (savedConsent) {
-				outputDisplay.innerText = JSON.stringify(savedConsent, null, 2);
-			} else {
-				outputDisplay.innerText = 'No local data retrieved (null)';
-			}
-		}
-	}
-
 	window.addEventListener('DOMContentLoaded', () => {
 		const cookieBanner = document.getElementById('cookieBanner');
 		const acceptAllBtn = document.getElementById('acceptAllCookies');
 		const saveSelectedBtn = document.getElementById('saveSelectedCookies');
 		const declineBtn = document.getElementById('declineCookies');
-		const btnRetrieve = document.getElementById('btnRetrieveData');
-		const btnClear = document.getElementById('btnClearData');
 		
 		const chkAnalytics = document.getElementById('chkAnalytics');
 		const chkMarketing = document.getElementById('chkMarketing');
 
-		const cookieConsent = getStoredCookieConsent();
+		const cookieConsent = OchoStorage.getCookieConsent();
 
 		if (!cookieConsent) {
 			setTimeout(() => {
 				cookieBanner.classList.add('show-banner');
 			}, 1000);
 		} else {
+			cookieBanner.classList.remove('show-banner');
 			if (chkAnalytics) chkAnalytics.checked = !!cookieConsent.analytics;
 			if (chkMarketing) chkMarketing.checked = !!cookieConsent.marketing;
 		}
@@ -2723,9 +2707,8 @@ html{
 				status: statusLabel,
 				updatedAt: new Date().toISOString()
 			};
-			localStorage.setItem('ocho_cookie_consent', JSON.stringify(consentData));
+			OchoStorage.setCookieConsent(consentData);
 			cookieBanner.classList.remove('show-banner');
-			updateStorageUI();
 		}
 
 		if (acceptAllBtn) {
@@ -2751,20 +2734,6 @@ html{
 				saveConsent(true, false, false, 'declined_optional');
 			});
 		}
-
-		if (btnRetrieve) btnRetrieve.addEventListener('click', updateStorageUI);
-
-		if (btnClear) {
-			btnClear.addEventListener('click', () => {
-				localStorage.removeItem('ocho_cookie_consent');
-				if (chkAnalytics) chkAnalytics.checked = false;
-				if (chkMarketing) chkMarketing.checked = false;
-				updateStorageUI();
-				if (cookieBanner) cookieBanner.classList.add('show-banner');
-			});
-		}
-
-		updateStorageUI();
 	});
 
 
@@ -2825,7 +2794,7 @@ html{
 
 
 	/* =========================================================
-	   ROPE CURSOR PHYSICS ENGINE (CANVAS INTEGRATION)
+	   ROPE CURSOR PHYSICS ENGINE (HIGH-DPI RETINA CANVAS)
 	========================================================= */
 	if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
 		const canvas = document.createElement('canvas');
@@ -2833,13 +2802,22 @@ html{
 		document.body.appendChild(canvas);
 		const ctx = canvas.getContext('2d');
 
-		let width = canvas.width = window.innerWidth;
-		let height = canvas.height = window.innerHeight;
+		const dpr = window.devicePixelRatio || 1;
+		let width = window.innerWidth;
+		let height = window.innerHeight;
 
-		window.addEventListener('resize', () => {
-			width = canvas.width = window.innerWidth;
-			height = canvas.height = window.innerHeight;
-		});
+		function resizeCanvas() {
+			width = window.innerWidth;
+			height = window.innerHeight;
+			canvas.width = width * dpr;
+			canvas.height = height * dpr;
+			canvas.style.width = width + 'px';
+			canvas.style.height = height + 'px';
+			ctx.scale(dpr, dpr);
+		}
+
+		resizeCanvas();
+		window.addEventListener('resize', resizeCanvas);
 
 		const mouse = { x: width / 2, y: height / 2 };
 		window.addEventListener('mousemove', (e) => {
@@ -2847,12 +2825,12 @@ html{
 			mouse.y = e.clientY;
 		});
 
-		const segmentsCount = 60; // Increased to 60 for a much longer line trail
+		const segmentsCount = 20;
 		const segments = [];
 		for (let i = 0; i < segmentsCount; i++) {
 			segments.push({ x: mouse.x, y: mouse.y });
 		}
-		const spacing = 12; // Increased to 12 for wider stretching between segments
+		const spacing = 6;
 
 		function updateRopeCursor() {
 			ctx.clearRect(0, 0, width, height);
@@ -2918,7 +2896,7 @@ html{
 
 	revealElements.forEach((el, i) => { el._revealOrder = i; });
 
-	const STAGGER_DELAY = 180;
+	const STAGGER_DELAY = 20;
 	const revealQueue = [];
 	let isRevealing = false;
 
@@ -2959,238 +2937,27 @@ html{
 
 
 	/* =========================================================
-	   HERO SECTION TYPEWRITER EFFECT
+	   HERO & STORY REVEAL TRIGGERS
 	========================================================= */
-	const heroData = [
-		{ id: 'hero-label', text: 'Welcome', speed: 30 },
-		{ id: 'hero-h1', text: 'Where Every Stay', speed: 30 },
-		{ id: 'hero-h2', text: 'Tells a Story.', speed: 30, isGold: true },
-		{ id: 'hero-desc', text: 'Connecting people with quality spaces, great food, and better experiences.', speed: 10 }
-	];
-
-	function typeHeroSequence(index = 0) {
-		if (index >= heroData.length) {
-			const btn = document.getElementById('hero-btn');
-			if (btn) btn.style.opacity = '1';
-
-			setTimeout(() => {
-				deleteHeroSequence(heroData.length - 1);
-			}, 3500);
-			return;
-		}
-
-		const item = heroData[index];
-		const element = document.getElementById(item.id);
-		if (!element) return;
-
-		let charIndex = 0;
-		const cursor = document.createElement('span');
-		cursor.className = 'typing-cursor';
-		element.appendChild(cursor);
-
-		function typeChar() {
-			if (charIndex <= item.text.length) {
-				let typedText = item.text.substring(0, charIndex);
-				
-				if (item.isGold) {
-					element.innerHTML = `<span>${typedText}</span>`;
-				} else {
-					element.innerText = typedText;
-				}
-				
-				element.appendChild(cursor);
-				charIndex++;
-				setTimeout(typeChar, item.speed);
-			} else {
-				cursor.remove();
-				typeHeroSequence(index + 1);
-			}
-		}
-
-		typeChar();
-	}
-
-	function deleteHeroSequence(index) {
-		if (index < 0) {
-			setTimeout(() => typeHeroSequence(0), 800);
-			return;
-		}
-
-		const item = heroData[index];
-		const element = document.getElementById(item.id);
-		if (!element) return;
-
-		let charIndex = item.text.length;
-		const cursor = document.createElement('span');
-		cursor.className = 'typing-cursor';
-		element.appendChild(cursor);
-
-		function deleteChar() {
-			if (charIndex >= 0) {
-				let typedText = item.text.substring(0, charIndex);
-
-				if (item.isGold) {
-					element.innerHTML = `<span>${typedText}</span>`;
-				} else {
-					element.innerText = typedText;
-				}
-
-				element.appendChild(cursor);
-				charIndex--;
-				setTimeout(deleteChar, item.speed / 2);
-			} else {
-				cursor.remove();
-				deleteHeroSequence(index - 1);
-			}
-		}
-
-		deleteChar();
-	}
-
 	window.addEventListener('DOMContentLoaded', () => {
 		const heroContent = document.querySelector('.hero-content');
 		setTimeout(() => {
 			if (heroContent) heroContent.classList.add('show');
 		}, 300);
-
-		setTimeout(() => {
-			typeHeroSequence(0);
-		}, 700);
 	});
 
-
-	/* =========================================================
-	   SLOW TYPEWRITER EFFECT FOR "OUR STORY"
-	========================================================= */
-	const storyData = [
-		{ id: 'typewriter-label', text: 'Our Story', speed: 40 },
-		{ id: 'typewriter-title', text: 'More Than\na Place to Stay.', speed: 30 },
-		{ id: 'typewriter-p1', text: 'OCHO Ventures was created to bring accommodation, food, comfort, and experience together in one destination.', speed: 10 },
-		{ id: 'typewriter-p2', text: 'From the moment you arrive, every detail is designed to make your stay comfortable and memorable.', speed: 10 }
-	];
-
-	let isTypingActive = false;
-	let currentTypeTimeout = null;
-
-	function renderTypedText(element, fullText, length) {
-		const currentSubstring = fullText.substring(0, length);
-		element.innerHTML = currentSubstring.replace(/\n/g, '<br>');
-	}
-
-	function clearAllText() {
-		if (currentTypeTimeout) clearTimeout(currentTypeTimeout);
-		storyData.forEach(item => {
-			const el = document.getElementById(item.id);
-			if (el) el.innerHTML = '';
-		});
-	}
-
-	function typeSequence(index = 0) {
-		if (!isTypingActive) return;
-
-		if (index >= storyData.length) {
-			revealStoryImage();
-			currentTypeTimeout = setTimeout(() => {
-				hideStoryImage();
-				deleteSequence(storyData.length - 1);
-			}, 4000);
-			return;
-		}
-
-		const item = storyData[index];
-		const element = document.getElementById(item.id);
-		if (!element) return;
-
-		let charIndex = 0;
-		const cursor = document.createElement('span');
-		cursor.className = 'typing-cursor';
-		element.appendChild(cursor);
-
-		function typeChar() {
-			if (!isTypingActive) return;
-
-			if (charIndex <= item.text.length) {
-				renderTypedText(element, item.text, charIndex);
-				element.appendChild(cursor);
-				charIndex++;
-				currentTypeTimeout = setTimeout(typeChar, item.speed);
-			} else {
-				cursor.remove();
-				typeSequence(index + 1);
-			}
-		}
-
-		typeChar();
-	}
-
+	const storySection = document.getElementById('experience');
 	const storyImageEl = document.querySelector('.story-image');
 
-	function revealStoryImage() {
-		if (!storyImageEl || storyImageEl.classList.contains('show')) return;
-		storyImageEl.classList.add('show');
-
-		const startCinematic = (e) => {
-			if (e.target !== storyImageEl || e.propertyName !== 'transform') return;
-			storyImageEl.classList.add('cinematic-active');
-			storyImageEl.removeEventListener('transitionend', startCinematic);
-		};
-		storyImageEl.addEventListener('transitionend', startCinematic);
-	}
-
-	function hideStoryImage() {
-		if (!storyImageEl) return;
-		storyImageEl.classList.remove('show');
-		storyImageEl.classList.remove('cinematic-active');
-	}
-
-	function deleteSequence(index) {
-		if (!isTypingActive) return;
-
-		if (index < 0) {
-			currentTypeTimeout = setTimeout(() => typeSequence(0), 1000);
-			return;
-		}
-
-		const item = storyData[index];
-		const element = document.getElementById(item.id);
-		if (!element) return;
-
-		let charIndex = item.text.length;
-		const cursor = document.createElement('span');
-		cursor.className = 'typing-cursor';
-		element.appendChild(cursor);
-
-		function deleteChar() {
-			if (!isTypingActive) return;
-
-			if (charIndex >= 0) {
-				renderTypedText(element, item.text, charIndex);
-				element.appendChild(cursor);
-				charIndex--;
-				currentTypeTimeout = setTimeout(deleteChar, item.speed / 2);
-			} else {
-				cursor.remove();
-				deleteSequence(index - 1);
-			}
-		}
-
-		deleteChar();
-	}
-
-	const storySection = document.getElementById('experience');
-	if (storySection) {
+	if (storySection && storyImageEl) {
 		const storyObserver = new IntersectionObserver((entries) => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
-					if (!isTypingActive) {
-						isTypingActive = true;
-						clearAllText();
-						typeSequence(0);
-					}
+					storyImageEl.classList.add('show');
+					storyImageEl.classList.add('cinematic-active');
 				} else {
-					isTypingActive = false;
-					clearAllText();
-					hideStoryImage();
+					storyImageEl.classList.remove('show');
+					storyImageEl.classList.remove('cinematic-active');
 				}
 			});
 		}, { threshold: 0.3 });
