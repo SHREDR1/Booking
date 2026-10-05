@@ -17,29 +17,38 @@
 	overflow:hidden;
 }
 
-.hero::before{
-	content:"";
+.hero-video{
 	position:absolute;
-	inset:-8%;
-
-	background:
-		linear-gradient(
-			90deg,
-			rgba(0,0,0,.78),
-			rgba(0,0,0,.25)
-		),
-		url("hero.jpg") center/cover no-repeat;
-
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
 	z-index:0;
-	transform:scale(1.08);
 }
 
 .hero::after{
+	content:"";
+	position:absolute;
+	inset:0;
+	background:
+		linear-gradient(
+			90deg,
+			rgba(0,0,0,.78) 0%,
+			rgba(0,0,0,.38) 45%,
+			rgba(0,0,0,.20) 100%
+		),
+		linear-gradient(
+			180deg,
+			rgba(0,0,0,.10),
+			rgba(0,0,0,.80)
+		);
 	z-index:1;
+	pointer-events:none;
 }
 
 .hero-content{
-	z-index:3;
+	position:relative;
+	z-index:2;
 }
 
 .story-image{
@@ -66,14 +75,6 @@
 .hero h2,
 .section-title{
 	overflow:hidden;
-}
-
-@media(max-width:900px){
-
-	.hero::before{
-		transform:scale(1);
-	}
-
 }
 
 
@@ -141,46 +142,41 @@ header{
 
 
 /* =========================================================
-   LOGO (UPDATED WITH CLICK COLOR-CHANGE FEATURE)
+   LOGO (UPDATED FOR IMAGE LOGO)
 ========================================================= */
 
-.logo{
+.logo-container {
 	flex-shrink:0;
-
-	font-size:32px;
-	font-weight:700;
-
-	letter-spacing:7px;
-
-	color:#D4AF37;
-
-	white-space:nowrap;
-
-	transition: color 0.4s ease, transform 0.4s ease;
 	display: inline-block;
-	text-transform: uppercase;
 	cursor: pointer;
-
 	/* Infinite Floating & Glow Animation */
 	animation: ochoInfiniteMove 4s ease-in-out infinite alternate;
+	transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.logo-image {
+	height: 45px; /* Adjust this value to fit your header height nicely */
+	width: auto;
+	display: block;
+	object-fit: contain;
 }
 
 @keyframes ochoInfiniteMove {
 	0% {
 		transform: translateY(0px) scale(1);
-		text-shadow: 0 0 5px rgba(212, 175, 55, 0.2);
+		filter: drop-shadow(0 0 5px rgba(212, 175, 55, 0.2));
 	}
 	50% {
 		transform: translateY(-6px) scale(1.03);
-		text-shadow: 0 0 15px rgba(212, 175, 55, 0.6), 0 0 30px rgba(212, 175, 55, 0.3);
+		filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.6)) drop-shadow(0 0 30px rgba(212, 175, 55, 0.3));
 	}
 	100% {
 		transform: translateY(4px) scale(0.98);
-		text-shadow: 0 0 8px rgba(212, 175, 55, 0.3);
+		filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.3));
 	}
 }
 
-.logo:hover{
+.logo-container:hover {
 	opacity: 0.85;
 }
 
@@ -213,7 +209,7 @@ header{
 
 	padding:12px 11px;
 
-	color:#eee;
+	color:#ffffff;
 
 	font-size:11px;
 
@@ -249,7 +245,7 @@ header{
 }
 
 .login-link{
-	color:white;
+	color:#ffffff;
 
 	font-size:12px;
 
@@ -428,7 +424,7 @@ header{
 
 	width:230px;
 
-	background:#0b0e14;
+	background:#ffffff;
 
 	border:1px solid rgba(212,175,55,.25);
 
@@ -453,7 +449,7 @@ header{
 
 	padding:15px 18px;
 
-	color:#ddd;
+	color:#111;
 
 	font-size:13px;
 
@@ -468,7 +464,7 @@ header{
 
 	background:#D4AF37;
 
-	color:#111;
+	color:#fff;
 }
 
 @media (hover:hover) and (pointer:fine){
@@ -519,44 +515,7 @@ header{
 
 	overflow:hidden;
 
-	background:
-
-		linear-gradient(
-			90deg,
-			rgba(0,0,0,.78) 0%,
-			rgba(0,0,0,.38) 45%,
-			rgba(0,0,0,.20) 100%
-		),
-
-		linear-gradient(
-			180deg,
-			rgba(0,0,0,.10),
-			rgba(0,0,0,.80)
-		),
-
-		url("hero.jpg") center/cover no-repeat;
-}
-
-
-/* HERO PLACEHOLDER EFFECT */
-
-.hero::after{
-
-	content:"";
-
-	position:absolute;
-
-	inset:0;
-
-	background:
-
-		radial-gradient(
-			circle at 75% 30%,
-			rgba(212,175,55,.08),
-			transparent 35%
-		);
-
-	pointer-events:none;
+	background:#000;
 }
 
 
@@ -570,11 +529,9 @@ header{
 
 	max-width:750px;
 	
-	/* Added smooth transition for the content block hover effect */
 	transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* --- NEW HERO TEXT HOVER ANIMATION ENHANCEMENTS --- */
 .hero-content:hover {
 	transform: translateY(-6px);
 }
@@ -600,7 +557,6 @@ header{
 .hero-content:hover .hero-description {
 	color: #ffffff;
 }
-/* ------------------------------------------------ */
 
 .hero-label{
 
@@ -1208,15 +1164,10 @@ footer{
 }
 
 .footer-logo{
-
 	font-size:30px;
-
 	color:#D4AF37;
-
 	font-weight:bold;
-
 	letter-spacing:6px;
-
 	text-transform: uppercase;
 }
 
@@ -1322,11 +1273,8 @@ footer{
 		height:75px;
 	}
 
-	.logo{
-
-		font-size:27px;
-
-		letter-spacing:5px;
+	.logo-container{
+		height: 38px;
 	}
 
 	.menu-toggle{
@@ -1356,7 +1304,7 @@ footer{
 
 		padding:10px 0;
 
-		background:#080b10;
+		background:#ffffff;
 
 		border-top:1px solid rgba(212,175,55,.2);
 	}
@@ -1369,6 +1317,12 @@ footer{
 	#navbar li > a{
 
 		padding:16px 25px;
+		color:#111111;
+	}
+
+	#navbar li > a:hover{
+		background:#D4AF37;
+		color:#ffffff;
 	}
 
 	.dropdown-content{
@@ -1391,7 +1345,7 @@ footer{
 
 		box-shadow:none;
 
-		background:#11161d;
+		background:#ffffff;
 
 		transition:max-height .35s ease, opacity .35s ease;
 	}
@@ -1412,6 +1366,15 @@ footer{
 		transform:none !important;
 
 		padding-left:45px;
+
+		color:#111;
+	}
+
+	.dropdown-content a:hover{
+
+		background:#D4AF37;
+
+		color:#fff;
 	}
 
 	.account-links{
@@ -1426,6 +1389,7 @@ footer{
 	.login-link{
 
 		font-size:12px;
+		color:#ffffff;
 	}
 
 	.register-btn{
@@ -1440,6 +1404,25 @@ footer{
 		padding:0 25px 70px;
 
 		min-height:100vh;
+		
+		/* Center hero content on mobile dimensions */
+		align-items: center !important;
+		text-align: center;
+	}
+
+	.hero-content {
+		margin: 0 auto;
+		max-width: 100%;
+	}
+
+	.hero-description {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.hero-button {
+		margin-left: auto;
+		margin-right: auto;
 	}
 
 	.hero h1, .hero h2{
@@ -1543,7 +1526,7 @@ footer{
 
 	.hero{
 
-		align-items:flex-end;
+		align-items:center !important;
 
 		padding-bottom:60px;
 	}
@@ -1726,10 +1709,6 @@ html{
 		color .4s ease;
 }
 
-.hero{
-	background-attachment:scroll;
-}
-
 .contact{
 	background-attachment:scroll;
 }
@@ -1751,7 +1730,7 @@ html{
 		width: 100vw;
 		height: 100vh;
 		pointer-events: none;
-		z-index: 10000000; /* FIXED: Elevated above modal layer (9999999) */
+		z-index: 10000000;
 	}
 }
 
@@ -1773,9 +1752,8 @@ html{
 		padding: 0 12px !important;
 	}
 
-	.logo {
-		font-size: 20px !important;
-		letter-spacing: 3px !important;
+	.logo-container {
+		height: 30px !important;
 	}
 
 	.hero {
@@ -2011,10 +1989,9 @@ html{
 
 	<header>
 
-		<div class="logo" id="interactiveLogo">
-			OCHO
-		</div>
-
+		<a href="#home" class="logo-container" id="interactiveLogo">
+			<img src="logo.jpg" alt="OCHO Logo" class="logo-image">
+		</a>
 
 		<ul id="navbar">
 
@@ -2036,8 +2013,6 @@ html{
 					<a href="VMGO.html">
 						VMGO & Testimonials
 					</a>
-
-					
 
 					<a href="PRIVACY POLICY.html">
 						Privacy Policy
@@ -2142,6 +2117,10 @@ html{
 	===================================================== -->
 
 	<section class="hero" id="home">
+		<video autoplay muted loop playsinline class="hero-video">
+			<source src="28.mp4" type="video/mp4">
+			Your browser does not support HTML5 video.
+		</video>
 
 		<div class="hero-content">
 
@@ -2206,7 +2185,7 @@ html{
 
 				<div class="story-image-container">
 					<img
-						src=".jpg"
+						src="story.jpg"
 						class="story-image"
 						alt="OCHO Ventures"
 					>
@@ -2411,7 +2390,7 @@ html{
 		<div class="footer-top">
 
 			<div class="footer-logo">
-				OCHO
+				<img src="logo.jpg" alt="OCHO Logo" style="height: 35px; width: auto; object-fit: contain;">
 			</div>
 
 			<div class="footer-links">
@@ -2515,23 +2494,6 @@ html{
 			localStorage.setItem('ocho_cookie_consent', JSON.stringify(consentData));
 		}
 	};
-
-
-	/* =========================================================
-	   CLICK COLOR CHANGE FEATURE FOR THE LOGO
-	========================================================= */
-	document.addEventListener('DOMContentLoaded', () => {
-		const interactiveLogo = document.getElementById('interactiveLogo');
-		const colorPalette = ['#D4AF37', '#00d2ff', '#00ff87', '#ff007f', '#ffffff'];
-		let colorIndex = 0;
-
-		if (interactiveLogo) {
-			interactiveLogo.addEventListener('click', () => {
-				colorIndex = (colorIndex + 1) % colorPalette.length;
-				interactiveLogo.style.color = colorPalette[colorIndex];
-			});
-		}
-	});
 
 
 	/* =========================================================
@@ -2787,7 +2749,15 @@ html{
 		link.addEventListener('click', (e) => {
 			if (window.innerWidth <= 900) {
 				e.preventDefault();
-				link.parentElement.classList.toggle('active');
+				const parentDropdown = link.parentElement;
+				
+				document.querySelectorAll('#navbar .dropdown').forEach(item => {
+					if (item !== parentDropdown) {
+						item.classList.remove('active');
+					}
+				});
+
+				parentDropdown.classList.toggle('active');
 			}
 		});
 	});
@@ -2888,7 +2858,7 @@ html{
 
 
 	/* =========================================================
-	   SCROLL REVEAL & 3D FLIP TRIGGER
+	   SCROLL REVEAL & 3D FLIP TRIGGER (ONCE ONLY)
 	========================================================= */
 	const revealElements = Array.from(document.querySelectorAll(
 		".section-content, .contact-content, .section-label, .section-title, .section-text, .story-image, .room img, .food-image, .food-info, .feature, .gallery img"
@@ -2915,7 +2885,7 @@ html{
 		setTimeout(processRevealQueue, STAGGER_DELAY);
 	}
 
-	const generalObserver = new IntersectionObserver((entries) => {
+	const generalObserver = new IntersectionObserver((entries, observer) => {
 		entries.forEach(entry => {
 			const el = entry.target;
 
@@ -2923,10 +2893,7 @@ html{
 				if (!el.classList.contains("show") && !revealQueue.includes(el)) {
 					revealQueue.push(el);
 				}
-			} else {
-				el.classList.remove("show");
-				const idx = revealQueue.indexOf(el);
-				if (idx > -1) revealQueue.splice(idx, 1);
+				observer.unobserve(el);
 			}
 		});
 
@@ -2950,14 +2917,12 @@ html{
 	const storyImageEl = document.querySelector('.story-image');
 
 	if (storySection && storyImageEl) {
-		const storyObserver = new IntersectionObserver((entries) => {
+		const storyObserver = new IntersectionObserver((entries, observer) => {
 			entries.forEach(entry => {
 				if (entry.isIntersecting) {
 					storyImageEl.classList.add('show');
 					storyImageEl.classList.add('cinematic-active');
-				} else {
-					storyImageEl.classList.remove('show');
-					storyImageEl.classList.remove('cinematic-active');
+					observer.unobserve(entry.target);
 				}
 			});
 		}, { threshold: 0.3 });
