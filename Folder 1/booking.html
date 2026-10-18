@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DONG - Booking & Ordering System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            text-align: center;
+            width: 100%;
+            max-width: 900px;
+            padding: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: #f8fafc;
+        }
+
+        p {
+            color: #94a3b8;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        .card-grid {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 40px 30px;
+            width: 350px;
+            text-decoration: none;
+            color: inherit;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            background: #334155;
+            border-color: #38bdf8;
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: #38bdf8;
+        }
+
+        .card p {
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #38bdf8;
+            color: #0f172a;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.2s ease;
+        }
+
+        .card:hover .btn {
+            background: #7dd3fc;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>MAKE A RESERVATION</h1>
+        <p>Select an option below to get started.:</p>
+
+        <div class="card-grid">
+            <!-- Room Booking Option -->
+            <a href="room.html" class="card">
+                <h2>Book a Room</h2>
+                <p>Reserve comfortable accommodations, check availability, and manage your stays.</p>
+                <span class="btn">Room Booking</span>
+            </a>
+
+            <!-- Food Ordering Option -->
+            <a href="menu.html" class="card">
+                <h2>Order Food</h2>
+                <p>Browse our delicious menu, select your meals, and place your food orders.</p>
+                <span class="btn">Food Menu</span>
+            </a>
+        </div>
+    </div>
+
+</body>
+</html>

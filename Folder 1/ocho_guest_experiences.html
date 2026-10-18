@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101110">
+  <title>Guest Experiences | OCHO Ventures</title>
+  <style>
+    :root {
+      --bg: #101110;
+      --panel: #171817;
+      --panel-2: #1d1e1c;
+      --text: #f5f0e7;
+      --muted: #b8b4aa;
+      --gold: #d4b16a;
+      --gold-dark: #9c7839;
+      --line: rgba(226, 210, 174, .18);
+      --radius: 14px;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0; color: var(--text); background: var(--bg);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.55;
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea, select { font: inherit; }
+    .container { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 10; background: rgba(13,14,13,.94);
+      backdrop-filter: blur(12px); border-bottom: 1px solid var(--line);
+    }
+    .nav { min-height: 74px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+    .brand { color: var(--gold); letter-spacing: .22em; font-family: Georgia, serif; font-size: 26px; line-height: 1; }
+    .brand small { display: block; text-align: center; letter-spacing: .45em; font: 9px/2 ui-sans-serif, sans-serif; }
+    .navlinks { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); color: #e4e0d8; font-size: 13px; }
+    .navlinks a:hover, .navlinks a.active { color: var(--gold); }
+    .navlinks a.active { border-bottom: 1px solid var(--gold); padding-bottom: 7px; }
+    .nav-cta, .submit-btn {
+      border: 1px solid var(--gold); border-radius: 999px; background: var(--gold);
+      color: #17130b; padding: 11px 20px; font-weight: 700; cursor: pointer;
+    }
+    .hero {
+      min-height: 300px; display: grid; align-items: center; position: relative; overflow: hidden;
+      background:
+        linear-gradient(90deg, rgba(7,8,7,.92) 0%, rgba(7,8,7,.73) 42%, rgba(7,8,7,.15) 100%),
+        url("https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=2000&q=85") center 54%/cover;
+      border-bottom: 1px solid var(--line);
+    }
+    .hero-copy { max-width: 560px; padding: 52px 0 58px; }
+    .eyebrow { color: var(--gold); text-transform: uppercase; font-size: 11px; font-weight: 800; letter-spacing: .18em; }
+    h1, h2, h3 { font-family: Georgia, "Times New Roman", serif; font-weight: 400; line-height: 1.12; }
+    h1 { font-size: clamp(38px, 5vw, 60px); margin: 12px 0 14px; }
+    .hero p { color: #e0ddd6; max-width: 480px; margin: 0; }
+    .upload-section { padding: 46px 0; border-bottom: 1px solid var(--line); }
+    .upload-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: clamp(28px, 5vw, 68px); align-items: start; }
+    h2 { font-size: clamp(29px, 3vw, 38px); margin: 9px 0 12px; }
+    .muted { color: var(--muted); }
+    .photo-strip { display: flex; gap: 8px; margin-top: 22px; }
+    .photo-strip img { width: 24%; height: 78px; object-fit: cover; border-radius: 8px; }
+    .review-form { display: grid; gap: 12px; }
+    .field { width: 100%; color: var(--text); background: #141514; border: 1px solid #393a36; border-radius: 8px; padding: 13px 14px; outline: none; }
+    .field:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,177,106,.12); }
+    textarea.field { min-height: 112px; resize: vertical; }
+    .upload-box {
+      border: 1px dashed #77766f; border-radius: 10px; min-height: 142px; padding: 22px;
+      display: grid; place-items: center; text-align: center; color: var(--muted); cursor: pointer;
+      background: linear-gradient(135deg, rgba(255,255,255,.025), transparent);
+    }
+    .upload-box:hover { border-color: var(--gold); }
+    .camera { font-size: 28px; color: var(--gold); }
+    .upload-box strong { display: block; color: var(--text); margin: 4px 0; }
+    .preview-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .preview-list img { width: 72px; height: 64px; object-fit: cover; border-radius: 7px; border: 1px solid var(--line); }
+    .consent { display: flex; gap: 9px; color: var(--muted); font-size: 12px; align-items: flex-start; }
+    .consent input { margin-top: 4px; accent-color: var(--gold); }
+    .submit-btn { border-radius: 8px; padding: 14px 18px; }
+    .notice { display: none; padding: 11px 13px; border: 1px solid var(--line); border-radius: 8px; color: var(--gold); font-size: 13px; }
+    .gallery-section { padding: 42px 0 70px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 22px; margin-bottom: 22px; }
+    .section-head h2 { margin-bottom: 0; }
+    .filters { display: flex; flex-wrap: wrap; gap: 8px; }
+    .filter {
+      background: transparent; color: var(--muted); border: 1px solid transparent; padding: 8px 12px;
+      border-radius: 999px; cursor: pointer; font-size: 12px;
+    }
+    .filter.active, .filter:hover { color: var(--gold); border-color: var(--gold-dark); }
+    .gallery { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+    .review-card { overflow: hidden; border: 1px solid #343632; background: linear-gradient(145deg, #181a18, #101110); border-radius: 10px; }
+    .review-card > img { width: 100%; height: 175px; object-fit: cover; display: block; background: #292a26; }
+    .review-content { padding: 14px; }
+    .person { display: flex; align-items: center; gap: 9px; font-size: 12px; font-weight: 650; }
+    .avatar { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: #3c3b32; color: var(--gold); flex: 0 0 auto; }
+    .stars { color: var(--gold); letter-spacing: .08em; font-size: 12px; margin: 4px 0 9px; }
+    .review-content p { font-size: 13px; color: #d8d5ce; margin: 0; overflow-wrap: anywhere; }
+    .meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; color: var(--muted); font-size: 10px; margin-top: 14px; }
+    .tag { border: 1px solid #55564f; border-radius: 999px; padding: 2px 7px; white-space: nowrap; }
+    .empty { grid-column: 1 / -1; text-align: center; border: 1px dashed var(--line); border-radius: 10px; padding: 38px; color: var(--muted); }
+    footer { border-top: 1px solid var(--line); text-align: center; padding: 26px 20px; color: var(--muted); font-size: 12px; }
+    footer strong { color: var(--gold); letter-spacing: .2em; }
+    @media (max-width: 900px) {
+      .gallery { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .upload-grid { grid-template-columns: 1fr; }
+      .navlinks { gap: 13px; }
+    }
+    @media (max-width: 600px) {
+      .container { width: min(100% - 28px, var(--max)); }
+      .nav { min-height: 66px; flex-wrap: wrap; padding: 12px 0; }
+      .brand { font-size: 22px; }
+      .navlinks { order: 3; width: 100%; overflow-x: auto; padding: 4px 0 2px; font-size: 12px; }
+      .nav-cta { padding: 9px 13px; font-size: 12px; }
+      .hero { min-height: 290px; background-position: 58% center; }
+      .hero-copy { padding: 44px 0; }
+      .section-head { align-items: start; flex-direction: column; }
+      .gallery { gap: 11px; }
+      .review-card > img { height: 135px; }
+      .review-content { padding: 10px; }
+      .review-content p { font-size: 12px; }
+      .meta { align-items: flex-start; flex-direction: column; }
+      .photo-strip img { height: 62px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav container" aria-label="Main navigation">
+      <a class="brand" href="#" aria-label="OCHO Ventures home">OCHO<small>VENTURES</small></a>
+      <div class="navlinks">
+        <a href="#">Home</a><a href="#">Food &amp; Dining</a><a href="#">Accommodations</a>
+        <a class="active" href="#stories">Experiences</a><a href="#">About</a>
+      </div>
+      <a class="nav-cta" href="#share">Share Your Visit</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="hero-copy">
+          <div class="eyebrow">Guest Experiences</div>
+          <h1>Share Your<br>Dining Moments</h1>
+          <p>We’d love to see your photos and hear about your experience at OCHO. Share your memories, leave a review, and inspire others to visit.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="upload-section" id="share">
+      <div class="container upload-grid">
+        <div>
+          <div class="eyebrow">Upload your experience</div>
+          <h2>Good Food Deserves<br>to Be Shared.</h2>
+          <p class="muted">Post your dine-in photos, tell us what you loved, and help others discover the OCHO experience.</p>
+          <div class="photo-strip" aria-hidden="true">
+            <img src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=250&q=75" alt="">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=250&q=75" alt="">
+            <img src="https://images.unsplash.com/photo-1515003197210-e0cd7184f8b5?auto=format&fit=crop&w=250&q=75" alt="">
+            <img src="https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=250&q=75" alt="">
+          </div>
+        </div>
+
+        <form class="review-form" id="reviewForm">
+          <label class="upload-box" for="photos">
+            <span>
+              <span class="camera">◎</span>
+              <strong>Choose Photos</strong>
+              <span>or tap here to select up to 5 JPG, PNG, or WebP images</span>
+            </span>
+          </label>
+          <input id="photos" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+          <div id="previews" class="preview-list" aria-live="polite"></div>
+
+          <input class="field" id="guestName" maxlength="60" placeholder="Your name (optional)">
+          <select class="field" id="rating" required aria-label="Your rating">
+            <option value="">Choose your rating</option>
+            <option value="5">★★★★★ — Loved it</option>
+            <option value="4">★★★★☆ — Great</option>
+            <option value="3">★★★☆☆ — Good</option>
+            <option value="2">★★☆☆☆ — Could be better</option>
+            <option value="1">★☆☆☆☆ — Needs improvement</option>
+          </select>
+          <select class="field" id="category" aria-label="Visit type">
+            <option value="Dine-in">Dine-in</option><option value="Family">Family</option>
+            <option value="Friends">Friends</option><option value="Couple">Couple</option>
+            <option value="Celebration">Celebration</option>
+          </select>
+          <textarea class="field" id="message" maxlength="500" required placeholder="Tell us about your experience..."></textarea>
+          <label class="consent"><input id="permission" type="checkbox" required>
+            <span>I confirm these are my photos (or I have permission to share them), and I agree that OCHO may display this submission publicly if approved.</span>
+          </label>
+          <button class="submit-btn" type="submit">Submit Experience</button>
+          <div class="notice" id="notice" role="status"></div>
+          <small class="muted">Demo note: submissions appear only in this open browser session. A real website needs a backend and moderation before publishing customer posts.</small>
+        </form>
+      </div>
+    </section>
+
+    <section class="gallery-section" id="stories">
+      <div class="container">
+        <div class="section-head">
+          <div><div class="eyebrow">Guest stories</div><h2>Moments from Our Guests</h2></div>
+          <div class="filters" aria-label="Filter guest stories">
+            <button class="filter active" data-filter="All">All</button>
+            <button class="filter" data-filter="Dine-in">Dine-in</button>
+            <button class="filter" data-filter="Family">Family</button>
+            <button class="filter" data-filter="Friends">Friends</button>
+            <button class="filter" data-filter="Couple">Couple</button>
+            <button class="filter" data-filter="Celebration">Celebrations</button>
+          </div>
+        </div>
+        <div class="gallery" id="gallery" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><strong>OCHO VENTURES</strong><p>Good food. Great company. Memories worth sharing.</p></footer>
+
+  <script>
+    // Sample cards are placeholders for the design. Replace them with real, permissioned reviews.
+    const sampleReviews = [
+      { name: "Maria S.", rating: 5, category: "Dine-in", date: "Oct 12, 2025", message: "The food was amazing and the atmosphere was relaxing. We’ll definitely come back!", image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80" },
+      { name: "Rey D.", rating: 5, category: "Friends", date: "Oct 05, 2025", message: "Perfect place to catch up with friends. Great food, good vibes, and friendly service.", image: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80" },
+      { name: "Liza F.", rating: 5, category: "Family", date: "Sep 28, 2025", message: "Our family had a wonderful time. The dishes were delicious and everyone felt welcome.", image: "https://images.unsplash.com/photo-1515003197210-e0cd7184f8b5?auto=format&fit=crop&w=800&q=80" },
+      { name: "John & Anne", rating: 5, category: "Couple", date: "Sep 20, 2025", message: "A cozy dinner experience. Lovely atmosphere and a memorable evening together.", image: "https://images.unsplash.com/photo-1511795409834-ef04bbd61622?auto=format&fit=crop&w=800&q=80" }
+    ];
+    let reviews = [...sampleReviews];
+    let activeFilter = "All";
+    let selectedFiles = [];
+
+    const gallery = document.getElementById("gallery");
+    const photosInput = document.getElementById("photos");
+    const previews = document.getElementById("previews");
+    const notice = document.getElementById("notice");
+
+    function renderGallery() {
+      gallery.innerHTML = "";
+      const visible = reviews.filter(review => activeFilter === "All" || review.category === activeFilter);
+      if (!visible.length) {
+        gallery.innerHTML = '<div class="empty">No stories in this category yet. Be the first to share a moment.</div>';
+        return;
+      }
+      visible.forEach(review => {
+        const card = document.createElement("article");
+        card.className = "review-card";
+        const img = document.createElement("img");
+        img.src = review.image;
+        img.alt = "Guest-shared dining experience";
+        img.loading = "lazy";
+        const content = document.createElement("div");
+        content.className = "review-content";
+        const person = document.createElement("div");
+        person.className = "person";
+        const avatar = document.createElement("span");
+        avatar.className = "avatar";
+        avatar.textContent = (review.name || "Guest").trim().charAt(0).toUpperCase();
+        const name = document.createElement("span");
+        name.textContent = review.name || "Guest";
+        person.append(avatar, name);
+        const stars = document.createElement("div");
+        stars.className = "stars";
+        stars.textContent = "★".repeat(Number(review.rating)) + "☆".repeat(5 - Number(review.rating));
+        const message = document.createElement("p");
+        message.textContent = "“" + review.message + "”";
+        const meta = document.createElement("div");
+        meta.className = "meta";
+        const date = document.createElement("span");
+        date.textContent = review.date;
+        const tag = document.createElement("span");
+        tag.className = "tag";
+        tag.textContent = review.category;
+        meta.append(date, tag);
+        content.append(person, stars, message, meta);
+        card.append(img, content);
+        gallery.append(card);
+      });
+    }
+
+    document.querySelectorAll(".filter").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".filter").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        activeFilter = button.dataset.filter;
+        renderGallery();
+      });
+    });
+
+    photosInput.addEventListener("change", () => {
+      selectedFiles = Array.from(photosInput.files || []);
+      if (selectedFiles.length > 5) {
+        selectedFiles = selectedFiles.slice(0, 5);
+        notice.style.display = "block";
+        notice.textContent = "You can select up to 5 photos. Only the first 5 are selected.";
+      } else {
+        notice.style.display = "none";
+      }
+      previews.innerHTML = "";
+      selectedFiles.forEach(file => {
+        if (!file.type.startsWith("image/")) return;
+        const img = document.createElement("img");
+        img.alt = "Selected photo preview";
+        img.src = URL.createObjectURL(file);
+        previews.append(img);
+      });
+    });
+
+    document.getElementById("reviewForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const rating = document.getElementById("rating").value;
+      const message = document.getElementById("message").value.trim();
+      if (!rating || !message) return;
+      const files = selectedFiles.slice(0, 5);
+      const image = files.length ? URL.createObjectURL(files[0]) : "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80";
+      reviews.unshift({
+        name: document.getElementById("guestName").value.trim() || "Guest",
+        rating: Number(rating),
+        category: document.getElementById("category").value,
+        date: new Date().toLocaleDateString(undefined, { month: "short", day: "2-digit", year: "numeric" }),
+        message,
+        image
+      });
+      activeFilter = "All";
+      document.querySelectorAll(".filter").forEach(item => item.classList.toggle("active", item.dataset.filter === "All"));
+      renderGallery();
+      event.target.reset();
+      selectedFiles = [];
+      previews.innerHTML = "";
+      notice.style.display = "block";
+      notice.textContent = "Demo submission added to this page. It is not uploaded to a server or saved permanently.";
+      document.getElementById("stories").scrollIntoView({ behavior: "smooth" });
+    });
+
+    renderGallery();
+  </script>
+</body>
+</html>

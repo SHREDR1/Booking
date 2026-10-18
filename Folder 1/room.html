@@ -1,0 +1,1236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Ocho Boarding House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg-alt: #14110d;
+    --panel-bg: #15120e;
+    --ink: #f2ede2;
+    --muted: #8c8477;
+    --brass: #b98a4e;
+    --brass-dim: #7d6440;
+    --forest: #2f3b2e;
+    --border: rgba(242, 237, 226, 0.09);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  h1, h2, h3, .display {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  a { color: inherit; }
+
+  @media (hover: hover) and (pointer: fine) {
+    body { cursor: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  /* ============ GRAIN OVERLAY ============ */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ============ CUSTOM CURSOR ============ */
+  .ocho-cursor {
+    position: fixed; top: 0; left: 0;
+    width: 6px; height: 6px;
+    background-color: var(--brass);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate3d(0,0,0) translate(-50%,-50%);
+  }
+
+  .ocho-cursor-ring {
+    position: fixed; top: 0; left: 0;
+    width: 44px; height: 44px;
+    border: 1px solid rgba(185, 138, 78, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate3d(0,0,0) translate(-50%,-50%);
+    transition: width 0.3s cubic-bezier(0.16,1,0.3,1), height 0.3s cubic-bezier(0.16,1,0.3,1), background-color 0.3s ease, border-color 0.3s ease;
+  }
+
+  #tubesCanvas {
+    position: fixed;
+    inset: 0;
+    z-index: 9997;
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ============ HERO ============ */
+  .hero {
+    position: relative;
+    height: 100svh;
+    min-height: 560px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background-image: url('../Folder 2/22.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.42) saturate(0.9);
+    transform: scale(1.06);
+  }
+
+  .hero-scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(12,10,8,0.55) 0%, rgba(12,10,8,0.35) 40%, var(--bg) 100%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 50px 90px 50px;
+    max-width: 1100px;
+  }
+
+  .eyebrow {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--brass);
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    margin-bottom: 22px;
+  }
+
+  .hero-content h1 {
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  .hero-content h1 em {
+    font-style: italic;
+    color: var(--brass);
+  }
+
+  .hero-sub {
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.7;
+    max-width: 460px;
+    margin-top: 26px;
+  }
+
+  .scroll-cue {
+    position: absolute;
+    left: 50px;
+    bottom: 34px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    color: var(--muted);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+  }
+
+  .scroll-cue .line {
+    width: 1px;
+    height: 46px;
+    background: rgba(242,237,226,0.25);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scroll-cue .line::after {
+    content: '';
+    position: absolute;
+    top: -100%;
+    left: 0; right: 0;
+    height: 100%;
+    background: var(--brass);
+    animation: cueDrop 2.2s ease-in-out infinite;
+  }
+
+  @keyframes cueDrop {
+    0% { top: -100%; }
+    60% { top: 100%; }
+    100% { top: 100%; }
+  }
+
+  /* ============ INTRO STRIP ============ */
+  .intro {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 120px 50px 60px 50px;
+    text-align: center;
+  }
+
+  .intro p {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: clamp(1.3rem, 2.6vw, 1.8rem);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .intro p span { color: var(--muted); }
+
+  /* ============ CAROUSEL SECTION LABEL ============ */
+  .section-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 40px 60px 0 60px;
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+
+  .section-label .tag {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    color: var(--brass);
+  }
+
+  .section-label .count {
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  .carousel-controls {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .carousel-arrow {
+    background: transparent;
+    border: 1px solid rgba(185, 138, 78, 0.4);
+    color: var(--ink);
+    padding: 8px 18px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+  }
+  
+  .carousel-arrow:hover, .carousel-arrow:active {
+    background: var(--brass);
+    border-color: var(--brass);
+    color: #0c0a08;
+  }
+
+  /* ============ CAROUSEL ============ */
+  .cinematic-carousel {
+    display: flex;
+    gap: 24px;
+    padding: 30px 60px 100px 60px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scrollbar-width: none;
+    cursor: grab;
+    user-select: none;
+  }
+
+  .cinematic-carousel::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cinematic-carousel:active { cursor: grabbing; }
+
+  /* ============ HOVER OVERLAY CARD STYLE ============ */
+  .room-panel {
+    flex: 0 0 440px;
+    width: 440px;
+    height: 540px;
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    transition: transform 0.4s ease, box-shadow 0.4s ease, opacity 0.6s ease;
+    opacity: 0;
+    transform: translateY(26px) scale(0.985);
+  }
+
+  .room-panel.in-view { opacity: 1; transform: translateY(0) scale(1); }
+
+  .room-panel:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+  }
+
+  .plaque {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 3;
+    display: flex;
+    align-items: center;
+    padding: 6px 14px;
+    background: rgba(12,10,8,0.7);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 30px;
+  }
+
+  .plaque .no {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--brass);
+    letter-spacing: 0.08em;
+  }
+
+  .panel-image-container {
+    position: absolute;
+    inset: 0;
+    width: 100%; 
+    height: 100%;
+    overflow: hidden;
+    background: #111;
+  }
+
+  .panel-image-container img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+  }
+
+  .room-panel:hover .panel-image-container img { 
+    transform: scale(1.06); 
+  }
+
+  /* FLOATING WHITE BOX */
+  .panel-content-layer {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    z-index: 2;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-radius: 14px;
+    color: #111111;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    max-height: 72px;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), padding 0.4s ease;
+  }
+
+  .room-panel:hover .panel-content-layer {
+    max-height: 240px;
+    padding: 20px 24px;
+  }
+
+  .panel-content-layer h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #111111;
+    margin: 0 0 2px 0;
+  }
+
+  .price {
+    color: var(--brass);
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.02em;
+    margin-bottom: 12px;
+  }
+
+  .panel-content-layer p {
+    font-size: 0.85rem;
+    color: #555555;
+    line-height: 1.45;
+    margin: 0 0 14px 0;
+    opacity: 0;
+    transition: opacity 0.3s ease 0.1s;
+  }
+
+  .room-panel:hover .panel-content-layer p {
+    opacity: 1;
+  }
+
+  .btn {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #111111;
+    color: #ffffff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    border: none;
+    align-self: flex-start;
+    transition: background-color 0.2s ease;
+  }
+
+  .btn:hover, .btn:focus-visible {
+    background-color: var(--brass);
+    color: #ffffff;
+  }
+
+  /* SPECIAL CENTERED STYLING FOR CARD 1 */
+  .room-panel.centered-card .panel-content-layer {
+    text-align: center;
+    align-items: center;
+  }
+
+  .room-panel.centered-card .btn {
+    align-self: center;
+  }
+
+  /* ============ CTA ============ */
+  .cta {
+    text-align: center;
+    padding: 140px 40px 150px 40px;
+    border-top: 1px solid var(--border);
+    background: linear-gradient(180deg, var(--bg) 0%, var(--bg-alt) 100%);
+  }
+
+  .cta .eyebrow { justify-content: center; display: flex; }
+
+  .cta h2 {
+    font-size: clamp(2.1rem, 5.5vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    max-width: 780px;
+    margin: 22px auto 40px auto;
+  }
+
+  .cta h2 em { font-style: italic; color: var(--brass); }
+
+  /* ============ BUGATTI MINIMAL LUXURY FOOTER ============ */
+  .bugatti-footer {
+    background-color: #111111;
+    color: #e5e5e5;
+    padding: 80px 60px 60px 60px;
+    font-family: 'Inter', sans-serif;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .footer-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin-bottom: 70px;
+  }
+
+  .footer-col h4 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #888888;
+    margin: 0 0 24px 0;
+    font-weight: 600;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .footer-col li {
+    margin-bottom: 12px;
+  }
+
+  .footer-col a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.82rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+
+  .footer-col a:hover {
+    color: var(--brass);
+  }
+
+  /* Legal Bar */
+  .legal-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding-top: 20px;
+    margin-bottom: 40px;
+  }
+
+  .copyright {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #ffffff;
+  }
+
+  .legal-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 22px;
+  }
+
+  .legal-links a {
+    color: #ffffff;
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .legal-links a:hover {
+    color: var(--brass);
+  }
+
+  .language-selector {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .language-selector h5 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #ffffff;
+    margin: 0 0 10px 0;
+    font-weight: 700;
+  }
+
+  .lang-options {
+    display: flex;
+    gap: 16px;
+    font-size: 0.78rem;
+  }
+
+  .lang-options a.active {
+    color: #888888;
+    text-decoration: none;
+  }
+
+  .lang-options a {
+    color: #ffffff;
+    text-decoration: none;
+  }
+
+  /* Bottom Row: Social & Hiring Banner */
+  .footer-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+  .social-icons {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+
+  .social-icons a {
+    color: #ffffff;
+    transition: opacity 0.2s ease;
+  }
+
+  .social-icons a:hover {
+    opacity: 0.7;
+  }
+
+  .social-icons svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor;
+  }
+
+  /* Hiring Card Box */
+  .hiring-card {
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 8px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 380px;
+    width: 100%;
+    background: #141414;
+  }
+
+  .hiring-content {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .hiring-img {
+    width: 52px;
+    height: 52px;
+    border-radius: 4px;
+    object-fit: cover;
+  }
+
+  .hiring-text p {
+    margin: 0;
+    font-family: monospace;
+    font-size: 0.75rem;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .hiring-text span {
+    font-family: monospace;
+    font-size: 0.7rem;
+    color: #888888;
+  }
+
+  .hiring-btn {
+    display: block;
+    text-align: center;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    padding: 10px;
+    border-radius: 4px;
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 0.68rem;
+    font-family: monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
+  }
+
+  .hiring-btn:hover {
+    background: #ffffff;
+    color: #111111;
+  }
+
+  /* WhatsApp Floating Button Fixed Size */
+  .whatsapp-float {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    width: 48px;
+    height: 48px;
+    background-color: #25d366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 1001;
+    transition: transform 0.3s ease;
+    text-decoration: none;
+  }
+
+  .whatsapp-float:hover {
+    transform: scale(1.08);
+  }
+
+  .whatsapp-float svg {
+    width: 26px;
+    height: 26px;
+    fill: #ffffff;
+  }
+
+  @media (max-width: 992px) {
+    .hero-content { padding: 0 24px 70px 24px; }
+    .scroll-cue { left: 24px; }
+    .intro { padding: 90px 24px 40px 24px; }
+    .section-label { padding: 30px 24px 0 24px; flex-direction: column; gap: 15px; align-items: flex-start; }
+    
+    .room-panel {
+      scroll-snap-align: center;
+      height: 480px;
+      flex: 0 0 85vw;
+      width: 85vw;
+    }
+    .panel-content-layer { max-height: 220px; padding: 18px; bottom: 16px; left: 16px; right: 16px; }
+    .cinematic-carousel { padding-left: 24px; padding-right: 24px; }
+    .cta { padding: 90px 24px 100px 24px; }
+    
+    .bugatti-footer { padding: 60px 24px 40px 24px; }
+    .footer-columns { grid-template-columns: repeat(2, 1fr); gap: 30px; }
+    .footer-bottom-row { flex-direction: column; align-items: flex-start; }
+    .hiring-card { max-width: 100%; }
+  }
+
+  @media (max-width: 576px) {
+    .footer-columns { grid-template-columns: 1fr; }
+    .legal-links { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+<canvas id="tubesCanvas"></canvas>
+<div class="ocho-cursor"></div>
+<div class="ocho-cursor-ring"></div>
+
+<div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg"></div>
+  <div class="hero-scrim"></div>
+  <div class="hero-content">
+    <span class="eyebrow">A Room For Every Stay</span>
+    <h1>Ocho <em>Boarding</em><br>House</h1>
+    <p class="hero-sub">Six room types, one address. Wired for work, priced for real life, and built around the small comforts that make a rented room feel like yours.</p>
+  </div>
+  <div class="scroll-cue">
+    <div class="line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- INTRO -->
+<section class="intro">
+  <p>From a single bedspace to a private mezzanine loft — <span>every room at Ocho House is walked through below, in order, exactly as you'd find them down the hall.</span></p>
+</section>
+
+<div class="section-label">
+  <div>
+    <span class="tag">The Rooms</span>
+    <span class="count" style="display:block; margin-top:4px;">06 Types Available</span>
+  </div>
+  <div class="carousel-controls">
+    <button class="carousel-arrow" id="prevBtn">&larr; Prev</button>
+    <button class="carousel-arrow" id="nextBtn">Next &rarr;</button>
+  </div>
+</div>
+
+<!-- CAROUSEL -->
+<div class="cinematic-carousel" id="carousel">
+
+  <!-- CARD NO. 01 -->
+  <div class="room-panel centered-card">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 01</span></div>
+      <img src="../Folder 2/37.jpg" alt="Single Suite" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <div>
+        <h3>Single Suite</h3>
+        <div class="price">₱1,500 / month</div>
+        <p>Includes electric fan, shared clean CR, and Wi-Fi.</p>
+      </div>
+      <a href="book%20now.html?room=Single%20Suite&price=%E2%82%B11,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 02</span></div>
+      <img src="../Folder 2/32.jpg" alt="Double Room" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <div>
+        <h3>Double Room</h3>
+        <div class="price">₱2,500 / month</div>
+        <p>Ideal for two people. Includes dual bedding & study desks.</p>
+      </div>
+      <a href="book%20now.html?room=Double%20Room&price=%E2%82%B12,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 03</span></div>
+      <img src="../Folder 2/33.jpg" alt="Executive Aircon" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <div>
+        <h3>Executive Aircon</h3>
+        <div class="price">₱3,500 / month</div>
+        <p>Air-conditioned room with private CR and full privacy.</p>
+      </div>
+      <a href="book%20now.html?room=Executive%20Aircon&price=%E2%82%B13,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 04</span></div>
+      <img src="../Folder 2/34.jpg" alt="Shared Bedspace" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <div>
+        <h3>Shared Bedspace</h3>
+        <div class="price">₱800 / month</div>
+        <p>Budget option in secure quarters with male/female wings.</p>
+      </div>
+      <a href="book%20now.html?room=Shared%20Bedspace&price=%E2%82%B1800%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 05</span></div>
+      <img src="../Folder 2/36.jpg" alt="Deluxe Studio" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <div>
+        <h3>Deluxe Studio</h3>
+        <div class="price">₱4,500 / month</div>
+        <p>Standalone studio unit featuring a mini-kitchenette.</p>
+      </div>
+      <a href="book%20now.html?room=Deluxe%20Studio&price=%E2%82%B14,500%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+  <div class="room-panel">
+    <div class="panel-image-container">
+      <div class="plaque"><span class="no">No. 06</span></div>
+      <img src="../Folder 2/22.jpg" alt="Mezzanine Loft" onerror="this.parentElement.style.background='linear-gradient(160deg,#2a221a,#0c0a08)'; this.remove();">
+    </div>
+    <div class="panel-content-layer">
+      <div>
+        <h3>Mezzanine Loft</h3>
+        <div class="price">₱5,200 / month</div>
+        <p>Multi-level layout with upper berth and study lounge.</p>
+      </div>
+      <a href="book%20now.html?room=Mezzanine%20Loft&price=%E2%82%B15,200%20%2F%20month" class="btn inquire-btn">Inquire Space</a>
+    </div>
+  </div>
+
+</div>
+
+<!-- CTA -->
+<section class="cta" id="contact">
+  <span class="eyebrow">Ready When You Are</span>
+  <h2>Come see the room <em>before</em><br>someone else does.</h2>
+  <a href="mailto:ochogilbert83@gmail.com" class="btn" style="background: transparent; color: var(--ink); border: 1px solid rgba(242,237,226,0.22); border-radius: 30px;">Inquire Now</a>
+</section>
+
+<!-- BUGATTI-STYLE FOOTER -->
+<footer class="bugatti-footer">
+  <div class="footer-columns">
+    <!-- Col 1 -->
+    <div class="footer-col">
+      <h4>Accommodations</h4>
+      <ul>
+        <li><a href="#">Single Suite</a></li>
+        <li><a href="#">Double Room</a></li>
+        <li><a href="#">Executive Aircon</a></li>
+        <li><a href="#">Shared Bedspace</a></li>
+        <li><a href="#">Deluxe Studio</a></li>
+        <li><a href="#">Mezzanine Loft</a></li>
+      </ul>
+    </div>
+
+    <!-- Col 2 -->
+    <div class="footer-col">
+      <h4>Ocho House</h4>
+      <ul>
+        <li><a href="#">Discover Ocho</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Newsroom</a></li>
+        <li><a href="#">Classic Spaces</a></li>
+        <li><a href="#">Virtual Tour</a></li>
+        <li><a href="#">House Rules</a></li>
+        <li><a href="#">Resident Stories</a></li>
+        <li><a href="#">Location Guide</a></li>
+        <li><a href="#">Contact Us</a></li>
+      </ul>
+    </div>
+
+    <!-- Col 3 -->
+    <div class="footer-col">
+      <h4>Amenities</h4>
+      <ul>
+        <li><a href="#">High-Speed Wi-Fi</a></li>
+        <li><a href="#">Laundry Area</a></li>
+        <li><a href="#">24/7 Security & CCTV</a></li>
+        <li><a href="#">Study Lounge</a></li>
+        <li><a href="#">Kitchen Space</a></li>
+      </ul>
+    </div>
+
+    <!-- Col 4 -->
+    <div class="footer-col">
+      <h4>Customer Support</h4>
+      <ul>
+        <li><a href="#">Inquiries & Reservations</a></li>
+        <li><a href="#">Maintenance Request</a></li>
+        <li><a href="#">Partner Network</a></li>
+        <li><a href="#">Resident Portal</a></li>
+        <li><a href="#">House Guarantee</a></li>
+        <li><a href="#">Emergency Assistance</a></li>
+        <li><a href="#">FAQ & Help Center</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Legal & Language Bar -->
+  <div class="legal-bar">
+    <div style="display: flex; flex-direction: column; gap: 16px;">
+      <div class="copyright">© 2026 OCHO HOUSE S.A.S.</div>
+      <div class="legal-links">
+        <a href="#">Legal Notice</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Cookie Policy</a>
+        <a href="#">Privacy Settings</a>
+        <a href="#">House Rules & Compliance</a>
+        <a href="#">Utility Rates</a>
+      </div>
+    </div>
+
+    <div class="language-selector">
+      <h5>Language</h5>
+      <div class="lang-options">
+        <a href="#" class="active">English</a>
+        <a href="#">Tagalog</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Social Icons & Hiring Banner -->
+  <div class="footer-bottom-row">
+    <div class="social-icons">
+      <!-- LinkedIn -->
+      <a href="#" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+      </a>
+      <!-- Instagram -->
+      <a href="#" aria-label="Instagram">
+        <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+      </a>
+      <!-- X / Twitter -->
+      <a href="#" aria-label="X">
+        <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <!-- YouTube -->
+      <a href="#" aria-label="YouTube">
+        <svg viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+      </a>
+      <!-- Facebook -->
+      <a href="#" aria-label="Facebook">
+        <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+      </a>
+    </div>
+
+    <!-- Career Card -->
+    <div class="hiring-card">
+      <div class="hiring-content">
+        <img src="../Folder 2/37.jpg" alt="Join Us" class="hiring-img" onerror="this.style.background='#333'">
+        <div class="hiring-text">
+          <p>Are you ready for a new adventure?</p>
+          <span>We are hiring.</span>
+        </div>
+      </div>
+      <a href="#" class="hiring-btn">Explore Our Opportunities</a>
+    </div>
+  </div>
+</footer>
+
+<a href="https://wa.me/639364167099" target="_blank" class="whatsapp-float" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24">
+    <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/>
+  </svg>
+</a>
+
+</div>
+
+<script>
+  /* ===== AUTH CHECK FOR INQUIRE SPACE BUTTONS ===== */
+  document.addEventListener('DOMContentLoaded', () => {
+    const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+    const inquireButtons = document.querySelectorAll('.inquire-btn');
+    inquireButtons.forEach(btn => {
+      if (!isLoggedIn) {
+        const originalHref = btn.getAttribute('href');
+        btn.setAttribute('href', `login.html?redirect=${encodeURIComponent(originalHref)}`);
+      }
+    });
+  });
+
+  /* ===== ROPE-STYLE CURSOR & PHYSICS SIMULATION ===== */
+  const cursorDot = document.querySelector('.ocho-cursor');
+  const cursorRing = document.querySelector('.ocho-cursor-ring');
+  const tubesCanvas = document.getElementById('tubesCanvas');
+
+  if (cursorDot && cursorRing && tubesCanvas && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
+    let ringX = mouseX, ringY = mouseY, ringInit = false;
+
+    window.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX; mouseY = e.clientY;
+      if (!ringInit) { ringX = mouseX; ringY = mouseY; ringInit = true; }
+      cursorDot.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%)`;
+    });
+
+    function renderRing() {
+      ringX += (mouseX - ringX) * 0.15;
+      ringY += (mouseY - ringY) * 0.15;
+      cursorRing.style.transform = `translate3d(${ringX}px, ${ringY}px, 0) translate(-50%, -50%)`;
+      requestAnimationFrame(renderRing);
+    }
+    renderRing();
+
+    document.querySelectorAll('a, button, .room-panel, .btn').forEach((el) => {
+      el.addEventListener('mouseenter', () => {
+        cursorRing.style.width = '68px';
+        cursorRing.style.height = '68px';
+        cursorRing.style.backgroundColor = 'rgba(185,138,78,0.12)';
+        cursorRing.style.borderColor = '#b98a4e';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursorRing.style.width = '44px';
+        cursorRing.style.height = '44px';
+        cursorRing.style.backgroundColor = 'transparent';
+        cursorRing.style.borderColor = 'rgba(185,138,78,0.4)';
+      });
+    });
+
+    const tctx = tubesCanvas.getContext('2d');
+    const TUBE_DPR = Math.min(window.devicePixelRatio || 1, 1.5); 
+    function resizeTubes() {
+      tubesCanvas.width = window.innerWidth * TUBE_DPR;
+      tubesCanvas.height = window.innerHeight * TUBE_DPR;
+      tctx.setTransform(TUBE_DPR, 0, 0, TUBE_DPR, 0, 0);
+    }
+    resizeTubes();
+    window.addEventListener('resize', resizeTubes);
+
+    const ROPE_SEGMENTS = 10;
+    const NUM_ROPES = 5;
+    
+    const ropes = Array.from({ length: NUM_ROPES }, (_, ropeIndex) => {
+      return Array.from({ length: ROPE_SEGMENTS }, () => ({
+        x: mouseX,
+        y: mouseY,
+        vx: 0,
+        vy: 0
+      }));
+    });
+
+    const ropePalettes = [
+      ['#b98a4e', '#d4af37', '#9c743f', '#7d6440', '#4a3b25'],
+      ['#e0c095', '#b98a4e', '#8c7048', '#5e4b2f', '#362b1b'],
+      ['#c89d5a', '#a67c37', '#d9c28a', '#66512c', '#382b17']
+    ];
+    let paletteIndex = 0;
+
+    window.addEventListener('click', () => {
+      paletteIndex = (paletteIndex + 1) % ropePalettes.length;
+    });
+
+    function drawRopes() {
+      tctx.clearRect(0, 0, tubesCanvas.width, tubesCanvas.height);
+      tctx.lineCap = 'round';
+      tctx.lineJoin = 'round';
+
+      const colors = ropePalettes[paletteIndex];
+
+      ropes.forEach((rope, rIndex) => {
+        const offsetX = (rIndex - Math.floor(NUM_ROPES / 2)) * 4;
+        const offsetY = (rIndex - Math.floor(NUM_ROPES / 2)) * 4;
+
+        rope[0].x += (mouseX + offsetX - rope[0].x) * 0.3;
+        rope[0].y += (mouseY + offsetY - rope[0].y) * 0.3;
+
+        for (let i = 1; i < rope.length; i++) {
+          const prev = rope[i - 1];
+          const curr = rope[i];
+          
+          const dx = prev.x - curr.x;
+          const dy = prev.y - curr.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          const targetDist = 2;
+
+          if (dist > 1) {
+            const pull = (dist - targetDist) / dist * 0.5;
+            curr.x += dx * pull;
+            curr.y += dy * pull;
+          }
+        }
+
+        tctx.beginPath();
+        for (let i = 0; i < rope.length; i++) {
+          if (i === 0) tctx.moveTo(rope[i].x, rope[i].y);
+          else tctx.lineTo(rope[i].x, rope[i].y);
+        }
+
+        tctx.shadowColor = 'rgba(0, 0, 0, 0.6)';
+        tctx.shadowBlur = 8;
+        tctx.globalAlpha = 0.35;
+        tctx.lineWidth = 8 - rIndex * 0.6;
+        tctx.strokeStyle = '#0c0a08';
+        tctx.stroke();
+
+        tctx.shadowBlur = 0;
+        tctx.globalAlpha = 0.9;
+        tctx.lineWidth = 3.5 - rIndex * 0.3;
+        tctx.strokeStyle = colors[rIndex % colors.length];
+        tctx.stroke();
+      });
+
+      tctx.globalAlpha = 1;
+      requestAnimationFrame(drawRopes);
+    }
+    drawRopes();
+  }
+
+  /* =========================================================
+     WHEEL INERTIA SCROLL
+  ========================================================= */
+  const INERTIA_FRICTION = 0.965;      
+  const INERTIA_WHEEL_GAIN = 0.25;     
+  const INERTIA_MIN_VELOCITY = 0.005;  
+  const MAX_VELOCITY = 15;               
+
+  let currentVelocity = 0;
+  let targetVelocity = 0;
+  let inertiaRunning = false;
+  let lastFrameTime = performance.now();
+
+  function inertiaTick(now) {
+    const deltaTime = (now - lastFrameTime) / 1000;
+    lastFrameTime = now;
+
+    currentVelocity += (targetVelocity - currentVelocity) * 0.12;
+
+    const adjustedFriction = Math.pow(INERTIA_FRICTION, deltaTime * 60);
+    targetVelocity *= adjustedFriction;
+
+    if (Math.abs(currentVelocity) < INERTIA_MIN_VELOCITY) {
+      currentVelocity = 0;
+      targetVelocity = 0;
+      inertiaRunning = false;
+      return;
+    }
+
+    window.scrollBy({ top: currentVelocity, left: 0, behavior: "auto" });
+    requestAnimationFrame(inertiaTick);
+  }
+
+  function handleWheelInertia(e) {
+    e.preventDefault();
+
+    let addedForce = e.deltaY * INERTIA_WHEEL_GAIN;
+    if (Math.abs(addedForce) > 5) {
+      addedForce = Math.sign(addedForce) * (5 + Math.log1p(Math.abs(addedForce) - 5));
+    }
+
+    targetVelocity += addedForce;
+    targetVelocity = Math.sign(targetVelocity) * Math.min(Math.abs(targetVelocity), MAX_VELOCITY);
+
+    if (!inertiaRunning) {
+      inertiaRunning = true;
+      lastFrameTime = performance.now();
+      requestAnimationFrame(inertiaTick);
+    }
+  }
+
+  if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+    window.addEventListener("wheel", handleWheelInertia, { passive: false });
+  }
+
+  /* ===== HERO PARALLAX ===== */
+  const heroBg = document.getElementById('heroBg');
+  const hero = document.querySelector('.hero');
+
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    if (hero && heroBg && scrollY < hero.offsetHeight) {
+      heroBg.style.transform = `scale(1.06) translateY(${scrollY * 0.15}px)`;
+    }
+  }, { passive: true });
+
+  /* ===== CAROUSEL DRAG & BUTTON NAVIGATION ===== */
+  const carousel = document.getElementById('carousel');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+  
+  if (prevBtn && nextBtn) {
+    prevBtn.addEventListener('click', () => {
+      const cardWidth = carousel.querySelector('.room-panel').offsetWidth + 24;
+      carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' });
+    });
+
+    nextBtn.addEventListener('click', () => {
+      const cardWidth = carousel.querySelector('.room-panel').offsetWidth + 24;
+      carousel.scrollBy({ left: cardWidth, behavior: 'smooth' });
+    });
+  }
+
+  let isDown = false;
+  let startX;
+  let scrollStart;
+
+  carousel.addEventListener('mousedown', (e) => {
+    isDown = true;
+    startX = e.pageX - carousel.offsetLeft;
+    scrollStart = carousel.scrollLeft;
+  });
+
+  window.addEventListener('mouseup', () => { isDown = false; });
+  window.addEventListener('mousemove', (e) => {
+    if (!isDown) return;
+    e.preventDefault();
+    const x = e.pageX - carousel.offsetLeft;
+    const walk = (x - startX) * 2;
+    carousel.scrollLeft = scrollStart - walk;
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); });
+  }, { root: carousel, threshold: 0.1 });
+
+  carousel.querySelectorAll('.room-panel').forEach(panel => observer.observe(panel));
+</script>
+
+</body>
+</html>

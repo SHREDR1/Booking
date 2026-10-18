@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Book a Space - Ocho Boarding House</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0c0a08;
+    --bg-alt: #14110d;
+    --panel-bg: #15120e;
+    --ink: #f2ede2;
+    --muted: #8c8477;
+    --brass: #b98a4e;
+    --border: rgba(242, 237, 226, 0.09);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    margin: 0;
+    padding: 0;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    margin: 0;
+  }
+
+  /* ============ GRAIN OVERLAY ============ */
+  .grain {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+  }
+
+  /* ============ NAV ============ */
+  .lusion-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 50px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .nav-btn {
+    background: transparent;
+    border: 1px solid rgba(242,237,226,0.25);
+    color: var(--ink);
+    padding: 10px 22px;
+    border-radius: 30px;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .nav-btn:hover {
+    border-color: var(--ink);
+    background: rgba(242,237,226,0.08);
+  }
+
+  .brand-logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+  }
+
+  /* ============ CONTAINER ============ */
+  .booking-wrapper {
+    max-width: 700px;
+    margin: 60px auto 100px auto;
+    padding: 0 20px;
+  }
+
+  .booking-card {
+    background-color: var(--panel-bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 50px;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.55);
+  }
+
+  .eyebrow {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--brass);
+    text-transform: uppercase;
+    letter-spacing: 0.28em;
+    margin-bottom: 14px;
+  }
+
+  .booking-card h1 {
+    font-size: clamp(2rem, 4vw, 2.6rem);
+    margin-bottom: 30px;
+  }
+
+  /* SUMMARY BOX */
+  .selection-box {
+    background: rgba(12,10,8,0.6);
+    border: 1px solid rgba(185, 138, 78, 0.3);
+    padding: 24px;
+    border-radius: 4px;
+    margin-bottom: 30px;
+  }
+
+  .selection-box h3 {
+    font-size: 1rem;
+    color: var(--brass);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 0.95rem;
+  }
+
+  .row span:first-child { color: var(--muted); }
+  .row span:last-child { font-weight: 500; }
+
+  .total-row {
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+    padding-top: 12px;
+    font-size: 1.05rem;
+    color: var(--brass);
+    font-weight: 600;
+  }
+
+  /* FORM CONTROLS */
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .form-group.full {
+    grid-column: span 2;
+  }
+
+  .form-group label {
+    display: block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    margin-bottom: 8px;
+  }
+
+  .form-group input, .form-group select, .form-group textarea {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(12,10,8,0.8);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    border-color: var(--brass);
+  }
+
+  .btn {
+    display: inline-block;
+    width: 100%;
+    padding: 15px 30px;
+    background-color: var(--brass);
+    color: #0c0a08;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    margin-top: 10px;
+  }
+
+  .btn:hover { opacity: 0.9; }
+
+  /* SUCCESS TICKET SCREEN */
+  #successScreen {
+    display: none;
+    text-align: center;
+  }
+
+  #successScreen h2 {
+    font-size: 2rem;
+    color: var(--brass);
+    margin-bottom: 15px;
+  }
+
+  .ticket-box {
+    background: rgba(12,10,8,0.8);
+    border: 1px dashed var(--brass);
+    padding: 25px;
+    border-radius: 6px;
+    margin: 25px 0;
+    text-align: left;
+  }
+
+  @media (max-width: 768px) {
+    .form-grid { grid-template-columns: 1fr; }
+    .form-group.full { grid-column: span 1; }
+    .booking-card { padding: 30px 20px; }
+    .lusion-nav { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="grain"></div>
+
+<nav class="lusion-nav">
+  <a href="room_3.html" class="nav-btn">&larr; Back to Catalog</a>
+  <div class="brand-logo">Ocho House</div>
+  <div></div>
+</nav>
+
+<div class="booking-wrapper">
+  <div class="booking-card">
+    
+    <!-- BOOKING FORM -->
+    <div id="formSection">
+      <span class="eyebrow">Select & Reserve</span>
+      <h1>Space Booking System</h1>
+
+      <form id="bookingForm" onsubmit="processBooking(event)">
+        <div class="form-grid">
+          
+          <!-- ROOM SELECTION LIST -->
+          <div class="form-group full">
+            <label for="roomSelect">Choose Room Type</label>
+            <select id="roomSelect" onchange="updateRoomSelection()">
+              <option value="Single Suite" data-price="1500">No. 01: Single Suite - ₱1,500 / month</option>
+              <option value="Double Room" data-price="2500">No. 02: Double Room - ₱2,500 / month</option>
+              <option value="Executive Aircon" data-price="3500">No. 03: Executive Aircon - ₱3,500 / month</option>
+              <option value="Shared Bedspace" data-price="800">No. 04: Shared Bedspace - ₱800 / month</option>
+              <option value="Deluxe Studio" data-price="4500">No. 05: Deluxe Studio - ₱4,500 / month</option>
+              <option value="Mezzanine Loft" data-price="5200">No. 06: Mezzanine Loft - ₱5,200 / month</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="fullName">Full Name</label>
+            <input type="text" id="fullName" required placeholder="e.g. Juan Dela Cruz">
+          </div>
+
+          <div class="form-group">
+            <label for="contactNumber">Contact Number</label>
+            <input type="tel" id="contactNumber" required placeholder="+63 900 000 0000">
+          </div>
+
+          <div class="form-group">
+            <label for="moveInDate">Target Move-In Date</label>
+            <input type="date" id="moveInDate" required>
+          </div>
+
+          <div class="form-group">
+            <label for="duration">Stay Duration</label>
+            <select id="duration" onchange="updateRoomSelection()">
+              <option value="1">1 Month</option>
+              <option value="3">3 Months</option>
+              <option value="6">6 Months</option>
+              <option value="12">1 Year</option>
+            </select>
+          </div>
+
+          <!-- SUMMARY BOX INSIDE FORM -->
+          <div class="form-group full">
+            <div class="selection-box" style="margin-bottom: 0;">
+              <h3>Billing Breakdown</h3>
+              <div class="row">
+                <span>Selected Room:</span>
+                <span id="summaryRoom">Single Suite</span>
+              </div>
+              <div class="row">
+                <span>Monthly Rate:</span>
+                <span id="summaryRate">₱1,500</span>
+              </div>
+              <div class="row total-row">
+                <span>Total Balance:</span>
+                <span id="summaryTotal">₱1,500</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group full">
+            <label for="notes">Special Requests / Notes</label>
+            <textarea id="notes" rows="3" placeholder="Any specific requirements..."></textarea>
+          </div>
+        </div>
+
+        <button type="submit" class="btn">Confirm & Reserve Space</button>
+      </form>
+    </div>
+
+    <!-- SUCCESS CONFIRMATION TICKET -->
+    <div id="successScreen">
+      <span class="eyebrow">Reservation Successful</span>
+      <h2>You're All Set!</h2>
+      <p style="color: var(--muted); line-height: 1.6;">Your booking request has been registered in our system. Please present your booking reference code upon arrival.</p>
+      
+      <div class="ticket-box">
+        <div class="row">
+          <span>Reference ID:</span>
+          <span id="ticketRef" style="color: var(--brass); font-family: monospace; font-size: 1.1rem;">OCHO-9921</span>
+        </div>
+        <div class="row">
+          <span>Reserved Room:</span>
+          <span id="ticketRoom">Single Suite</span>
+        </div>
+        <div class="row">
+          <span>Tenant Name:</span>
+          <span id="ticketName">Juan Dela Cruz</span>
+        </div>
+        <div class="row">
+          <span>Move-In Date:</span>
+          <span id="ticketDate">2026-04-01</span>
+        </div>
+        <div class="row total-row">
+          <span>Total Due:</span>
+          <span id="ticketTotal">₱1,500</span>
+        </div>
+      </div>
+
+      <a href="room_3.html" class="btn" style="text-align: center; display: block;">Return to Rooms Catalog</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // Automatically select room from URL parameter if passed from the main page
+  const urlParams = new URLSearchParams(window.location.search);
+  const preselectedRoom = urlParams.get('room');
+  
+  if (preselectedRoom) {
+    const roomSelect = document.getElementById('roomSelect');
+    for (let option of roomSelect.options) {
+      if (option.value.toLowerCase() === preselectedRoom.toLowerCase()) {
+        roomSelect.value = option.value;
+        break;
+      }
+    }
+  }
+
+  // Update calculations and summary details whenever selection changes
+  function updateRoomSelection() {
+    const roomSelect = document.getElementById('roomSelect');
+    const selectedOption = roomSelect.options[roomSelect.selectedIndex];
+    
+    const roomName = selectedOption.value;
+    const monthlyRate = parseInt(selectedOption.getAttribute('data-price')) || 0;
+    const months = parseInt(document.getElementById('duration').value) || 1;
+    const totalBalance = monthlyRate * months;
+
+    // Update UI labels
+    document.getElementById('summaryRoom').textContent = roomName;
+    document.getElementById('summaryRate').textContent = `₱${monthlyRate.toLocaleString()} / month`;
+    document.getElementById('summaryTotal').textContent = `₱${totalBalance.toLocaleString()} (${months} month${months > 1 ? 's' : ''})`;
+  }
+
+  // Run on load to set initial state
+  updateRoomSelection();
+
+  // Handle booking submission
+  function processBooking(e) {
+    e.preventDefault();
+
+    const roomSelect = document.getElementById('roomSelect');
+    const roomName = roomSelect.value;
+    const monthlyRate = parseInt(roomSelect.options[roomSelect.selectedIndex].getAttribute('data-price'));
+    const months = parseInt(document.getElementById('duration').value);
+    const calculatedTotal = monthlyRate * months;
+
+    const name = document.getElementById('fullName').value;
+    const date = document.getElementById('moveInDate').value;
+    const randomRef = 'OCHO-' + Math.floor(1000 + Math.random() * 9000);
+
+    // Populate ticket data
+    document.getElementById('ticketRef').textContent = randomRef;
+    document.getElementById('ticketRoom').textContent = roomName;
+    document.getElementById('ticketName').textContent = name;
+    document.getElementById('ticketDate').textContent = date;
+    document.getElementById('ticketTotal').textContent = `₱${calculatedTotal.toLocaleString()}`;
+
+    // Switch view to ticket screen
+    document.getElementById('formSection').style.display = 'none';
+    document.getElementById('successScreen').style.display = 'block';
+  }
+</script>
+
+</body>
+</html>

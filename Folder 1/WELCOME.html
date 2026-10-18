@@ -1,0 +1,3648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>OCHO Ventures</title>
+
+<style>
+
+/* =========================================================
+   OCHO CINEMATIC SCROLL SYSTEM
+========================================================= */
+
+.hero{
+	overflow:hidden;
+}
+
+.hero-video{
+	position:absolute;
+	inset:0;
+	width:100%;
+	height:100%;
+	object-fit:cover;
+	z-index:0;
+
+	/* BLUR EFFECT & OVERFLOW FIX */
+	filter: blur(60px);
+	transform: scale(1.05);
+}
+
+.hero::after{
+	content:"";
+	position:absolute;
+	inset:0;
+	background:
+		linear-gradient(
+			90deg,
+			rgba(0,0,0,.78) 0%,
+			rgba(0,0,0,.38) 45%,
+			rgba(0,0,0,.20) 100%
+		),
+		linear-gradient(
+			180deg,
+			rgba(0,0,0,.10),
+			rgba(0,0,0,.80)
+		);
+	z-index:1;
+	pointer-events:none;
+}
+
+.hero-content{
+	position:relative;
+	z-index:2;
+}
+
+.food-grid{
+	overflow:hidden;
+}
+
+.gallery{
+	overflow:hidden;
+}
+
+.contact{
+	overflow:hidden;
+}
+
+.hero h1,
+.hero h2,
+.section-title{
+	overflow:hidden;
+}
+
+
+/* =========================================================
+   RESET & GLOBAL TEXT STYLES
+========================================================= */
+
+*{
+	margin:0;
+	padding:0;
+	box-sizing:border-box;
+}
+
+html{
+	scroll-behavior:smooth;
+}
+
+body{
+	margin:0;
+	font-family:"Segoe UI",Arial,sans-serif;
+	background:#05070b;
+	color:white;
+	overflow-x:hidden;
+}
+
+img{
+	display:block;
+	width:100%;
+}
+
+a{
+	text-decoration:none;
+	color:inherit;
+}
+
+
+/* =========================================================
+   HEADER
+========================================================= */
+
+header{
+	position:fixed;
+
+	top:0;
+	left:0;
+
+	width:100%;
+	height:90px;
+
+	display:flex;
+	align-items:center;
+
+	padding:0 30px;
+
+	z-index:1000;
+
+	background:rgba(5,7,11,.70);
+
+	backdrop-filter:blur(8px);
+
+	border-bottom:1px solid rgba(255,255,255,.06);
+
+	gap:25px;
+
+	/* SMOOTH HIDE/SHOW TRANSITION */
+	transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* HIDE HEADER ON SCROLL DOWN (MOBILE ONLY) */
+@media (max-width: 900px) {
+	header.header-hidden {
+		transform: translateY(-100%);
+	}
+}
+
+
+/* =========================================================
+   LOGO (TEXT-BASED STYLING)
+========================================================= */
+
+.logo-container {
+	flex-shrink:0;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	cursor: pointer;
+	text-decoration: none;
+	animation: ochoInfiniteMove 4s ease-in-out infinite alternate;
+	transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.logo-title {
+	font-size: 22px;
+	font-weight: 700;
+	letter-spacing: 2px;
+	color: #ffffff;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+
+.logo-subtitle {
+	font-size: 11px;
+	font-weight: 500;
+	letter-spacing: 0.5px;
+	color: #D4AF37;
+	text-transform: lowercase;
+}
+
+@keyframes ochoInfiniteMove {
+	0% {
+		transform: translateY(0px) scale(1);
+	}
+	50% {
+		transform: translateY(-3px) scale(1.02);
+	}
+	100% {
+		transform: translateY(2px) scale(0.99);
+	}
+}
+
+.logo-container:hover {
+	opacity: 0.85;
+}
+
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+#navbar{
+	display:flex;
+
+	align-items:center;
+
+	list-style:none;
+
+	gap:2px;
+
+	margin-left:auto;
+	margin-right:10px;
+
+	flex-shrink:1;
+}
+
+#navbar li{
+	position:relative;
+}
+
+#navbar li > a{
+	display:block;
+
+	padding:12px 11px;
+
+	color:#ffffff;
+
+	font-size:11px;
+
+	font-weight:600;
+
+	letter-spacing:1px;
+
+	white-space:nowrap;
+
+	transition:.3s;
+	text-transform: uppercase;
+}
+
+#navbar li > a:hover{
+	color:#D4AF37;
+}
+
+
+/* =========================================================
+   ACCOUNT
+========================================================= */
+
+.account-links{
+	display:flex;
+
+	align-items:center;
+
+	gap:14px;
+
+	flex-shrink:0;
+
+	white-space:nowrap;
+}
+
+.login-link{
+	color:#ffffff;
+
+	font-size:12px;
+
+	font-weight:600;
+
+	white-space:nowrap;
+
+	transition:.3s;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.login-link:hover{
+	color:#D4AF37;
+}
+
+.register-btn{
+	display:inline-block;
+
+	padding:10px 16px;
+
+	background:#D4AF37;
+
+	color:#111;
+
+	font-size:11px;
+
+	font-weight:700;
+
+	border-radius:2px;
+
+	white-space:nowrap;
+
+	transition:.3s;
+	text-transform: uppercase;
+}
+
+.register-btn:hover{
+	background:#f1d45e;
+
+	transform:translateY(-2px);
+}
+
+
+/* =========================================================
+   MODAL LOGIN OVERLAY STYLES
+========================================================= */
+.login-modal-overlay {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.8);
+	backdrop-filter: blur(5px);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 9999999;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.login-modal-overlay.active {
+	opacity: 1;
+	visibility: visible;
+}
+
+.login-modal-box {
+	background: #0b0e14;
+	border: 1px solid rgba(212, 175, 55, 0.3);
+	border-top: 3px solid #D4AF37;
+	padding: 30px;
+	width: 100%;
+	max-width: 400px;
+	border-radius: 4px;
+	box-shadow: 0 20px 50px rgba(0,0,0,.7);
+}
+
+.login-modal-box h3 {
+	color: #D4AF37;
+	font-size: 18px;
+	margin-bottom: 20px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-align: center;
+}
+
+.login-input-group {
+	margin-bottom: 15px;
+}
+
+.login-input-group label {
+	display: block;
+	font-size: 11px;
+	letter-spacing: 1px;
+	color: #aaa;
+	margin-bottom: 6px;
+	text-transform: uppercase;
+}
+
+.login-input-group input {
+	width: 100%;
+	padding: 12px;
+	background: #030507;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: #fff;
+	font-size: 14px;
+	border-radius: 2px;
+	outline: none;
+	transition: border-color 0.3s;
+	cursor: text !important;
+}
+
+.login-input-group input:focus {
+	border-color: #D4AF37;
+}
+
+.login-error {
+	color: #ff4d4d;
+	font-size: 12px;
+	margin-bottom: 15px;
+	text-align: center;
+	display: none;
+}
+
+.login-modal-actions {
+	display: flex;
+	gap: 10px;
+	margin-top: 20px;
+}
+
+.login-modal-btn {
+	flex: 1;
+	padding: 12px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	border: none;
+	cursor: pointer;
+	transition: 0.3s;
+	text-align: center;
+}
+
+.btn-submit-login {
+	background: #D4AF37;
+	color: #111;
+}
+
+.btn-submit-login:hover {
+	background: #f1d45e;
+}
+
+.btn-cancel-login {
+	background: transparent;
+	color: #aaa;
+	border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-cancel-login:hover {
+	color: #fff;
+	border-color: #fff;
+}
+
+
+/* =========================================================
+   DROPDOWN & STAGGERED ANIMATIONS
+========================================================= */
+
+.dropdown-content{
+
+	position:absolute;
+
+	top:100%;
+
+	left:0;
+
+	width:230px;
+
+	background:#ffffff;
+
+	border:1px solid rgba(212,175,55,.25);
+
+	border-top:2px solid #D4AF37;
+
+	box-shadow:0 20px 50px rgba(0,0,0,.45);
+
+	opacity:0;
+
+	visibility:hidden;
+
+	transform:translateY(12px);
+
+	transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
+
+	overflow:hidden;
+}
+
+.dropdown-content a{
+
+	display:block;
+
+	padding:15px 18px;
+
+	color:#111;
+
+	font-size:13px;
+
+	opacity:0;
+
+	transform:translateY(-10px);
+
+	transition: opacity 0.5s ease, transform 0.5s ease, background 0.3s, color 0.3s;
+}
+
+.dropdown-content a:hover{
+
+	background:#D4AF37;
+
+	color:#fff;
+}
+
+@media (hover:hover) and (pointer:fine){
+
+	.dropdown:hover .dropdown-content{
+
+		opacity:1;
+
+		visibility:visible;
+
+		transform:translateY(0);
+	}
+
+}
+
+
+/* =========================================================
+   MOBILE MENU & CUSTOM 2-LINE HAMBURGER ICON
+========================================================= */
+
+.menu-toggle{
+
+	display:none;
+
+	align-items: center;
+	gap: 8px;
+	font-size: 12px;
+	font-weight: 600;
+	letter-spacing: 1px;
+	color: #ffffff;
+
+	cursor: pointer;
+	text-transform: uppercase;
+}
+
+/* Custom 2-Line Asymmetrical Hamburger Container */
+.hamburger-lines {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	width: 20px;
+	align-items: flex-start;
+}
+
+.hamburger-lines span {
+	display: block;
+	height: 2px;
+	background-color: #ffffff;
+	border-radius: 2px;
+	transition: all 0.3s ease;
+}
+
+/* Long Top Line */
+.hamburger-lines span.line-top {
+	width: 18px;
+}
+
+/* Short Bottom Line */
+.hamburger-lines span.line-bottom {
+	width: 12px;
+}
+
+/* Close State Animation */
+.menu-toggle.active .line-top {
+	transform: translateY(3px) rotate(45deg);
+	width: 18px;
+}
+
+.menu-toggle.active .line-bottom {
+	transform: translateY(-3px) rotate(-45deg);
+	width: 18px;
+}
+
+
+/* =========================================================
+   HERO
+========================================================= */
+
+.hero{
+
+	position:relative;
+
+	min-height:100vh;
+
+	display:flex;
+
+	align-items:flex-end;
+
+	padding:0 8% 90px;
+
+	overflow:hidden;
+
+	background:#000;
+}
+
+
+/* HERO CONTENT & HOVER EFFECT */
+
+.hero-content{
+
+	position:relative;
+
+	z-index:2;
+
+	max-width:750px;
+	
+	transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.hero-content:hover {
+	transform: translateY(-6px);
+}
+
+.hero-content:hover .hero-label {
+	letter-spacing: 9px;
+	color: #f1d45e;
+}
+
+.hero-content:hover h1 {
+	letter-spacing: -2px;
+	text-shadow: 0 10px 30px rgba(0,0,0,0.8);
+}
+
+.hero-content:hover h2 {
+	letter-spacing: -2px;
+}
+
+.hero-content:hover h2 span {
+	text-shadow: 0 0 20px rgba(212, 175, 55, 0.5), 0 0 40px rgba(212, 175, 55, 0.2);
+}
+
+.hero-content:hover .hero-description {
+	color: #ffffff;
+}
+
+.hero-label{
+
+	color:#D4AF37;
+
+	font-size:13px;
+
+	font-weight:600;
+
+	letter-spacing:6px;
+
+	margin-bottom:20px;
+
+	text-transform: uppercase;
+	transition: letter-spacing 0.5s ease, color 0.5s ease;
+}
+
+.hero h1{
+
+	font-size: clamp(40px, 6vw, 85px);
+
+	line-height:.95;
+
+	font-weight:700;
+
+	letter-spacing:-2px;
+
+	margin-bottom:10px;
+
+	text-transform: uppercase;
+	transition: letter-spacing 0.5s ease, text-shadow 0.5s ease;
+}
+
+.hero h2{
+	font-size: clamp(40px, 6vw, 85px);
+
+	line-height:.95;
+
+	font-weight:700;
+
+	letter-spacing:-2px;
+
+	margin-bottom:30px;
+
+	text-transform: uppercase;
+	transition: letter-spacing 0.5s ease;
+}
+
+.hero h2 span{
+
+	color:#D4AF37;
+	transition: text-shadow 0.5s ease;
+}
+
+.hero-description{
+
+	max-width:560px;
+
+	color:#d4d4d4;
+
+	font-size:17px;
+
+	line-height:1.8;
+
+	margin-bottom:35px;
+	transition: color 0.5s ease;
+}
+
+.hero-button{
+
+	display:inline-block;
+
+	padding:16px 32px;
+
+	background:#D4AF37;
+
+	color:#111;
+
+	font-size:12px;
+
+	font-weight:700;
+
+	letter-spacing:2px;
+
+	transition:.4s;
+
+	text-transform: uppercase;
+}
+
+.hero-button:hover{
+
+	background:white;
+
+	transform:translateY(-3px);
+}
+
+
+/* SCROLL */
+
+.scroll-indicator{
+
+	position:absolute;
+
+	right:7%;
+
+	bottom:40px;
+
+	writing-mode:vertical-rl;
+
+	font-size:10px;
+
+	letter-spacing:4px;
+
+	color:#aaa;
+
+	z-index:3;
+
+	text-transform: uppercase;
+}
+
+.scroll-line{
+
+	width:1px;
+
+	height:70px;
+
+	background:#D4AF37;
+
+	margin-top:12px;
+
+	animation:scrollLine 2s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   GENERAL SECTION
+========================================================= */
+
+.section{
+
+	min-height:90vh;
+
+	display:flex;
+
+	align-items:center;
+
+	padding:100px 8%;
+
+	position:relative;
+
+	background:#070a0f;
+}
+
+.section.dark{
+
+	background:#0b0f15;
+}
+
+.section-content{
+
+	width:100%;
+
+	max-width:1200px;
+
+	margin:auto;
+}
+
+.section-label{
+
+	color:#D4AF37;
+
+	font-size:12px;
+
+	letter-spacing:5px;
+
+	font-weight:600;
+
+	margin-bottom:18px;
+
+	text-transform: uppercase;
+}
+
+.section-title{
+
+	font-size:clamp(42px,6vw,78px);
+
+	line-height:.95;
+
+	margin-bottom:25px;
+
+	font-weight:700;
+
+	text-transform: uppercase;
+}
+
+.section-text{
+
+	color:#bcbcbc;
+
+	line-height:1.9;
+
+	font-size:16px;
+
+	max-width:550px;
+}
+
+
+/* =========================================================
+   STORY SECTION (BACKGROUND IMAGE 13.JPEG - NO CONTAINER BOX)
+========================================================= */
+
+#experience {
+	background: url("../Folder 2/13.jpeg") center/cover no-repeat;
+	position: relative;
+	min-height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 80px 20px;
+}
+
+#experience::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.55);
+	z-index: 1;
+}
+
+.story-container {
+	position: relative;
+	z-index: 2;
+	width: 100%;
+	max-width: 700px;
+	margin: 0 auto;
+}
+
+.story-card {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+	padding: 0 !important;
+	text-align: center;
+}
+
+.story-card .section-label {
+	color: #D4AF37;
+	font-size: 12px;
+	letter-spacing: 5px;
+	font-weight: 600;
+	margin-bottom: 20px;
+	text-transform: uppercase;
+	text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+
+.story-card .section-title {
+	font-size: clamp(36px, 6vw, 64px);
+	line-height: 1.05;
+	font-weight: 800;
+	margin-bottom: 25px;
+	color: #ffffff;
+	letter-spacing: -1px;
+	text-shadow: 0 4px 20px rgba(0,0,0,0.9);
+}
+
+.story-card .section-text {
+	color: #e0e0e0;
+	font-size: 16px;
+	line-height: 1.8;
+	max-width: 580px;
+	margin: 0 auto;
+	text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+}
+
+
+/* =========================================================
+   ACCOMMODATION
+========================================================= */
+
+.rooms{
+
+	display:grid;
+
+	grid-template-columns:repeat(3,1fr);
+
+	gap:25px;
+
+	margin-top:55px;
+}
+
+.room{
+
+	position:relative;
+
+	height:480px;
+
+	border-radius:12px;
+
+	overflow:hidden;
+
+	background:#111;
+
+	box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	cursor: pointer;
+}
+
+.room img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), filter 0.8s cubic-bezier(0.25, 1, 0.5, 1) !important;
+}
+
+.room:hover img {
+	transform: scale(1.05);
+	filter: brightness(0.85);
+}
+
+.room-overlay {
+	position: absolute;
+	bottom: 15px;
+	left: 20px;
+	right: 20px;
+	width: auto;
+
+	background: #ffffff;
+	color: #111111;
+
+	padding: 20px 25px;
+	border-radius: 6px;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+	z-index: 2;
+
+	text-align: left;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	justify-content: flex-start;
+
+	max-height: 70px;
+	overflow: hidden;
+	
+	transition: max-height 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+	            transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), 
+	            box-shadow 0.8s ease;
+}
+
+.room:hover .room-overlay {
+	max-height: 320px;
+	transform: translateY(-5px);
+	box-shadow: 0 18px 40px rgba(0,0,0,0.35);
+}
+
+.room-overlay h3 {
+	font-family: "Segoe UI", Arial, sans-serif;
+	font-size: 18px;
+	font-weight: 700;
+	margin: 0;
+	color: #111111;
+	letter-spacing: 0.5px;
+	text-align: left;
+	width: 100%;
+}
+
+.room-overlay p {
+	color: #555555;
+	font-size: 13.5px;		
+	line-height: 1.65;
+	margin-top: 10px;
+	text-align: left;
+	width: 100%;
+
+	opacity: 0;
+	transform: translateY(15px);
+	
+	transition: opacity 0.6s cubic-bezier(0.25, 1, 0.5, 1), 
+	            transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.room:hover .room-overlay p {
+	opacity: 1;
+	transform: translateY(0);
+	transition-delay: 0.2s;
+}
+
+
+/* =========================================================
+   FOOD SECTION & BALANCED DUAL-CARD GRID LAYOUT
+========================================================= */
+
+.food-grid{
+
+	display:grid;
+
+	grid-template-columns: 1fr 1fr;
+
+	align-items: stretch;
+	gap: 30px;
+}
+
+/* Matched Container Dimensions for Both Boxes */
+.food-rating-wrapper,
+.food-info{
+	background: #0b0f15;
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 12px;
+	padding: 40px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
+.food-rating-wrapper {
+	gap: 15px;
+}
+
+.food-rating-wrapper h3 {
+	color: #D4AF37;
+	font-size: 1rem;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	margin-bottom: 2px;
+}
+
+.rating-canvas-box {
+	position: relative;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#chartCanvas {
+	background: rgba(0, 0, 0, 0.4);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	border-radius: 8px;
+	width: 85%;
+	max-width: 380px;
+	height: auto;
+	margin: 0 auto;
+}
+
+.rating-controls-grid {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.control-group {
+	display: flex;
+	flex-direction: column;
+	gap: 3px;
+}
+
+.control-group label {
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	color: #9aa0a6;
+	display: flex;
+	justify-content: space-between;
+}
+
+.control-group input[type="range"] {
+	accent-color: #D4AF37;
+	cursor: pointer;
+}
+
+.control-group input[type="range"]:disabled {
+	opacity: 0.5;
+	cursor: not-allowed;
+}
+
+.chart-stats-row {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 10px;
+}
+
+.stat-box {
+	background: rgba(0, 0, 0, 0.3);
+	border: 1px solid rgba(255, 255, 255, 0.08);
+	padding: 10px;
+	border-radius: 6px;
+}
+
+.stat-box span {
+	display: block;
+	font-size: 0.65rem;
+	color: #9aa0a6;
+	text-transform: uppercase;
+}
+
+.stat-box strong {
+	font-size: 1rem;
+	color: #D4AF37;
+}
+
+.rating-btn-row {
+	display: flex;
+	gap: 10px;
+}
+
+.btn-submit-data {
+	flex: 2;
+	background: #D4AF37;
+	color: #000;
+	border: none;
+	padding: 10px 15px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.8rem;
+	transition: all 0.3s ease;
+}
+
+.btn-submit-data:hover {
+	background: #f1d45e;
+}
+
+.btn-reset-data {
+	flex: 1;
+	background: transparent;
+	color: #9aa0a6;
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	padding: 10px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.8rem;
+	transition: all 0.3s ease;
+}
+
+.btn-reset-data:hover {
+	border-color: #D4AF37;
+	color: #fff;
+}
+
+.submission-status {
+	display: none;
+	background: rgba(46, 204, 113, 0.1);
+	border: 1px solid #2ecc71;
+	color: #2ecc71;
+	padding: 6px;
+	border-radius: 4px;
+	font-size: 0.75rem;
+	text-align: center;
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+.submission-status.active {
+	display: block;
+}
+
+/* Right Side Content Container (Matched exactly with left box) */
+.food-info{
+	display:flex;
+	flex-direction:column;
+	justify-content:center;
+}
+
+.food-info h2{
+	font-size: clamp(35px, 4.5vw, 60px);
+	line-height: .95;
+	margin-bottom: 25px;
+	text-transform: uppercase;
+}
+
+.food-info p{
+	max-width: 450px;
+	color: #bbb;
+	line-height: 1.9;
+	margin-bottom: 30px;
+	font-size: 16px;
+}
+
+.text-button{
+
+	display:inline-block;
+
+	color:#D4AF37;
+
+	font-size:12px;
+
+	letter-spacing:3px;
+
+	font-weight:bold;
+
+	border-bottom:1px solid #D4AF37;
+
+	padding-bottom:8px;
+
+	width:max-content;
+
+	text-transform: uppercase;
+}
+
+
+/* =========================================================
+   FACILITY GALLERY SECTION (COMPACT + ANIMATED ARROW HOVER)
+========================================================= */
+
+.gallery-header-centered {
+	text-align: center;
+	margin-bottom: 30px;
+}
+
+.gallery-header-centered .section-label {
+	color: #D4AF37;
+	font-size: 11px;
+	letter-spacing: 3px;
+	font-weight: 700;
+	margin-bottom: 12px;
+	text-transform: uppercase;
+}
+
+.gallery-header-centered .section-title {
+	font-size: clamp(28px, 4vw, 44px);
+	line-height: 1.1;
+	font-weight: 800;
+	margin-bottom: 12px;
+	color: #ffffff;
+}
+
+.gallery-header-subtext {
+	color: #aaaaaa;
+	font-size: 13px;
+	margin-bottom: 20px;
+}
+
+.facility-action-btn-gold {
+	display: inline-block;
+	background: #D4AF37;
+	color: #111111;
+	padding: 10px 22px;
+	font-size: 11px;
+	font-weight: 700;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	border-radius: 3px;
+	transition: all 0.3s ease;
+}
+
+.facility-action-btn-gold:hover {
+	background: #f1d45e;
+	transform: translateY(-2px);
+}
+
+.facility-gallery-wrapper {
+	position: relative;
+	margin: 30px auto 0 auto;
+	width: 100%;
+	max-width: 900px;
+}
+
+.facility-grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: 20px;
+}
+
+.facility-card-item {
+	display: flex;
+	flex-direction: column;
+	cursor: pointer;
+}
+
+.facility-card {
+	position: relative;
+	height: 300px;
+	border-radius: 8px;
+	overflow: hidden;
+	background: #111;
+	box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.facility-card img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), filter 0.6s ease;
+}
+
+.facility-card-item:hover .facility-card img {
+	transform: scale(1.05);
+	filter: brightness(0.9);
+}
+
+.facility-card-info {
+	margin-top: 14px;
+	text-align: left;
+}
+
+.facility-card-info .card-category {
+	color: #D4AF37;
+	font-size: 10px;
+	font-weight: 700;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	margin-bottom: 4px;
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+}
+
+/* Arrow Slide Animation on Hover */
+.facility-card-info .arrow-icon {
+	display: inline-block;
+	transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), color 0.3s ease;
+}
+
+.facility-card-item:hover .arrow-icon {
+	transform: translateX(8px);
+	color: #ffffff;
+}
+
+.facility-card-info .card-title {
+	font-size: 18px;
+	font-weight: 700;
+	color: #ffffff;
+	margin-bottom: 4px;
+	transition: color 0.3s ease;
+}
+
+.facility-card-item:hover .card-title {
+	color: #D4AF37;
+}
+
+.facility-card-info .card-desc {
+	font-size: 12.5px;
+	color: #888888;
+	line-height: 1.4;
+}
+
+.gallery-bottom-quote {
+	margin-top: 40px;
+	padding: 25px 20px 0 20px;
+	border-top: 1px solid rgba(255, 255, 255, 0.08);
+	text-align: center;
+}
+
+.gallery-bottom-quote p {
+	color: #cccccc;
+	font-size: 14px;
+	line-height: 1.7;
+	max-width: 600px;
+	margin: 0 auto 10px auto;
+	font-style: italic;
+}
+
+.gallery-bottom-quote strong {
+	color: #D4AF37;
+	font-size: 12px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	display: block;
+}
+
+
+/* =========================================================
+   WHY OCHO
+========================================================= */
+
+.features{
+
+	display:grid;
+
+	grid-template-columns:repeat(3,1fr);
+
+	gap:1px;
+
+	margin-top:60px;
+
+	background:#252a30;
+}
+
+.feature{
+
+	padding:60px 40px;
+
+	background:#0b0f15;
+
+	transition:.4s;
+}
+
+.feature:hover{
+
+	background:#111821;
+}
+
+.feature-number{
+
+	color:#D4AF37;
+
+	font-size:12px;
+
+	letter-spacing:3px;
+
+	margin-bottom:30px;
+}
+
+.feature h3{
+
+	font-size:28px;
+
+	margin-bottom:15px;
+
+	text-transform: uppercase;
+}
+
+.feature p{
+
+	color:#aaa;
+
+	line-height:1.8;
+
+	font-size:14px;
+}
+
+
+
+
+/* =========================================================
+   AFFILIATE PRODUCT HIGHLIGHTS
+========================================================= */
+
+.affiliate-link{
+	display:inline-block;
+	margin-top:24px;
+	color:#D4AF37;
+	font-size:12px;
+	font-weight:600;
+	letter-spacing:1px;
+	text-decoration:none;
+	text-transform:uppercase;
+	transition:color .25s ease, transform .25s ease;
+}
+
+.affiliate-link:hover{
+	color:#fff;
+	transform:translateX(3px);
+}
+
+.affiliate-disclosure{
+	margin-top:24px;
+	color:#888;
+	font-size:12px;
+	line-height:1.7;
+	max-width:720px;
+}
+
+/* Affiliate product image highlights */
+.affiliate-product-image{
+    width:100%;
+    height:230px;
+    display:block;
+    object-fit:cover;
+    object-position:center;
+    margin:-0px 0 28px;
+    background:#171717;
+    border:1px solid rgba(212,175,55,.18);
+    transition:transform .45s ease, filter .45s ease;
+    filter:saturate(.82);
+}
+.feature:hover .affiliate-product-image{
+    transform:scale(1.025);
+    filter:saturate(1.08);
+}
+.feature{
+    overflow:hidden;
+}
+@media(max-width:800px){
+    .features{grid-template-columns:1fr;}
+    .affiliate-product-image{height:260px;}
+    .feature{padding:28px 24px;}
+}
+
+/* =========================================================
+   CONTACT
+========================================================= */
+
+.contact{
+
+	min-height:70vh;
+
+	display:flex;
+
+	align-items:center;
+
+	justify-content:center;
+
+	text-align:center;
+
+	padding:100px 20px;
+
+	background:
+
+		linear-gradient(
+			rgba(0,0,0,.65),
+			rgba(0,0,0,.85)
+		),
+
+		url("../Folder 2/contact.jpg") center/cover no-repeat;
+}
+
+.contact-content{
+
+	max-width:800px;
+}
+
+.contact h2{
+
+	font-size:clamp(55px,8vw,100px);
+
+	line-height:.9;
+
+	margin-bottom:25px;
+
+	text-transform: uppercase;
+}
+
+.contact p{
+
+	color:#ccc;
+
+	max-width:600px;
+
+	margin:0 auto 35px;
+
+	line-height:1.8;
+}
+
+
+/* =========================================================
+   FOOTER
+========================================================= */
+
+footer{
+
+	padding:60px 8% 30px;
+
+	background:#030507;
+
+	border-top:1px solid rgba(255,255,255,.08);
+}
+
+.footer-top{
+
+	display:flex;
+
+	justify-content:space-between;
+
+	align-items:flex-start;
+
+	padding-bottom:50px;
+}
+
+.footer-logo{
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+}
+
+.footer-logo .logo-title {
+	font-size: 24px;
+}
+
+.footer-links{
+
+	display:flex;
+
+	gap:60px;
+}
+
+.footer-links h4{
+
+	color:#D4AF37;
+
+	font-size:11px;
+
+	letter-spacing:2px;
+
+	margin-bottom:18px;
+
+	text-transform: uppercase;
+}
+
+.footer-links a{
+
+	display:block;
+
+	color:#aaa;
+
+	font-size:13px;
+
+	margin-bottom:10px;
+
+	transition:.3s;
+}
+
+.footer-links a:hover{
+
+	color:white;
+}
+
+.footer-bottom{
+
+	border-top:1px solid rgba(255,255,255,.08);
+
+	padding-top:25px;
+
+	color:#666;
+
+	font-size:11px;
+}
+
+
+/* =========================================================
+   ANIMATIONS
+========================================================= */
+
+@keyframes scrollLine{
+
+	0%,100%{
+
+		transform:scaleY(.5);
+
+		transform-origin:top;
+	}
+
+	50%{
+
+		transform:scaleY(1);
+
+		transform-origin:top;
+	}
+}
+
+
+/* =========================================================
+   MOBILE RESPONSIVE & FULLSCREEN DRAWER MENU
+========================================================= */
+
+@media(max-width:900px){
+
+	header{
+
+		padding:0 15px;
+
+		height:75px;
+		justify-content: space-between;
+		gap: 10px;
+	}
+
+	.menu-toggle{
+
+		display:flex;
+
+		order:4;
+	}
+
+	/* Fullscreen Slide-out Menu Drawer */
+	#navbar{
+
+		position:fixed;
+
+		top:0;
+
+		left:-100%; /* Hidden off-screen to the left */
+
+		width:85%;
+
+		max-width:400px;
+
+		height:500vh;
+
+		display:flex;
+
+		flex-direction:column;
+
+		align-items:stretch;
+
+		margin:0;
+
+		padding:30px 25px;
+
+		background:#ffffff;
+
+		box-shadow: 10px 0 30px rgba(0,0,0,0.5);
+
+		z-index:2000000;
+
+		overflow-y:auto;
+
+		transition: left 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+	}
+
+	#navbar.active{
+
+		left:0; /* Slides into view */
+	}
+
+	/* Top Close / Header Row inside the Drawer */
+	.drawer-header {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 20px;
+		border-bottom: 1px solid rgba(0,0,0,0.08);
+		margin-bottom: 20px;
+	}
+
+	.drawer-close-btn {
+		background: none;
+		border: none;
+		font-size: 22px;
+		font-family: Arial, sans-serif;
+		cursor: pointer;
+		color: #111111;
+		line-height: 1;
+		padding: 4px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	.drawer-sign-in {
+		background: #f0f4ff;
+		color: #0038ff;
+		padding: 8px 18px;
+		border-radius: 20px;
+		font-size: 12px;
+		font-weight: 700;
+		text-transform: uppercase;
+		border: 1px solid #d0e0ff;
+	}
+
+	#navbar li > a{
+
+		padding: 14px 0;
+		color:#111111;
+		font-size: 15px;
+		font-weight: 600;
+		border-bottom: 1px solid rgba(0,0,0,0.04);
+	}
+
+	#navbar li > a:hover{
+		background: transparent;
+		color:#D4AF37;
+	}
+
+	.dropdown-content{
+
+		position:static;
+
+		width:100%;
+
+		max-height:0;
+
+		overflow:hidden;
+
+		opacity:0;
+
+		visibility:hidden;
+
+		transform:none;
+
+		border:none;
+
+		box-shadow:none;
+
+		background:#f9f9f9;
+
+		transition:max-height .35s ease, opacity .35s ease;
+		border-radius: 4px;
+	}
+
+	.dropdown.active .dropdown-content{
+
+		max-height:350px;
+
+		opacity:1;
+
+		visibility:visible;
+		margin-top: 8px;
+		margin-bottom: 8px;
+	}
+
+	.dropdown-content a{
+
+		opacity:1 !important;
+
+		transform:none !important;
+
+		padding: 12px 20px !important;
+
+		color:#333 !important;
+		font-size: 13px !important;
+		border-bottom: none !important;
+	}
+
+	.dropdown-content a:hover{
+
+		background:#D4AF37;
+
+		color:#fff !important;
+	}
+
+	.account-links{
+
+		display: flex !important;
+		margin-left: auto;
+		margin-right: 10px;
+		gap: 10px;
+	}
+
+	.login-link{
+
+		font-size:10.5px;
+		color:#ffffff;
+	}
+
+	.register-btn{
+
+		padding:6px 10px;
+
+		font-size:9.5px;
+		display: inline-block !important;
+	}
+
+	.hero{
+
+		padding:0 25px 70px;
+
+		min-height:100vh;
+		
+		align-items: center !important;
+		text-align: center;
+	}
+
+	.hero-content {
+		margin: 0 auto;
+		max-width: 100%;
+	}
+
+	.hero-description {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.hero-button {
+		margin-left: auto;
+		margin-right: auto;
+	}
+
+	.hero h1, .hero h2{
+
+		font-size:clamp(35px, 10vw, 55px);
+	}
+
+	.hero-description{
+
+		font-size:14px;
+	}
+
+	.scroll-indicator{
+
+		display:none;
+	}
+
+	.story-card {
+		padding: 35px 25px;
+	}
+
+	.rooms{
+
+		grid-template-columns:1fr;
+	}
+
+	.room{
+
+		height:380px;
+	}
+
+	.food-grid{
+
+		grid-template-columns:1fr;
+	}
+
+	.food-rating-wrapper,
+	.food-info {
+		padding: 30px;
+	}
+
+	.facility-grid{
+
+		grid-template-columns:1fr;
+	}
+	
+	.facility-card {
+		height: 350px;
+	}
+
+	.features{
+
+		grid-template-columns:1fr;
+	}
+
+	.footer-top{
+
+		flex-direction:column;
+
+		gap:40px;
+	}
+
+	.footer-links{
+
+		flex-wrap:wrap;
+
+		gap:35px;
+	}
+
+}
+
+
+/* SMALL PHONES */
+
+@media(max-width:480px){
+
+	header{
+		padding: 0 10px;
+		gap: 6px;
+	}
+
+	.logo-title {
+		font-size: 18px;
+	}
+
+	.logo-subtitle {
+		font-size: 9px;
+	}
+
+	.account-links{
+		gap: 6px;
+		margin-right: 6px;
+	}
+	
+	.login-link {
+		font-size: 9.5px;
+	}
+	
+	.register-btn {
+		padding: 5px 8px;
+		font-size: 8.5px;
+	}
+
+	.menu-toggle {
+		font-size: 10.5px;
+		gap: 5px;
+	}
+
+	.hero{
+
+		align-items:center !important;
+
+		padding-bottom:60px;
+	}
+
+	.hero-label{
+
+		font-size:10px;
+
+		letter-spacing:4px;
+	}
+
+	.section{
+
+		padding:80px 22px;
+	}
+
+	.section-title{
+
+		font-size:46px;
+
+	}
+
+	.contact h2{
+
+		font-size:58px;
+	}
+
+}
+
+
+/* REDUCE MOTION */
+
+@media(prefers-reduced-motion:reduce){
+
+	*,
+	*::before,
+	*::after{
+
+		animation:none !important;
+
+		transition:none !important;
+
+		scroll-behavior:auto !important;
+	}
+}
+
+
+/* =========================================================
+   CINEMATIC SMOOTH SCROLL EFFECT
+========================================================= */
+
+html{
+	scroll-behavior:smooth;
+	scroll-padding-top:90px;
+}
+
+.section-content,
+.contact-content,
+.section-label,
+.section-title,
+.section-text,
+.feature,
+.food-info,
+.story-card{
+	opacity:0;
+	transform:translateY(50px);
+	filter:blur(14px);
+	will-change:opacity, transform, filter;
+	transition:
+		opacity 1.9s cubic-bezier(.22,.61,.36,1),
+		transform 1.9s cubic-bezier(.22,.61,.36,1),
+		filter 1.9s cubic-bezier(.22,.61,.36,1);
+}
+
+.section-content.show,
+.contact-content.show,
+.section-label.show,
+.section-title.show,
+.section-text.show,
+.feature.show,
+.food-info.show,
+.story-card.show{
+	opacity:1;
+	transform:translateY(0);
+	filter:blur(0px);
+}
+
+.section-label{
+	transition-delay:.05s;
+}
+
+.section-title{
+	transition-delay:.15s;
+}
+
+.section-text{
+	transition-delay:.25s;
+}
+
+.food-info{
+	transition-delay:.15s;
+}
+
+.feature:nth-child(1){
+	transition-delay:.1s;
+}
+
+.feature:nth-child(2){
+	transition-delay:.2s;
+}
+
+.feature:nth-child(3){
+	transition-delay:.3s;
+}
+
+.facility-card:nth-child(1){
+	transition-delay:.05s;
+}
+
+.facility-card:nth-child(2){
+	transition-delay:.15s;
+}
+
+.hero-content{
+	opacity:0;
+	transform:translateY(40px);
+	filter:blur(16px);
+	transition:
+		opacity 2.1s cubic-bezier(.22,.61,.36,1),
+		transform 2.1s cubic-bezier(.22,.61,.36,1),
+		filter 2.1s cubic-bezier(.22,.61,.36,1);
+}
+
+.hero-content.show{
+	opacity:1;
+	transform:translateY(0);
+	filter:blur(0px);
+}
+
+.hero-button,
+.text-button{
+	transition:
+		opacity .8s ease,
+		transform .4s ease,
+		background .4s ease,
+		color .4s ease;
+}
+
+.contact{
+	background-attachment:scroll;
+}
+
+
+/* =========================================================
+   ROPE CURSOR PHYSICS ENGINE (CANVAS TRAIL)
+========================================================= */
+
+@media (hover: hover) and (pointer: fine) {
+	html, body, a, button {
+		cursor: none !important;
+	}
+
+	#ropeCanvas {
+		position: fixed;
+		top: 0;
+		left: 0;
+		width: 100vw;
+		height: 100vh;
+		pointer-events: none;
+		z-index: 10000000;
+	}
+}
+
+@media (max-width: 900px) {
+	#ropeCanvas {
+		display: none;
+	}
+}
+
+
+/* =========================================================
+   COOKIE CONSENT BANNER
+========================================================= */
+
+.cookie-banner {
+	position: fixed;
+	bottom: 25px;
+	left: 25px;
+	right: 25px;
+	max-width: 520px;
+	background: #0b0e14;
+	border: 1px solid rgba(212, 175, 55, 0.3);
+	border-top: 3px solid #D4AF37;
+	padding: 22px 25px;
+	z-index: 1000000;
+	box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+	display: flex;
+	flex-direction: column;
+	gap: 15px;
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(20px);
+	transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+}
+
+.cookie-banner.show-banner {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.cookie-text h4 {
+	color: #D4AF37;
+	font-size: 14px;
+	margin-bottom: 6px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+.cookie-text p {
+	color: #ccc;
+	font-size: 12px;
+	line-height: 1.6;
+	margin-bottom: 12px;
+}
+
+.cookie-text a {
+	color: #D4AF37;
+	text-decoration: underline;
+}
+
+.cookie-options {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin-bottom: 5px;
+	padding: 10px;
+	background: rgba(255, 255, 255, 0.03);
+	border-radius: 4px;
+	border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.cookie-option {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-size: 12px;
+	color: #ddd;
+	cursor: pointer;
+}
+
+.cookie-option input[type="checkbox"] {
+	accent-color: #D4AF37;
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+}
+
+.cookie-option input[disabled] {
+	cursor: not-allowed;
+	opacity: 0.6;
+}
+
+.cookie-actions {
+	display: flex;
+	gap: 8px;
+	flex-wrap: wrap;
+}
+
+.cookie-btn {
+	padding: 9px 14px;
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	border: none;
+	cursor: pointer;
+	transition: 0.3s;
+	flex: 1;
+	text-align: center;
+}
+
+.cookie-btn-accept {
+	background: #D4AF37;
+	color: #111;
+}
+
+.cookie-btn-accept:hover {
+	background: #f1d45e;
+}
+
+.cookie-btn-save {
+	background: transparent;
+	color: #D4AF37;
+	border: 1px solid #D4AF37;
+}
+
+.cookie-btn-save:hover {
+	background: rgba(212, 175, 55, 0.15);
+}
+
+.cookie-btn-decline {
+	background: transparent;
+	color: #aaa;
+	border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.cookie-btn-decline:hover {
+	color: #fff;
+	border-color: #fff;
+}
+
+@media (max-width: 500px) {
+	.cookie-banner {
+		left: 15px;
+		right: 15px;
+		bottom: 15px;
+		padding: 18px;
+	}
+	
+	.cookie-actions {
+		flex-direction: column;
+	}
+}
+
+</style>
+</head>
+
+
+<body>
+
+	<!-- =====================================================
+		 HEADER
+	===================================================== -->
+
+	<header>
+
+		<a href="#home" class="logo-container" id="interactiveLogo">
+			<span class="logo-title">OCHO</span>
+			<span class="logo-subtitle">beyond the ordinary</span>
+		</a>
+
+		<ul id="navbar">
+
+			<li>
+				<a href="#home">Home</a>
+			</li>
+
+
+			<li class="dropdown" id="about-dropdown">
+
+				<a href="#">About Us</a>
+
+				<div class="dropdown-content">
+
+					<a href="our story.html">
+						Our Story
+					</a>
+
+					<a href="VMGO.html">
+						VMGO & Testimonials
+					</a>
+
+					<a href="PRIVACY POLICY.html">
+						Privacy Policy
+					</a>
+				</div>
+
+
+			</li>
+
+
+			<li class="dropdown">
+
+				<a href="#">Services</a>
+
+				<div class="dropdown-content">
+
+					<a href="menu.html">
+						Food Selections
+					</a>
+
+					<a href="room.html">
+						Accommodation
+						
+						
+					</a>
+					<a href="products.html">
+						Products
+						</a>
+
+
+
+				</div>
+
+			</li>
+
+
+
+			<li class="dropdown">
+
+				<a href="#">CUSTOMER'S</a>
+
+				<div class="dropdown-content">
+
+					<a href="ocho_guest_experiences.html">
+						Customer's Reviews
+					</a>
+
+					<a href="room.html">
+						Events & Celebrations
+				
+					</a>
+					
+					<a href="room.html">
+						Reservations & Bookings
+						</a>
+
+					<a href="room.html">
+						Special Offers & Rewards
+						</a>
+				
+				
+					<a href="room.html">
+						Help & Support
+						</a>
+				
+				
+				
+
+				</div>
+
+			</li>
+
+
+
+
+			<li class="dropdown">
+
+				<a href="#">Contact</a>
+
+				<div class="dropdown-content">
+
+					<a href="contact.html">
+						Facebook
+					</a>
+
+					<a href="#">
+						Whatsapp
+					</a>
+
+					<a href="tel:+123456789">
+						Gmail
+					</a>
+
+				</div>
+
+			</li>
+
+		</ul>
+
+			
+
+
+		<div class="account-links" id="account-links">
+			<a href="create account.html" class="register-btn" id="registerBtn">
+				Create Account
+			</a>
+
+			<a id="loginActionTrigger" class="login-link">
+				Log In
+			</a>
+
+			<a id="logoutActionTrigger" class="login-link" style="display: none;">
+				Log Out
+			</a>
+		</div>
+
+
+		<!-- 2-Line Asymmetrical Hamburger Icon -->
+		<div class="menu-toggle" id="menuToggle">
+			<span class="menu-label">MENU</span>
+			<div class="hamburger-lines">
+				<span class="line-top"></span>
+				<span class="line-bottom"></span>
+			</div>
+		</div>
+
+	</header>
+
+
+	<!-- =====================================================
+		 LOGIN MODAL POPUP
+	===================================================== -->
+	<div class="login-modal-overlay" id="loginModalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
+		<div class="login-modal-box">
+			<h3>System Login</h3>
+			<div class="login-input-group">
+				<label for="modalUser">Username</label>
+				<input type="text" id="modalUser" placeholder="Enter username">
+			</div>
+			<div class="login-input-group">
+				<label for="modalPass">Password</label>
+				<input type="password" id="modalPass" placeholder="Enter password">
+			</div>
+			<div class="login-error" id="loginErrorMsg">Invalid username or password!</div>
+			<div class="login-modal-actions">
+				<button class="login-modal-btn btn-submit-login" id="modalSubmitBtn">Log In</button>
+				<button class="login-modal-btn btn-cancel-login" id="modalCancelBtn">Cancel</button>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- =====================================================
+		 HERO
+	===================================================== -->
+
+	<section class="hero" id="home">
+		<video autoplay muted loop playsinline class="hero-video">
+			<source src="../Folder 2/28.mp4" type="video/mp4">
+			Your browser does not support HTML5 video.
+		</video>
+
+		<div class="hero-content">
+
+			<div class="hero-label">
+				Welcome
+			</div>
+
+			<h1>Where Every Stay</h1>
+			
+			<h2><span>Tells a Story.</span></h2>
+
+			<p class="hero-description">
+				Connecting people with quality spaces, great food, and better experiences.
+			</p>
+
+			<a href="#experience" class="hero-button" id="hero-btn">
+				Discover
+			</a>
+
+		</div>
+
+
+		<div class="scroll-indicator">
+
+			Scroll
+
+			<div class="scroll-line"></div>
+
+		</div>
+
+	</section>
+
+
+	<!-- =====================================================
+		 OUR STORY
+	===================================================== -->
+
+	<section class="section" id="experience">
+
+		<div class="story-container">
+
+			<div class="story-card">
+
+				<div class="section-label">
+					Our Story
+				</div>
+
+				<h2 class="section-title">
+					More Than<br>
+					a Place to Stay.
+				</h2>
+
+				<p class="section-text">
+					OCHO Ventures was created to bring accommodation, food, comfort, and experience together in one destination.
+					<br><br>
+					From the moment you arrive, every detail is designed to make your stay comfortable and memorable.
+				</p>
+
+			</div>
+
+		</div>
+
+	</section>
+
+
+	<!-- =====================================================
+		 ACCOMMODATION
+	===================================================== -->
+
+	<section class="section dark">
+
+		<div class="section-content">
+
+			<div class="section-label">
+				Accommodation
+			</div>
+
+			<h2 class="section-title">
+				Your space.<br>
+				Your comfort.
+			</h2>
+
+
+			<div class="rooms">
+		
+				<div class="room">
+					<img src="../Folder 2/26.jpg" alt="Affordable Prices">
+					<div class="room-overlay">
+						<h3>Affordable Prices</h3>
+						<p>Our approach in pricing guarantees you comfort, security, no hidden costs, and most importantly – value for money.</p>
+					</div>
+				</div>
+
+				<div class="room">
+					<img src="../Folder 2/27.jpg" alt="Convenient Locations">
+					<div class="room-overlay">
+						<h3>Convenient Locations</h3>
+						<p>A welcoming space situated in prime spots, providing quick accessibility to key destinations, establishments, and daily needs.</p>
+					</div>
+				</div>
+
+				<div class="room">
+					<img src="../Folder 2/28.jpg" alt="Luxury for Expatriates">
+					<div class="room-overlay">
+						<h3>Luxury for Expatriates</h3>
+						<p>More than accommodation — an exclusive lifestyle built for expatriates. Enjoy high-end features, pristine environment, security, and top-notch facilities.</p>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>
+
+
+	<!-- =====================================================
+		 OCHO BITES & SATISFACTION RATING
+	===================================================== -->
+
+	<section class="section">
+
+		<div class="section-content">
+
+			<div class="food-grid">
+
+				<!-- Left Side: Interactive Satisfaction Rating Graph & Controls -->
+				<div class="food-rating-wrapper">
+					<h3>Satisfaction Rating</h3>
+					
+					<div class="submission-status" id="submissionStatus">
+						✓ Rating Submitted Successfully!
+					</div>
+
+					<div class="rating-canvas-box">
+						<canvas id="chartCanvas" width="380" height="200"></canvas>
+					</div>
+
+					<div class="rating-controls-grid">
+						<div class="control-group">
+							<label>Service Quality <span id="q1Val">88%</span></label>
+							<input type="range" id="q1Input" min="50" max="100" value="88">
+						</div>
+
+						<div class="control-group">
+							<label>Platform Speed <span id="q2Val">92%</span></label>
+							<input type="range" id="q2Input" min="50" max="100" value="92">
+						</div>
+
+						<div class="control-group">
+							<label>User Support <span id="q3Val">85%</span></label>
+							<input type="range" id="q3Input" min="50" max="100" value="85">
+						</div>
+
+						<div class="control-group">
+							<label>Overall Value <span id="q4Val">95%</span></label>
+							<input type="range" id="q4Input" min="50" max="100" value="95">
+						</div>
+					</div>
+
+					<div class="chart-stats-row">
+						<div class="stat-box">
+							<span>Average Score</span>
+							<strong id="avgVal">90.0%</strong>
+						</div>
+						<div class="stat-box">
+							<span>Status Rating</span>
+							<strong id="statusVal">EXCELLENT</strong>
+						</div>
+					</div>
+
+					<div class="rating-btn-row">
+						<button class="btn-submit-data" id="submitBtn">Submit Rating</button>
+						<button class="btn-reset-data" id="resetBtn">Reset</button>
+					</div>
+				</div>
+
+				<!-- Right Side: Good Food Text (Matched Container Size) -->
+				<div class="food-info">
+					<h2>
+						Good food.<br>
+						Good moments.
+					</h2>
+					<p>
+						Discover delicious selections prepared for students, guests, workers, and everyone looking for a satisfying meal.
+					</p>
+					<a href="Ocho Bites.html" class="text-button">
+						Explore the menu →
+					</a>
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>
+
+
+	<!-- =====================================================
+		 AFFILIATE PRODUCT HIGHLIGHTS
+	===================================================== -->
+
+	<section class="section dark" id="featured-finds">
+
+		<div class="section-content">
+
+			<div class="section-label">
+				OUR PRODUCT SELECTION
+			</div>
+
+			<h2 class="section-title">
+				Featured Products<br>
+				Discover more. Choose better.
+			</h2>
+
+			<p class="section-text">
+				Explore technology, accessories, and practical products selected for everyday needs.
+			</p>
+
+			<div class="features">
+
+				<div class="feature">
+                    <a href="products.html" target="_blank" rel="sponsored nofollow noopener" aria-label="Explore phone cases">
+                        <img class="affiliate-product-image" src="https://images.unsplash.com/photo-1605236453806-6ff36851218e?auto=format&fit=crop&w=900&q=85" alt="Smartphone with a stylish protective phone case" loading="lazy">
+                    </a>
+					<div class="feature-number">01 / MOBILE STYLE</div>
+					<h3>Phone Cases</h3>
+					<p>Discover stylish cases, protective covers, and designs that help personalize your phone.</p>
+					<a class="affiliate-link" href="products.html" target="_blank" rel="sponsored nofollow noopener">Explore Phone Cases &rarr;</a>
+				</div>
+
+				<div class="feature">
+                    <a href="products.html" target="_blank" rel="sponsored nofollow noopener" aria-label="Explore computer processors">
+                        <img class="affiliate-product-image" src="https://images.unsplash.com/photo-1555617981-dac3880eac6e?auto=format&fit=crop&w=900&q=85" alt="Computer processor and PC hardware component" loading="lazy">
+                    </a>
+					<div class="feature-number">02 / PC PERFORMANCE</div>
+					<h3>CPU Processors</h3>
+					<p>Explore processors for desktop PC builds, computer upgrades, and everyday computing needs.</p>
+					<a class="affiliate-link" href="products.html" target="_blank" rel="sponsored nofollow noopener">Explore CPUs &rarr;</a>
+				</div>
+
+				<div class="feature">
+                    <a href="products.html" target="_blank" rel="sponsored nofollow noopener" aria-label="Explore computer motherboards">
+                        <img class="affiliate-product-image" src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=85" alt="Electronic circuit board representing computer motherboard components" loading="lazy">
+                    </a>
+					<div class="feature-number">03 / PC BUILD COMPONENTS</div>
+					<h3>Motherboards</h3>
+					<p>Browse motherboard options for compatible processors, PC builds, and future system upgrades.</p>
+					<a class="affiliate-link" href="products.html" target="_blank" rel="sponsored nofollow noopener">Explore Motherboards &rarr;</a>
+				</div>
+
+			</div>
+
+			
+
+	</section>
+
+
+	<!-- =====================================================
+		 GALLERY
+	===================================================== -->
+
+	<section class="section">
+
+		<div class="section-content">
+
+			<div class="gallery-header-centered">
+				<div class="section-label">THE OCHO EXPERIENCE</div>
+				<h2 class="section-title">Moments Worth Remembering.</h2>
+				<p class="gallery-header-subtext">Good food, meaningful connections, and experiences to share.</p>
+				<a href="#" class="facility-action-btn-gold">EXPLORE OUR FACILITIES</a>
+			</div>
+
+			<div class="facility-gallery-wrapper">
+
+				<div class="facility-grid">
+					
+					<div class="facility-card-item">
+						<div class="facility-card">
+							<img src="../Folder 2/29.jpg" alt="Community Gallery">
+						</div>
+						<div class="facility-card-info">
+							<span class="card-category">
+								SHARE YOUR MOMENTS <span class="arrow-icon">&gt;&gt;&gt;</span>
+							</span>
+							<h3 class="card-title">Community Gallery</h3>
+							<p class="card-desc">Discover moments shared by our guests.</p>
+						</div>
+					</div>
+
+					<div class="facility-card-item">
+						<div class="facility-card">
+							<img src="../Folder 2/30.jpg" alt="Guest Stories">
+						</div>
+						<div class="facility-card-info">
+							<span class="card-category">
+								GUEST EXPERIENCES <span class="arrow-icon">&gt;&gt;&gt;</span>
+							</span>
+							<h3 class="card-title">Guest Stories</h3>
+							<p class="card-desc">See the experiences that bring people together.</p>
+						</div>
+					</div>
+
+				</div>
+
+				<div class="gallery-bottom-quote">
+					<p>"The memories not valued in present but until decide you'll find the memories wrap when you were old."</p>
+					<strong>Gilbert O.</strong>
+				</div>
+
+			</div>
+
+		</div>
+
+	</section>
+
+
+	<!-- =====================================================
+		 CONTACT
+	===================================================== -->
+
+	<section class="contact">
+
+		<div class="contact-content">
+
+			<div class="section-label">
+				Our Benchmark
+			</div>
+
+			<h2>
+				Excellence in every<br>experience.
+			</h2>
+
+			<p>
+				Whether you are looking for comfortable accommodation, delicious food, or simply a place to enjoy.
+			</p>
+
+			<a href="contact.html" class="hero-button">
+				Let’s Connect
+			</a>
+
+		</div>
+
+	</section>
+
+
+	<!-- =====================================================
+		 FOOTER
+	===================================================== -->
+
+	<footer>
+
+		<div class="footer-top">
+
+			<div class="footer-logo">
+				<span class="logo-title">OCHO</span>
+				<span class="logo-subtitle">beyond the ordinary</span>
+			</div>
+
+			<div class="footer-links">
+
+				<div>
+					<h4>Explore</h4>
+					<a href="#home">Home</a>
+					<a href="our story.html">Our Story</a>
+					<a href="Ocho Bites.html">Ocho Bites</a>
+					<a href="4 slide boarding house.html">Accommodation</a>
+				</div>
+
+				<div>
+					<h4>Connect</h4>
+					<a href="contact.html">Contact</a>
+					
+				</div>
+
+			</div>
+
+		</div>
+
+		<div class="footer-bottom">
+			© 2026 OCHO Ventures. All Rights Reserved.
+		</div>
+
+	</footer>
+
+
+	<!-- =====================================================
+		 COOKIE CONSENT BANNER
+	===================================================== -->
+
+	<div class="cookie-banner" id="cookieBanner">
+		<div class="cookie-text">
+			<h4>We Value Your Privacy</h4>
+			<p>Choose which cookies you allow us to use. Read our <a href="PRIVACY POLICY.html">Privacy Policy</a> to learn more.</p>
+			
+			<div class="cookie-options">
+				<label class="cookie-option">
+					<input type="checkbox" checked disabled>
+					<span><strong>Essential</strong> (Required for site functionality)</span>
+				</label>
+				<label class="cookie-option">
+					<input type="checkbox" id="chkAnalytics">
+					<span><strong>Analytics</strong> (Performance & usage stats)</span>
+				</label>
+				<label class="cookie-option">
+					<input type="checkbox" id="chkMarketing">
+					<span><strong>Marketing</strong> (Personalized offers & ads)</span>
+				</label>
+			</div>
+		</div>
+		<div class="cookie-actions">
+			<button class="cookie-btn cookie-btn-accept" id="acceptAllCookies">Accept All</button>
+			<button class="cookie-btn cookie-btn-save" id="saveSelectedCookies">Save Preferences</button>
+			<button class="cookie-btn cookie-btn-decline" id="declineCookies">Decline All</button>
+		</div>
+	</div>
+
+
+	<!-- =====================================================
+		 JAVASCRIPT
+	===================================================== -->
+
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+
+	<script>
+
+	/* =========================================================
+	   CENTRALIZED STORAGE HELPER UTILITY
+	========================================================= */
+	const OchoStorage = {
+		getLoggedIn() {
+			return sessionStorage.getItem('ocho_logged_in') === 'true' || localStorage.getItem('isLoggedIn') === 'true';
+		},
+		setLoggedIn(status) {
+			if (status) {
+				sessionStorage.setItem('ocho_logged_in', 'true');
+				localStorage.setItem('isLoggedIn', 'true');
+			} else {
+				sessionStorage.removeItem('ocho_logged_in');
+				localStorage.removeItem('isLoggedIn');
+			}
+		},
+		getUsers() {
+			return JSON.parse(localStorage.getItem('ocho_users') || '[]');
+		},
+		getCookieConsent() {
+			const rawData = localStorage.getItem('ocho_cookie_consent');
+			if (!rawData) return null;
+			try {
+				return JSON.parse(rawData);
+			} catch(e) {
+				return { essential: true, analytics: rawData === 'accepted', marketing: rawData === 'accepted', status: rawData };
+			}
+		},
+		setCookieConsent(consentData) {
+			localStorage.setItem('ocho_cookie_consent', JSON.stringify(consentData));
+		}
+	};
+
+
+	/* =========================================================
+	   DYNAMIC LOGIN / LOG OUT STATE & MODAL LOGIC + FOCUS TRAP
+	========================================================= */
+	document.addEventListener('DOMContentLoaded', () => {
+		const loginTrigger = document.getElementById('loginActionTrigger');
+		const logoutTrigger = document.getElementById('logoutActionTrigger');
+		const registerBtn = document.getElementById('registerBtn');
+		const modalOverlay = document.getElementById('loginModalOverlay');
+		const modalSubmit = document.getElementById('modalSubmitBtn');
+		const modalCancel = document.getElementById('modalCancelBtn');
+		const modalUser = document.getElementById('modalUser');
+		const modalPass = document.getElementById('modalPass');
+		const errorMsg = document.getElementById('loginErrorMsg');
+
+		let isLoggedIn = OchoStorage.getLoggedIn();
+
+		function updateLoginState() {
+			if (isLoggedIn) {
+				if (loginTrigger) {
+					loginTrigger.textContent = "Book Now";
+					loginTrigger.setAttribute('href', 'book now.html');
+					loginTrigger.onclick = null;
+				}
+
+				if (registerBtn) registerBtn.style.display = 'none';
+				if (logoutTrigger) {
+					logoutTrigger.style.display = 'inline-block';
+					logoutTrigger.onclick = (e) => {
+						e.preventDefault();
+						OchoStorage.setLoggedIn(false);
+						isLoggedIn = false;
+						updateLoginState();
+						window.location.reload();
+					};
+				}
+			} else {
+				if (loginTrigger) {
+					loginTrigger.textContent = "Login";
+					loginTrigger.removeAttribute('href');
+					
+					loginTrigger.onclick = (e) => {
+						e.preventDefault();
+						modalOverlay.classList.add('active');
+						modalOverlay.setAttribute('aria-hidden', 'false');
+						if (modalUser) modalUser.focus();
+					};
+				}
+
+				if (registerBtn) {
+					registerBtn.style.display = 'inline-block';
+					registerBtn.setAttribute('href', 'create account.html');
+				}
+				if (logoutTrigger) logoutTrigger.style.display = 'none';
+			}
+		}
+
+		updateLoginState();
+
+		function closeModal() {
+			modalOverlay.classList.remove('active');
+			modalOverlay.setAttribute('aria-hidden', 'true');
+			errorMsg.style.display = 'none';
+			if (loginTrigger) loginTrigger.focus();
+		}
+
+		if (modalOverlay) {
+			modalOverlay.addEventListener('keydown', (e) => {
+				if (!modalOverlay.classList.contains('active')) return;
+				
+				if (e.key === 'Escape') {
+					closeModal();
+					return;
+				}
+
+				if (e.key === 'Tab') {
+					const focusableElements = modalOverlay.querySelectorAll('input, button');
+					const firstElement = focusableElements[0];
+					const lastElement = focusableElements[focusableElements.length - 1];
+
+					if (e.shiftKey) { 
+						if (document.activeElement === firstElement) {
+							lastElement.focus();
+							e.preventDefault();
+						}
+					} else { 
+						if (document.activeElement === lastElement) {
+							firstElement.focus();
+							e.preventDefault();
+						}
+					}
+				}
+			});
+		}
+
+		if (modalSubmit) {
+			modalSubmit.addEventListener('click', () => {
+				const u = modalUser.value.trim();
+				const p = modalPass.value.trim();
+
+				let isValidUser = false;
+				const storedUsers = OchoStorage.getUsers();
+				
+				if (storedUsers.length > 0) {
+					isValidUser = storedUsers.some(user => (user.username === u || user.email === u) && user.password === p);
+				}
+
+				if (!isValidUser && u === 'admin' && p === '12345') {
+					isValidUser = true;
+				}
+
+				if (isValidUser) {
+					OchoStorage.setLoggedIn(true);
+					isLoggedIn = true;
+					errorMsg.style.display = 'none';
+					closeModal();
+					
+					modalUser.value = '';
+					modalPass.value = '';
+
+					updateLoginState();
+				} else {
+					errorMsg.style.display = 'block';
+				}
+			});
+		}
+
+		if (modalCancel) {
+			modalCancel.addEventListener('click', closeModal);
+		}
+
+		if (modalOverlay) {
+			modalOverlay.addEventListener('click', (e) => {
+				if (e.target === modalOverlay) {
+					closeModal();
+				}
+			});
+		}
+	});
+
+
+	/* =========================================================
+	   SATISFACTION RATING GRAPH LOGIC
+	========================================================= */
+	const canvas = document.getElementById('chartCanvas');
+	const ctx = canvas.getContext('2d');
+
+	const inputs = [
+		document.getElementById('q1Input'),
+		document.getElementById('q2Input'),
+		document.getElementById('q3Input'),
+		document.getElementById('q4Input')
+	];
+
+	const valDisplays = [
+		document.getElementById('q1Val'),
+		document.getElementById('q2Val'),
+		document.getElementById('q3Val'),
+		document.getElementById('q4Val')
+	];
+
+	const avgVal = document.getElementById('avgVal');
+	const statusVal = document.getElementById('statusVal');
+	const submitBtn = document.getElementById('submitBtn');
+	const resetBtn = document.getElementById('resetBtn');
+	const submissionStatus = document.getElementById('submissionStatus');
+
+	const categories = ['Quality', 'Speed', 'Support', 'Value'];
+	const defaultValues = [88, 92, 85, 95];
+	let isSubmitted = false;
+
+	function drawChart() {
+		const width = canvas.width;
+		const height = canvas.height;
+		const padding = 35;
+
+		ctx.clearRect(0, 0, width, height);
+
+		const values = inputs.map(i => parseFloat(i.value));
+		
+		values.forEach((val, idx) => {
+			valDisplays[idx].textContent = `${val}%`;
+		});
+
+		const sum = values.reduce((a, b) => a + b, 0);
+		const average = sum / values.length;
+		avgVal.textContent = `${average.toFixed(1)}%`;
+
+		if (average >= 90) statusVal.textContent = "EXCELLENT";
+		else if (average >= 75) statusVal.textContent = "GOOD";
+		else statusVal.textContent = "AVERAGE";
+
+		const graphWidth = width - padding * 2;
+		const graphHeight = height - padding * 2;
+		const minVal = 50;
+		const maxVal = 100;
+
+		// Draw Y-Axis Gridlines
+		ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+		ctx.lineWidth = 1;
+		ctx.fillStyle = '#9aa0a6';
+		ctx.font = '9px Segoe UI, sans-serif';
+
+		for (let v = minVal; v <= maxVal; v += 10) {
+			const y = height - padding - ((v - minVal) / (maxVal - minVal)) * graphHeight;
+			ctx.beginPath();
+			ctx.moveTo(padding, y);
+			ctx.lineTo(width - padding, y);
+			ctx.stroke();
+
+			ctx.fillText(`${v}%`, 8, y + 3);
+		}
+
+		const points = values.map((val, i) => {
+			const x = padding + (i / (values.length - 1)) * graphWidth;
+			const y = height - padding - ((val - minVal) / (maxVal - minVal)) * graphHeight;
+			return { x, y, val, label: categories[i] };
+		});
+
+		// Draw Gradient Area Under Graph
+		ctx.beginPath();
+		ctx.moveTo(points[0].x, height - padding);
+		points.forEach(p => ctx.lineTo(p.x, p.y));
+		ctx.lineTo(points[points.length - 1].x, height - padding);
+		ctx.closePath();
+
+		const gradient = ctx.createLinearGradient(0, padding, 0, height - padding);
+		gradient.addColorStop(0, 'rgba(212, 175, 55, 0.35)');
+		gradient.addColorStop(1, 'rgba(212, 175, 55, 0.00)');
+		ctx.fillStyle = gradient;
+		ctx.fill();
+
+		// Draw Line
+		ctx.beginPath();
+		ctx.moveTo(points[0].x, points[0].y);
+		for (let i = 1; i < points.length; i++) {
+			ctx.lineTo(points[i].x, points[i].y);
+		}
+		ctx.strokeStyle = '#D4AF37';
+		ctx.lineWidth = 2.5;
+		ctx.stroke();
+
+		// Draw Nodes
+		points.forEach(p => {
+			ctx.fillStyle = '#9aa0a6';
+			ctx.font = '10px Segoe UI, sans-serif';
+			ctx.textAlign = 'center';
+			ctx.fillText(p.label, p.x, height - 10);
+
+			ctx.beginPath();
+			ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+			ctx.fillStyle = '#ffffff';
+			ctx.fill();
+			ctx.strokeStyle = '#D4AF37';
+			ctx.lineWidth = 2;
+			ctx.stroke();
+
+			ctx.fillStyle = '#D4AF37';
+			ctx.font = 'bold 10px Segoe UI, sans-serif';
+			ctx.fillText(`${p.val}%`, p.x, p.y - 10);
+		});
+	}
+
+	inputs.forEach(input => {
+		input.addEventListener('input', drawChart);
+	});
+
+	if (submitBtn) {
+		submitBtn.addEventListener('click', () => {
+			if (isSubmitted) return;
+			isSubmitted = true;
+			inputs.forEach(i => i.disabled = true);
+			submitBtn.style.opacity = "0.5";
+			submitBtn.style.cursor = "not-allowed";
+			submitBtn.textContent = "Submitted";
+			submissionStatus.classList.add('active');
+		});
+	}
+
+	if (resetBtn) {
+		resetBtn.addEventListener('click', () => {
+			isSubmitted = false;
+			inputs.forEach((input, i) => {
+				input.value = defaultValues[i];
+				input.disabled = false;
+			});
+			submitBtn.style.opacity = "1";
+			submitBtn.style.cursor = "pointer";
+			submitBtn.textContent = "Submit Rating";
+			submissionStatus.classList.remove('active');
+			drawChart();
+		});
+	}
+
+	drawChart();
+
+
+	/* =========================================================
+	   COOKIE CONSENT LOGIC (SHOW ONLY ONCE)
+	========================================================= */
+	window.addEventListener('DOMContentLoaded', () => {
+		const cookieBanner = document.getElementById('cookieBanner');
+		const acceptAllBtn = document.getElementById('acceptAllCookies');
+		const saveSelectedBtn = document.getElementById('saveSelectedCookies');
+		const declineBtn = document.getElementById('declineCookies');
+		
+		const chkAnalytics = document.getElementById('chkAnalytics');
+		const chkMarketing = document.getElementById('chkMarketing');
+
+		const cookieConsent = OchoStorage.getCookieConsent();
+
+		if (!cookieConsent) {
+			setTimeout(() => {
+				cookieBanner.classList.add('show-banner');
+			}, 1000);
+		} else {
+			cookieBanner.classList.remove('show-banner');
+			if (chkAnalytics) chkAnalytics.checked = !!cookieConsent.analytics;
+			if (chkMarketing) chkMarketing.checked = !!cookieConsent.marketing;
+		}
+
+		function saveConsent(essential, analytics, marketing, statusLabel) {
+			const consentData = {
+				essential: essential,
+				analytics: analytics,
+				marketing: marketing,
+				status: statusLabel,
+				updatedAt: new Date().toISOString()
+			};
+			OchoStorage.setCookieConsent(consentData);
+			cookieBanner.classList.remove('show-banner');
+		}
+
+		if (acceptAllBtn) {
+			acceptAllBtn.addEventListener('click', () => {
+				if (chkAnalytics) chkAnalytics.checked = true;
+				if (chkMarketing) chkMarketing.checked = true;
+				saveConsent(true, true, true, 'accepted_all');
+			});
+		}
+
+		if (saveSelectedBtn) {
+			saveSelectedBtn.addEventListener('click', () => {
+				const analyticsVal = chkAnalytics ? chkAnalytics.checked : false;
+				const marketingVal = chkMarketing ? chkMarketing.checked : false;
+				saveConsent(true, analyticsVal, marketingVal, 'custom_preferences');
+			});
+		}
+
+		if (declineBtn) {
+			declineBtn.addEventListener('click', () => {
+				if (chkAnalytics) chkAnalytics.checked = false;
+				if (chkMarketing) chkMarketing.checked = false;
+				saveConsent(true, false, false, 'declined_optional');
+			});
+		}
+	});
+
+
+	/* =========================================================
+	   STAGGERED DROPDOWN TIMERS & MOBILE TOGGLES
+	========================================================= */
+	const dropdowns = document.querySelectorAll('#navbar .dropdown');
+	const delays = [100, 200, 300, 400];
+
+	dropdowns.forEach(dropdown => {
+		const dropdownContent = dropdown.querySelector('.dropdown-content');
+		const links = dropdownContent ? dropdownContent.querySelectorAll('a') : [];
+		let dropdownTimers = [];
+
+		if (dropdownContent && links.length > 0) {
+			dropdown.addEventListener('mouseenter', () => {
+				if (window.innerWidth > 900) {
+					dropdownTimers.forEach(timer => clearTimeout(timer));
+					dropdownTimers = [];
+
+					links.forEach((link, index) => {
+						link.style.opacity = '0';
+						link.style.transform = 'translateY(-10px)';
+
+						const timer = setTimeout(() => {
+							link.style.opacity = '1';
+							link.style.transform = 'translateY(0)';
+						}, delays[index] || 0);
+
+						dropdownTimers.push(timer);
+					});
+				}
+			});
+
+			dropdown.addEventListener('mouseleave', () => {
+				if (window.innerWidth > 900) {
+					dropdownTimers.forEach(timer => clearTimeout(timer));
+					dropdownTimers = [];
+
+					links.forEach(link => {
+						link.style.opacity = '0';
+						link.style.transform = 'translateY(-10px)';
+					});
+				}
+			});
+		}
+	});
+
+	const dropdownLinks = document.querySelectorAll('#navbar .dropdown > a');
+	dropdownLinks.forEach(link => {
+		link.addEventListener('click', (e) => {
+			if (window.innerWidth <= 900) {
+				e.preventDefault();
+				const parentDropdown = link.parentElement;
+				
+				document.querySelectorAll('#navbar .dropdown').forEach(item => {
+					if (item !== parentDropdown) {
+						item.classList.remove('active');
+					}
+				});
+
+				parentDropdown.classList.toggle('active');
+			}
+		});
+	});
+
+
+	/* =========================================================
+	   ROPE CURSOR PHYSICS ENGINE (HIGH-DPI RETINA CANVAS)
+	========================================================= */
+	if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+		const canvasCursor = document.createElement('canvas');
+		canvasCursor.id = 'ropeCanvas';
+		document.body.appendChild(canvasCursor);
+		const ctxCursor = canvasCursor.getContext('2d');
+
+		const dpr = window.devicePixelRatio || 1;
+		let width = window.innerWidth;
+		let height = window.innerHeight;
+
+		function resizeCanvas() {
+			width = window.innerWidth;
+			height = window.innerHeight;
+			canvasCursor.width = width * dpr;
+			canvasCursor.height = height * dpr;
+			canvasCursor.style.width = width + 'px';
+			canvasCursor.style.height = height + 'px';
+			ctxCursor.scale(dpr, dpr);
+		}
+
+		resizeCanvas();
+		window.addEventListener('resize', resizeCanvas);
+
+		const mouse = { x: width / 2, y: height / 2 };
+		window.addEventListener('mousemove', (e) => {
+			mouse.x = e.clientX;
+			mouse.y = e.clientY;
+		});
+
+		const segmentsCount = 20;
+		const segments = [];
+		for (let i = 0; i < segmentsCount; i++) {
+			segments.push({ x: mouse.x, y: mouse.y });
+		}
+		const spacing = 6;
+
+		function updateRopeCursor() {
+			ctxCursor.clearRect(0, 0, width, height);
+
+			segments[0].x += (mouse.x - segments[0].x) * 0.35;
+			segments[0].y += (mouse.y - segments[0].y) * 0.35;
+
+			for (let i = 1; i < segmentsCount; i++) {
+				let prev = segments[i - 1];
+				let curr = segments[i];
+
+				let dx = prev.x - curr.x;
+				let dy = prev.y - curr.y;
+				let dist = Math.sqrt(dx * dx + dy * dy);
+
+				if (dist > spacing) {
+					let angle = Math.atan2(dy, dx);
+					curr.x = prev.x - Math.cos(angle) * spacing;
+					curr.y = prev.y - Math.sin(angle) * spacing;
+				}
+			}
+
+			ctxCursor.beginPath();
+			ctxCursor.moveTo(segments[0].x, segments[0].y);
+			for (let i = 1; i < segmentsCount; i++) {
+				ctxCursor.lineTo(segments[i].x, segments[i].y);
+			}
+			ctxCursor.strokeStyle = '#D4AF37';
+			ctxCursor.lineWidth = 3.5;
+			ctxCursor.lineCap = 'round';
+			ctxCursor.lineJoin = 'round';
+			ctxCursor.shadowColor = '#D4AF37';
+			ctxCursor.shadowBlur = 12;
+			ctxCursor.stroke();
+
+			requestAnimationFrame(updateRopeCursor);
+		}
+
+		requestAnimationFrame(updateRopeCursor);
+	}
+
+
+	/* =========================================================
+	   MOBILE MENU DRAWER TOGGLE
+	========================================================= */
+	const menuToggle = document.getElementById("menuToggle");
+	const navbar = document.getElementById("navbar");
+	const drawerCloseBtn = document.getElementById("drawerCloseBtn");
+
+	function closeMobileMenu() {
+		if (navbar) navbar.classList.remove("active");
+		if (menuToggle) menuToggle.classList.remove("active");
+	}
+
+	if(menuToggle) {
+		menuToggle.onclick = function(e){
+			e.stopPropagation();
+			navbar.classList.toggle("active");
+			menuToggle.classList.toggle("active");
+		};
+	}
+
+	if(drawerCloseBtn) {
+		drawerCloseBtn.onclick = function() {
+			closeMobileMenu();
+		};
+	}
+
+	document.addEventListener('click', (e) => {
+		if (window.innerWidth <= 900) {
+			if (navbar && navbar.classList.contains('active')) {
+				if (!navbar.contains(e.target) && !menuToggle.contains(e.target)) {
+					closeMobileMenu();
+				}
+			}
+		}
+	});
+
+
+	/* =========================================================
+	   MOBILE HEADER SCROLL HIDE/SHOW LOGIC
+	========================================================= */
+	let lastScrollY = window.scrollY;
+	const siteHeader = document.querySelector('header');
+
+	window.addEventListener('scroll', () => {
+		if (window.innerWidth <= 900) {
+			const currentScrollY = window.scrollY;
+
+			if (currentScrollY > lastScrollY && currentScrollY > 10) {
+				siteHeader.classList.add('header-hidden');
+			} else if (currentScrollY < lastScrollY) {
+				siteHeader.classList.remove('header-hidden');
+			}
+
+			lastScrollY = currentScrollY;
+		} else {
+			siteHeader.classList.remove('header-hidden');
+		}
+	}, { passive: true });
+
+
+	/* =========================================================
+	   SCROLL REVEAL TRIGGER (ONCE ONLY)
+	========================================================= */
+	const revealElements = Array.from(document.querySelectorAll(
+		".section-content, .contact-content, .section-label, .section-title, .section-text, .room, .food-rating-wrapper, .food-info, .feature, .facility-card, .story-card"
+	));
+
+	revealElements.forEach((el, i) => { el._revealOrder = i; });
+
+	const STAGGER_DELAY = 20;
+	const revealQueue = [];
+	let isRevealing = false;
+
+	function processRevealQueue() {
+		if (revealQueue.length === 0) {
+			isRevealing = false;
+			return;
+		}
+
+		isRevealing = true;
+		revealQueue.sort((a, b) => a._revealOrder - b._revealOrder);
+
+		const el = revealQueue.shift();
+		el.classList.add("show");
+
+		setTimeout(processRevealQueue, STAGGER_DELAY);
+	}
+
+	const generalObserver = new IntersectionObserver((entries, observer) => {
+		entries.forEach(entry => {
+			const el = entry.target;
+
+			if (entry.isIntersecting) {
+				if (!el.classList.contains("show") && !revealQueue.includes(el)) {
+					revealQueue.push(el);
+				}
+				observer.unobserve(el);
+			}
+		});
+
+		if (!isRevealing) processRevealQueue();
+	}, { threshold: 0.15 });
+
+	revealElements.forEach(el => generalObserver.observe(el));
+
+
+	/* =========================================================
+	   HERO REVEAL TRIGGER
+	========================================================= */
+	window.addEventListener('DOMContentLoaded', () => {
+		const heroContent = document.querySelector('.hero-content');
+		setTimeout(() => {
+			if (heroContent) heroContent.classList.add('show');
+		}, 300);
+	});
+
+
+	/* =========================================================
+	   WHEEL INERTIA SCROLL
+	========================================================= */
+	const INERTIA_FRICTION = 0.965;      
+	const INERTIA_WHEEL_GAIN = 0.25;     
+	const INERTIA_MIN_VELOCITY = 0.005;  
+	const MAX_VELOCITY = 15;             
+
+	let currentVelocity = 0;
+	let targetVelocity = 0;
+	let inertiaRunning = false;
+	let lastFrameTime = performance.now();
+
+	function inertiaTick(now) {
+		const deltaTime = (now - lastFrameTime) / 1000;
+		lastFrameTime = now;
+
+		currentVelocity += (targetVelocity - currentVelocity) * 0.12;
+
+		const adjustedFriction = Math.pow(INERTIA_FRICTION, deltaTime * 60);
+		targetVelocity *= adjustedFriction;
+
+		if (Math.abs(currentVelocity) < INERTIA_MIN_VELOCITY) {
+			currentVelocity = 0;
+			targetVelocity = 0;
+			inertiaRunning = false;
+			return;
+		}
+
+		window.scrollBy({ top: currentVelocity, left: 0, behavior: "auto" });
+		requestAnimationFrame(inertiaTick);
+	}
+
+	function handleWheelInertia(e) {
+		e.preventDefault();
+
+		let addedForce = e.deltaY * INERTIA_WHEEL_GAIN;
+		if (Math.abs(addedForce) > 5) {
+			addedForce = Math.sign(addedForce) * (5 + Math.log1p(Math.abs(addedForce) - 5));
+		}
+
+		targetVelocity += addedForce;
+		targetVelocity = Math.sign(targetVelocity) * Math.min(Math.abs(targetVelocity), MAX_VELOCITY);
+
+		if (!inertiaRunning) {
+			inertiaRunning = true;
+			lastFrameTime = performance.now();
+			requestAnimationFrame(inertiaTick);
+		}
+	}
+
+	if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+		window.addEventListener("wheel", handleWheelInertia, { passive: false });
+	}
+
+	</script>
+</body>
+</html>	
